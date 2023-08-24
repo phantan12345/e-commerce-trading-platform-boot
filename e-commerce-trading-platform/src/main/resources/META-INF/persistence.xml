@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence           http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+  <persistence-unit name="com.ou_demo_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.ou.demo.pojos.ProductStore</class>
+    <class>com.ou.demo.pojos.VoucherMoney</class>
+    <class>com.ou.demo.pojos.ProductImage</class>
+    <class>com.ou.demo.pojos.PaymentMethod</class>
+    <class>com.ou.demo.pojos.Payment</class>
+    <class>com.ou.demo.pojos.Store</class>
+    <class>com.ou.demo.pojos.VoucherCode</class>
+    <class>com.ou.demo.pojos.Category</class>
+    <class>com.ou.demo.pojos.User</class>
+    <class>com.ou.demo.pojos.Voucher</class>
+    <class>com.ou.demo.pojos.Orderdetail</class>
+    <class>com.ou.demo.pojos.Product</class>
+    <class>com.ou.demo.pojos.CodeUser</class>
+    <class>com.ou.demo.pojos.Role</class>
+    <class>com.ou.demo.pojos.Reriew</class>
+    <class>com.ou.demo.pojos.Order</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/trading?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="phantan0106"/>
+    </properties>
+  </persistence-unit>
+</persistence>
