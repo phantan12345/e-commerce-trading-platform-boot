@@ -4,6 +4,8 @@
  */
 package com.ou.demo.security;
 
+import com.ou.demo.pojos.User;
+import com.ou.demo.service.UserService;
 import java.security.Key;
 import java.util.Date;
 
@@ -13,8 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.ou.demo.pojos.User;
-import com.ou.demo.service.UserService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    private static final long REFRESH_TOKEN_EXPIRATION_DATE = 30 * 24 * 60 * 60 * 1000;
 
     @Value("${bezkoder.app.jwtSecret}")
     private String jwtSecret;
@@ -33,17 +34,24 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     @Autowired
-    private UserService UserService;
+    private UserService userService;
 
     public String generateJwtToken(UserDetails UserDetails) {
+
+        UserDetails userPrincipal = userService.loadUserByUsername(UserDetails.getUsername());
+
         String username = UserDetails.getUsername();
+        User user = userService.findByUsername(username);
+        Date currentDate = new Date();
+
+        Date expireDate = new Date(currentDate.getTime() + jwtExpirationMs);
 
         return Jwts.builder()
-                .setSubject(username)
-                        .setIssuedAt(new Date())
-                        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                        .signWith(key(), SignatureAlgorithm.HS256)
-                        .compact();
+                .setSubject((user.getUsername()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     private Key key() {

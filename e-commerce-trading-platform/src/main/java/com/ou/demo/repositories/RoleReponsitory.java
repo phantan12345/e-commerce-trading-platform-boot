@@ -4,21 +4,15 @@
  */
 package com.ou.demo.repositories;
 
-import com.ou.demo.pojos.User;
-import org.springframework.data.jpa.repository.*;
+import com.ou.demo.pojos.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author ADMIN
  */
 @Repository
-@Transactional
-public interface UserRepository extends JpaRepository<User, Integer> {
-
-    @Query("SELECT u FROM User u WHERE u.username =?1")
-    User findByUsername(String user);
+public interface RoleReponsitory extends JpaRepository<Role, Integer>{
     
-
-} 
+}

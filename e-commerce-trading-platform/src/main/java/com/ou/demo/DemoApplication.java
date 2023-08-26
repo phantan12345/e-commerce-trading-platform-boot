@@ -1,11 +1,10 @@
 package com.ou.demo;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,4 +20,17 @@ public class DemoApplication {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public Cloudinary cloudinary() {
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "ddznsqfbo",
+                "api_key", "654246967571578",
+                "api_secret", "Kpyhy80PQBnqlnI7EpI3kyxbXrs",
+                "secure", true));
+        return cloudinary;
+    }
+
+
+
 }
+                                                            

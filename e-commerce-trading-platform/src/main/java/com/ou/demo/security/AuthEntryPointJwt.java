@@ -1,4 +1,7 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.ou.demo.security;
 
 import java.io.IOException;
@@ -21,24 +24,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+  private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-            throws IOException, ServletException {
-        logger.error("Unauthorized error: {}", authException.getMessage());
+  @Override
+  public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+      throws IOException, ServletException {
+    logger.error("Unauthorized error: {}", authException.getMessage());
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        final Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("error", "Unauthorized");
-        body.put("message", authException.getMessage());
-        body.put("path", request.getServletPath());
+    final Map<String, Object> body = new HashMap<>();
+    body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+    body.put("error", "Unauthorized");
+    body.put("message", authException.getMessage());
+    body.put("path", request.getServletPath());
 
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), body);
-    }
+    final ObjectMapper mapper = new ObjectMapper();
+    mapper.writeValue(response.getOutputStream(), body);
+  }
 
 }
