@@ -4,11 +4,11 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.*;
-
 
 /**
  *
@@ -26,6 +26,7 @@ public class Reriew implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -39,6 +40,8 @@ public class Reriew implements Serializable {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
+    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reriewId")
     private Set<Reriew> reriewSet;
     @JoinColumn(name = "reriew_id", referencedColumnName = "id")
@@ -143,5 +146,5 @@ public class Reriew implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Reriew[ id=" + id + " ]";
     }
-    
+
 }

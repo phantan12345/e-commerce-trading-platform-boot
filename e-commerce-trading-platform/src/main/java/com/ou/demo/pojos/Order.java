@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.Date;
 import jakarta.persistence.*;
 
+
+
 /**
  *
  * @author ADMIN
@@ -23,6 +25,7 @@ public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;

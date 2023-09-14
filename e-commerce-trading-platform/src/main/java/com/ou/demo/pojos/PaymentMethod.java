@@ -4,10 +4,10 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
-
 
 /**
  *
@@ -23,13 +23,16 @@ public class PaymentMethod implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "discount")
     private Double discount;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentMethod")
+    @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentMethodId")
     private Set<Payment> paymentSet;
 
     public PaymentMethod() {
@@ -87,5 +90,5 @@ public class PaymentMethod implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.PaymentMethod[ id=" + id + " ]";
     }
-    
+
 }

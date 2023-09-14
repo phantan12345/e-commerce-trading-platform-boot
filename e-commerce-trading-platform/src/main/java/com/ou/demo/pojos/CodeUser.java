@@ -13,7 +13,7 @@ import jakarta.persistence.*;
  * @author ADMIN
  */
 @Entity
-@Table(name = "code_user")
+@Table(name = "code-user")
 @NamedQueries({
     @NamedQuery(name = "CodeUser.findAll", query = "SELECT c FROM CodeUser c"),
     @NamedQuery(name = "CodeUser.findById", query = "SELECT c FROM CodeUser c WHERE c.id = :id")})
@@ -21,15 +21,16 @@ public class CodeUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
-    @JoinColumn(name = "voucher_code_voucher_id", referencedColumnName = "voucher_id")
+    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private VoucherCode voucherCodeVoucherId;
+    private Voucher voucherId;
 
     public CodeUser() {
     }
@@ -54,12 +55,12 @@ public class CodeUser implements Serializable {
         this.userId = userId;
     }
 
-    public VoucherCode getVoucherCodeVoucherId() {
-        return voucherCodeVoucherId;
+    public Voucher getVoucherId() {
+        return voucherId;
     }
 
-    public void setVoucherCodeVoucherId(VoucherCode voucherCodeVoucherId) {
-        this.voucherCodeVoucherId = voucherCodeVoucherId;
+    public void setVoucherId(Voucher voucherId) {
+        this.voucherId = voucherId;
     }
 
     @Override

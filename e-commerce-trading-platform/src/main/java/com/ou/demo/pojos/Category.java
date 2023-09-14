@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
 
-
 /**
  *
  * @author ADMIN
@@ -24,19 +23,22 @@ public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Column(name = "name")
     private String name;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+
+    @OneToMany(mappedBy = "categoryId")
     private Set<Product> productSet;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+
+    @OneToMany(mappedBy = "categoryId")
     private Set<Category> categorySet;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Category categoryId;
 
     public Category() {
@@ -110,5 +112,5 @@ public class Category implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Category[ id=" + id + " ]";
     }
-    
+
 }

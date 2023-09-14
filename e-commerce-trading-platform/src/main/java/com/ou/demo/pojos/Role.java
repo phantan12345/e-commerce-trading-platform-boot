@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
 
-
 /**
  *
  * @author ADMIN
@@ -24,13 +23,15 @@ public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Column(name = "role_name")
     private String roleName;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleId")
+
+    @OneToMany(mappedBy = "roleId")
     private Set<User> userSet;
 
     public Role() {
@@ -88,5 +89,5 @@ public class Role implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Role[ id=" + id + " ]";
     }
-    
+
 }

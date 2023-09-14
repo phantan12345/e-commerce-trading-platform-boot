@@ -4,9 +4,9 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-
 import jakarta.persistence.*;
 
 /**
@@ -41,14 +41,19 @@ public class User implements Serializable {
     private String email;
     @Column(name = "active")
     private Boolean active;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Store> storeSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<CodeUser> codeUserSet;
+    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Reriew> reriewSet;
+    @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<CodeUser> codeUserSet;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Role roleId;
 
     public User() {
@@ -114,20 +119,20 @@ public class User implements Serializable {
         this.storeSet = storeSet;
     }
 
-    public Set<CodeUser> getCodeUserSet() {
-        return codeUserSet;
-    }
-
-    public void setCodeUserSet(Set<CodeUser> codeUserSet) {
-        this.codeUserSet = codeUserSet;
-    }
-
     public Set<Reriew> getReriewSet() {
         return reriewSet;
     }
 
     public void setReriewSet(Set<Reriew> reriewSet) {
         this.reriewSet = reriewSet;
+    }
+
+    public Set<CodeUser> getCodeUserSet() {
+        return codeUserSet;
+    }
+
+    public void setCodeUserSet(Set<CodeUser> codeUserSet) {
+        this.codeUserSet = codeUserSet;
     }
 
     public Role getRoleId() {
@@ -162,5 +167,5 @@ public class User implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.User[ id=" + id + " ]";
     }
-    
+
 }

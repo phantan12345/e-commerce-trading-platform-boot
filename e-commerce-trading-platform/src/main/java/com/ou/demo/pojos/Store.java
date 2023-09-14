@@ -32,13 +32,13 @@ public class Store implements Serializable {
     private String storeName;
     @Column(name = "adress")
     private String adress;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
-    private Set<ProductStore> productStoreSet;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
     @ManyToOne(optional = false)
     private User userId;
+    @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
+    private Set<ProductStore> productStoreSet;
 
     public Store() {
     }
@@ -71,20 +71,20 @@ public class Store implements Serializable {
         this.adress = adress;
     }
 
-    public Set<ProductStore> getProductStoreSet() {
-        return productStoreSet;
-    }
-
-    public void setProductStoreSet(Set<ProductStore> productStoreSet) {
-        this.productStoreSet = productStoreSet;
-    }
-
     public User getUserId() {
         return userId;
     }
 
     public void setUserId(User userId) {
         this.userId = userId;
+    }
+
+    public Set<ProductStore> getProductStoreSet() {
+        return productStoreSet;
+    }
+
+    public void setProductStoreSet(Set<ProductStore> productStoreSet) {
+        this.productStoreSet = productStoreSet;
     }
 
     @Override

@@ -4,6 +4,7 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
@@ -22,13 +23,17 @@ public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Column(name = "payment")
     private String payment;
-    @ManyToOne
-    private PaymentMethod paymentMethod;
+    @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private PaymentMethod paymentMethodId;
+    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId")
     private Set<Order> order1Set;
 
@@ -55,12 +60,12 @@ public class Payment implements Serializable {
         this.payment = payment;
     }
 
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
+    public PaymentMethod getPaymentMethodId() {
+        return paymentMethodId;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
     }
 
     public Set<Order> getOrder1Set() {

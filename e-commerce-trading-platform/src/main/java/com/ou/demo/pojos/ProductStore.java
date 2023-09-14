@@ -36,9 +36,10 @@ public class ProductStore implements Serializable {
     @ManyToOne(optional = false)
     private Store storeId;
     @JoinColumn(name = "voucher_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Voucher voucherId;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Orderdetail> orderdetailSet;
 

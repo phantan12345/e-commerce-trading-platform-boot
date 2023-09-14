@@ -4,10 +4,10 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
-
 
 /**
  *
@@ -18,23 +18,29 @@ import jakarta.persistence.*;
 @NamedQueries({
     @NamedQuery(name = "Voucher.findAll", query = "SELECT v FROM Voucher v"),
     @NamedQuery(name = "Voucher.findById", query = "SELECT v FROM Voucher v WHERE v.id = :id"),
-    @NamedQuery(name = "Voucher.findByDiscount", query = "SELECT v FROM Voucher v WHERE v.discount = :discount")})
+    @NamedQuery(name = "Voucher.findByDiscount", query = "SELECT v FROM Voucher v WHERE v.discount = :discount"),
+    @NamedQuery(name = "Voucher.findByCode", query = "SELECT v FROM Voucher v WHERE v.code = :code")})
 public class Voucher implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "discount")
     private Double discount;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voucherId")
+    @Column(name = "code")
+    private String code;
+    @JsonIgnore
+
+    @OneToMany(mappedBy = "voucherId")
     private Set<ProductStore> productStoreSet;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "voucher")
-    private VoucherCode voucherCode;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "voucher")
-    private VoucherMoney voucherMoney;
+    @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voucherId")
+    private Set<CodeUser> codeUserSet;
 
     public Voucher() {
     }
@@ -59,6 +65,14 @@ public class Voucher implements Serializable {
         this.discount = discount;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public Set<ProductStore> getProductStoreSet() {
         return productStoreSet;
     }
@@ -67,20 +81,12 @@ public class Voucher implements Serializable {
         this.productStoreSet = productStoreSet;
     }
 
-    public VoucherCode getVoucherCode() {
-        return voucherCode;
+    public Set<CodeUser> getCodeUserSet() {
+        return codeUserSet;
     }
 
-    public void setVoucherCode(VoucherCode voucherCode) {
-        this.voucherCode = voucherCode;
-    }
-
-    public VoucherMoney getVoucherMoney() {
-        return voucherMoney;
-    }
-
-    public void setVoucherMoney(VoucherMoney voucherMoney) {
-        this.voucherMoney = voucherMoney;
+    public void setCodeUserSet(Set<CodeUser> codeUserSet) {
+        this.codeUserSet = codeUserSet;
     }
 
     @Override
@@ -107,5 +113,5 @@ public class Voucher implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Voucher[ id=" + id + " ]";
     }
-    
+
 }

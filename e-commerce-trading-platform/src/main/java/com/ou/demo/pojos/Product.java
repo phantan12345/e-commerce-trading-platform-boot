@@ -38,15 +38,18 @@ public class Product implements Serializable {
     @Column(name = "image")
     private String image;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Category categoryId;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductStore> productStoreSet;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Reriew> reriewSet;
 

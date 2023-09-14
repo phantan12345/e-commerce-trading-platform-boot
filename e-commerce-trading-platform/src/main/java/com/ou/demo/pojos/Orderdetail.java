@@ -4,10 +4,10 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
-
 
 /**
  *
@@ -33,6 +33,8 @@ public class Orderdetail implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
     private Double price;
+    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderdetailId")
     private Set<Order> order1Set;
     @JoinColumn(name = "product-store_id", referencedColumnName = "id")
@@ -110,5 +112,5 @@ public class Orderdetail implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Orderdetail[ id=" + id + " ]";
     }
-    
+
 }
