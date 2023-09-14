@@ -4,6 +4,7 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
@@ -23,6 +24,7 @@ public class Store implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -30,9 +32,11 @@ public class Store implements Serializable {
     private String storeName;
     @Column(name = "adress")
     private String adress;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
     private Set<ProductStore> productStoreSet;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
     @ManyToOne(optional = false)
     private User userId;
 
@@ -107,5 +111,5 @@ public class Store implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Store[ id=" + id + " ]";
     }
-    
+
 }

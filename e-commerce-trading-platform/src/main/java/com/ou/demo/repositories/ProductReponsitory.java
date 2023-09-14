@@ -4,18 +4,18 @@
  */
 package com.ou.demo.repositories;
 
-import com.ou.demo.pojos.Role;
+import com.ou.demo.pojos.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author ADMIN
  */
-@Repository
-public interface RoleReponsitory extends JpaRepository<Role, Integer> {
 
-    @Query("SELECT r FROM Role r WHERE r.roleName = ?1")
-    public Role findRoleByRoleName (String roleName);
+@Repository
+@Transactional
+public interface ProductReponsitory extends JpaRepository<Product, Integer>{
+    
 }

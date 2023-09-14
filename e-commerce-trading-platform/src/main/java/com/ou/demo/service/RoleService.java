@@ -6,6 +6,7 @@ package com.ou.demo.service;
 
 import com.ou.demo.pojos.Role;
 import com.ou.demo.repositories.RoleReponsitory;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,20 @@ import org.springframework.stereotype.Service;
  * @author ADMIN
  */
 @Service
-public class RoleService {
+public interface RoleService {
     
-    @Autowired
-    private RoleReponsitory roleReponsitory;
-    
+  
     
     
-    public Optional<Role> getRoleById(int id){
-        return roleReponsitory.findById(id);
-    }
+    
+    public Optional<Role> getRoleById(int id);
+    
+    
+    public Role create(Role  r);
+    
+    public List<Role> getAll();
+    
+    
+    public Role findRoleByRoleName(String name);
+    
 }

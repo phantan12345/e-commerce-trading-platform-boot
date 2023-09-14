@@ -4,19 +4,13 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.Store;
-import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.Category;
 
 /**
  *
  * @author ADMIN
  */
-public interface StoreService {
-    
-     Store Create(Store store,User u);
-     
-     Store findStoreByUserID(User id);
-     
+public interface CategoryService {
 
-        
+    Category findCateByName(String name);
 }

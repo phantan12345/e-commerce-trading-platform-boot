@@ -4,11 +4,11 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import jakarta.persistence.*;
-
 
 /**
  *
@@ -20,29 +20,33 @@ import jakarta.persistence.*;
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
     @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"),
-    @NamedQuery(name = "Product.findByPricee", query = "SELECT p FROM Product p WHERE p.pricee = :pricee"),
+    @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByImage", query = "SELECT p FROM Product p WHERE p.image = :image")})
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Column(name = "product_name")
     private String productName;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "pricee")
-    private BigDecimal pricee;
+    @Column(name = "price")
+    private BigDecimal price;
     @Column(name = "image")
     private String image;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Category categoryId;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductStore> productStoreSet;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Reriew> reriewSet;
 
@@ -69,12 +73,12 @@ public class Product implements Serializable {
         this.productName = productName;
     }
 
-    public BigDecimal getPricee() {
-        return pricee;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setPricee(BigDecimal pricee) {
-        this.pricee = pricee;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public String getImage() {
@@ -141,5 +145,5 @@ public class Product implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Product[ id=" + id + " ]";
     }
-    
+
 }

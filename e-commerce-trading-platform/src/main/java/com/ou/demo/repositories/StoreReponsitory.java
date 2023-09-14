@@ -4,8 +4,11 @@
  */
 package com.ou.demo.repositories;
 
+import com.ou.demo.pojos.Role;
 import com.ou.demo.pojos.Store;
+import com.ou.demo.pojos.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Repository;
  * @author ADMIN
  */
 @Repository
-public interface StoreReponsitory extends JpaRepository<Store, Integer>{
-    
+public interface StoreReponsitory extends JpaRepository<Store, Integer> {
+
+    @Query("SELECT r FROM Store r WHERE r.userId = ?1")
+     Store findStoreByUserID(User id);
 }

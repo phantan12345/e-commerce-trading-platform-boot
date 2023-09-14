@@ -4,19 +4,13 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.Store;
-import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.ProductStore;
 
 /**
  *
  * @author ADMIN
  */
-public interface StoreService {
+public interface ProductStoreService {
     
-     Store Create(Store store,User u);
-     
-     Store findStoreByUserID(User id);
-     
-
-        
+    ProductStore create(ProductStore ps);
 }

@@ -4,17 +4,17 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
-
 
 /**
  *
  * @author ADMIN
  */
 @Entity
-@Table(name = "product-store")
+@Table(name = "product_store")
 @NamedQueries({
     @NamedQuery(name = "ProductStore.findAll", query = "SELECT p FROM ProductStore p"),
     @NamedQuery(name = "ProductStore.findById", query = "SELECT p FROM ProductStore p WHERE p.id = :id"),
@@ -23,6 +23,7 @@ public class ProductStore implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -37,6 +38,7 @@ public class ProductStore implements Serializable {
     @JoinColumn(name = "voucher_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Voucher voucherId;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -119,5 +121,5 @@ public class ProductStore implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.ProductStore[ id=" + id + " ]";
     }
-    
+
 }

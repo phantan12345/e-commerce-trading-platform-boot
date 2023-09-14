@@ -64,17 +64,9 @@ public class UserController {
 
         String jwtResponse = jwtUtils.generateJwtToken(userDetails);
 
-        if (jwtResponse != null) {
-            Cookie cookie = new Cookie("JWT_TOKEN", jwtResponse);
-            cookie.setPath("/");
-            cookie.setMaxAge(3600);
-
-            response.addCookie(cookie);
+      
             return ResponseEntity.ok().body(jwtResponse);
-        } else {
-            return ResponseEntity.badRequest().body("Username or password is invalid!");
-
-        }
+        
     }
 
     private void authenticate(String username, String password) throws Exception {
