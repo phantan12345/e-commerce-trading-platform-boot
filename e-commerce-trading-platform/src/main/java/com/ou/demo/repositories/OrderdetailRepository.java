@@ -2,17 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ou.demo.service;
+package com.ou.demo.repositories;
 
-import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.Orderdetail;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author ADMIN
  */
-public interface ProductStoreService {
-
-    ProductStore create(ProductStore ps);
-
-    ProductStore findByProduct(int id);
+public interface OrderdetailRepository extends JpaRepository<Orderdetail, Integer>{
+    
 }

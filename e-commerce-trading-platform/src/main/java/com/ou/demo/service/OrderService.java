@@ -4,15 +4,13 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.Order1;
+
 
 /**
  *
  * @author ADMIN
  */
-public interface ProductStoreService {
-
-    ProductStore create(ProductStore ps);
-
-    ProductStore findByProduct(int id);
+public interface OrderService {
+    Order1 create(Order1 o);
 }

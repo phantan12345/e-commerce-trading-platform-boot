@@ -4,15 +4,16 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.Orderdetail;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author ADMIN
  */
-public interface ProductStoreService {
-
-    ProductStore create(ProductStore ps);
-
-    ProductStore findByProduct(int id);
+@Repository
+@Transactional
+public interface OrderdetailService {
+    Orderdetail create(Orderdetail od);
 }

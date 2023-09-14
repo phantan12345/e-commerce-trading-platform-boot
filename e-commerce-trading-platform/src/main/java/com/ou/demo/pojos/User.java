@@ -42,16 +42,17 @@ public class User implements Serializable {
     @Column(name = "active")
     private Boolean active;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Store> storeSet;
     @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Reriew> reriewSet;
+    private Set<CodeUser> codeUserSet;
     @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<CodeUser> codeUserSet;
+    private Set<Reriew> reriewSet;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne
     private Role roleId;
@@ -119,20 +120,20 @@ public class User implements Serializable {
         this.storeSet = storeSet;
     }
 
-    public Set<Reriew> getReriewSet() {
-        return reriewSet;
-    }
-
-    public void setReriewSet(Set<Reriew> reriewSet) {
-        this.reriewSet = reriewSet;
-    }
-
     public Set<CodeUser> getCodeUserSet() {
         return codeUserSet;
     }
 
     public void setCodeUserSet(Set<CodeUser> codeUserSet) {
         this.codeUserSet = codeUserSet;
+    }
+
+    public Set<Reriew> getReriewSet() {
+        return reriewSet;
+    }
+
+    public void setReriewSet(Set<Reriew> reriewSet) {
+        this.reriewSet = reriewSet;
     }
 
     public Role getRoleId() {

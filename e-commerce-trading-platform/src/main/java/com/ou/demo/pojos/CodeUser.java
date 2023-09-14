@@ -7,13 +7,12 @@ package com.ou.demo.pojos;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
-
 /**
  *
  * @author ADMIN
  */
 @Entity
-@Table(name = "code-user")
+@Table(name = "code_user")
 @NamedQueries({
     @NamedQuery(name = "CodeUser.findAll", query = "SELECT c FROM CodeUser c"),
     @NamedQuery(name = "CodeUser.findById", query = "SELECT c FROM CodeUser c WHERE c.id = :id")})

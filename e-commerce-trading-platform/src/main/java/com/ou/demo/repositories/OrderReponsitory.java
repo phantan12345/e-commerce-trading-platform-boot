@@ -4,9 +4,8 @@
  */
 package com.ou.demo.repositories;
 
-import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.Order1;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public interface ProductStoreRepository extends JpaRepository<ProductStore, Integer>{
-    @Query("SELECT p FROM ProductStore p WHERE p.id = ?1")
-    ProductStore findByProduct(int id);
+public interface OrderReponsitory extends JpaRepository<Order1, Integer>{
+    
 }

@@ -4,15 +4,12 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.ProductImage;
 
 /**
  *
  * @author ADMIN
  */
-public interface ProductStoreService {
-
-    ProductStore create(ProductStore ps);
-
-    ProductStore findByProduct(int id);
+public interface ProductImageService {
+    ProductImage create(ProductImage img);
 }

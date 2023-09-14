@@ -5,6 +5,7 @@
 package com.ou.demo.service;
 
 import com.ou.demo.pojos.Category;
+import java.util.List;
 
 /**
  *
@@ -12,5 +13,15 @@ import com.ou.demo.pojos.Category;
  */
 public interface CategoryService {
 
+    Category create(Category c, int id);
+
     Category findCateByName(String name);
+
+    List<Category> getAll();
+
+    List<Category> getCateByCateId(int cate);
+
+    Category findCateById(int id);
+    
+    Category update(Category cate,int id);
 }

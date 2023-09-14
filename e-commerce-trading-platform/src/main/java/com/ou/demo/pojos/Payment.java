@@ -35,7 +35,7 @@ public class Payment implements Serializable {
     @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId")
-    private Set<Order> order1Set;
+    private Set<Order1> order1Set;
 
     public Payment() {
     }
@@ -68,11 +68,11 @@ public class Payment implements Serializable {
         this.paymentMethodId = paymentMethodId;
     }
 
-    public Set<Order> getOrder1Set() {
+    public Set<Order1> getOrder1Set() {
         return order1Set;
     }
 
-    public void setOrder1Set(Set<Order> order1Set) {
+    public void setOrder1Set(Set<Order1> order1Set) {
         this.order1Set = order1Set;
     }
 

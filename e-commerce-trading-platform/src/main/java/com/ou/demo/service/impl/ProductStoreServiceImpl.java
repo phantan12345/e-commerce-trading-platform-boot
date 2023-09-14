@@ -24,5 +24,10 @@ public class ProductStoreServiceImpl implements ProductStoreService{
     public ProductStore create(ProductStore ps) {
         return ProductStoreRepository.save(ps);
     }
+
+    @Override
+    public ProductStore findByProduct(int id) {
+        return ProductStoreRepository.findByProduct(id);
+    }
     
 }

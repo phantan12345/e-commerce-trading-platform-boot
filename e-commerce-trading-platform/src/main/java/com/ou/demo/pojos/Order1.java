@@ -4,11 +4,12 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import jakarta.persistence.*;
-
-
+import java.math.BigDecimal;
 
 /**
  *
@@ -17,11 +18,12 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "order")
 @NamedQueries({
-    @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order o"),
-    @NamedQuery(name = "Order1.findById", query = "SELECT o FROM Order o WHERE o.id = :id"),
-    @NamedQuery(name = "Order1.findByOrderDate", query = "SELECT o FROM Order o WHERE o.orderDate = :orderDate"),
-    @NamedQuery(name = "Order1.findByTotal", query = "SELECT o FROM Order o WHERE o.total = :total")})
-public class Order implements Serializable {
+    @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o"),
+    @NamedQuery(name = "Order1.findById", query = "SELECT o FROM Order1 o WHERE o.id = :id"),
+    @NamedQuery(name = "Order1.findByOrderDate", query = "SELECT o FROM Order1 o WHERE o.orderDate = :orderDate"),
+    @NamedQuery(name = "Order1.findByTotal", query = "SELECT o FROM Order1 o WHERE o.total = :total"),
+    @NamedQuery(name = "Order1.findByOrderdetailId", query = "SELECT o FROM Order1 o WHERE o.orderdetailId = :orderdetailId")})
+public class Order1 implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,19 +36,28 @@ public class Order implements Serializable {
     private Date orderDate;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total")
-    private Double total;
-    @JoinColumn(name = "orderdetail_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Orderdetail orderdetailId;
+    private double total;
+    @Basic(optional = false)
+    @Column(name = "orderdetail_id")
+    private int orderdetailId;
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Payment paymentId;
+    @JsonIgnore
 
-    public Order() {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
+    private Set<Orderdetail> orderdetailSet;
+
+    public Order1() {
     }
 
-    public Order(Integer id) {
+    public Order1(Integer id) {
         this.id = id;
+    }
+
+    public Order1(Integer id, int orderdetailId) {
+        this.id = id;
+        this.orderdetailId = orderdetailId;
     }
 
     public Integer getId() {
@@ -65,19 +76,19 @@ public class Order implements Serializable {
         this.orderDate = orderDate;
     }
 
-    public Double getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
-    public Orderdetail getOrderdetailId() {
+    public int getOrderdetailId() {
         return orderdetailId;
     }
 
-    public void setOrderdetailId(Orderdetail orderdetailId) {
+    public void setOrderdetailId(int orderdetailId) {
         this.orderdetailId = orderdetailId;
     }
 
@@ -87,6 +98,14 @@ public class Order implements Serializable {
 
     public void setPaymentId(Payment paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public Set<Orderdetail> getOrderdetailSet() {
+        return orderdetailSet;
+    }
+
+    public void setOrderdetailSet(Set<Orderdetail> orderdetailSet) {
+        this.orderdetailSet = orderdetailSet;
     }
 
     @Override
@@ -99,10 +118,10 @@ public class Order implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Order)) {
+        if (!(object instanceof Order1)) {
             return false;
         }
-        Order other = (Order) object;
+        Order1 other = (Order1) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -113,5 +132,5 @@ public class Order implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Order1[ id=" + id + " ]";
     }
-    
+
 }
