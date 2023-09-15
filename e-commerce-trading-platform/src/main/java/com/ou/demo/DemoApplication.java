@@ -2,7 +2,11 @@ package com.ou.demo;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.demo.dto.Mail;
+import com.ou.demo.service.MailService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +16,8 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 @SpringBootApplication
-public class DemoApplication {
+public class DemoApplication  {
+
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
@@ -43,4 +48,13 @@ public class DemoApplication {
         return new ModelMapper();
     }
 
+//    @Override
+//    public void run(String... args) throws Exception {
+//        Mail mail = new Mail();
+//        mail.setMailFrom("2051050435tan@ou.edu.vn");
+//        mail.setMailTo("phannhuttan2002@gmail.com");
+//        mail.setMailSubject("Spring Boot - Email demo");
+//        mail.setMailContent("Just testing");
+//        mailService.sendEmail(mail);
+//    }
 }

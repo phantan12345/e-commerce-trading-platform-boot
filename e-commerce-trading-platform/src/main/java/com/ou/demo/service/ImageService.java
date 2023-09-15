@@ -4,16 +4,15 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.Product;
-import com.ou.demo.pojos.ProductStore;
+import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author ADMIN
  */
-public interface ProductStoreService {
+public interface ImageService {
 
-    ProductStore create(ProductStore ps);
+    Map Cloudinary(MultipartFile file);
 
-    ProductStore findByProduct(Product id);
-}
+    }

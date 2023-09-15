@@ -5,8 +5,10 @@
 package com.ou.demo.dto;
 
 import com.ou.demo.pojos.Category;
+import com.ou.demo.pojos.ProductImage;
 import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +29,7 @@ public class ProdcutDto {
     @NotBlank
     private BigDecimal price;
     @NotBlank
-    private String image;
+    private List<ProductImage> productImageSet;
     @NotBlank
     private Category categoryId;
 }

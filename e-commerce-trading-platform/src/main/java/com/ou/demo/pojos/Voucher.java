@@ -34,7 +34,6 @@ public class Voucher implements Serializable {
     @Column(name = "code")
     private String code;
     @JsonIgnore
-
     @OneToMany(mappedBy = "voucherId")
     private Set<ProductStore> productStoreSet;
     @JsonIgnore

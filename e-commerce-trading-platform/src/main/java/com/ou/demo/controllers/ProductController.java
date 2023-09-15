@@ -43,13 +43,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api")
 public class ProductController {
-    
-    @Autowired
-    private ModelMapper ModelMapper;
 
     @Autowired
-    private  receiptService receiptService;
-    
+    private receiptService receiptService;
+
     @Autowired
     private ProductService productService;
 
@@ -100,14 +97,15 @@ public class ProductController {
     @PostMapping("/pay/")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public ResponseEntity<?> add(@RequestBody Map<String, CartDto> carts) {
+    public ResponseEntity<?> add(HttpSession s) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User userCuren = UserService.findByUsername(userDetails.getUsername());
+            Map<Integer, CartDto> carts=(Map<Integer, CartDto>) s.getAttribute("cart");
             return new ResponseEntity<>(this.receiptService.addReceipt(carts, userCuren), HttpStatus.OK);
         }
-        return new ResponseEntity<>(carts,HttpStatus.OK);
+        return new ResponseEntity<>("loi ko them dc cart", HttpStatus.UNAUTHORIZED);
 
     }
 

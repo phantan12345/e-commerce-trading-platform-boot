@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     private CategoryService CategoryService;
 
     @Autowired
-    private ImageService ImageService;
+    private ImageServiceImpl ImageService;
 
     @Autowired
     private ProductStoreService ProductStoreService;
@@ -69,7 +69,6 @@ public class ProductServiceImpl implements ProductService {
             img.setUrl(ImageService.Cloudinary(f).get("secure_url").toString());
             img.setProductId(p);
             ProductImageService.create(img);
-//            p.setImage (ImageService.Cloudinary(file).get("secure_url").toString());
 
         }
         return ModelMapper.map(p, ProdcutDto.class);

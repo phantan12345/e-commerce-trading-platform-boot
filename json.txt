@@ -1,0 +1,21 @@
+http://localhost:8080/api/signin/
+{
+    "username":"tan",
+    "password":"tan"
+}
+
+http://localhost:8080/api/product/{productId}/comment
+
+{
+   "coment":"san pham dep",
+   "evaluate":3
+}
+
+http://localhost:8080/api/product/{Proid}/comment/{id}/comments
+
+{
+   "coment":"san pham dep",
+   "evaluate":3
+}
+
+

@@ -9,20 +9,18 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 
 /**
  *
  * @author ADMIN
  */
 @Entity
-@Table(name = "order")
+@Table(name = "order1")
 @NamedQueries({
     @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o"),
     @NamedQuery(name = "Order1.findById", query = "SELECT o FROM Order1 o WHERE o.id = :id"),
     @NamedQuery(name = "Order1.findByOrderDate", query = "SELECT o FROM Order1 o WHERE o.orderDate = :orderDate"),
-    @NamedQuery(name = "Order1.findByTotal", query = "SELECT o FROM Order1 o WHERE o.total = :total"),
-    @NamedQuery(name = "Order1.findByOrderdetailId", query = "SELECT o FROM Order1 o WHERE o.orderdetailId = :orderdetailId")})
+    @NamedQuery(name = "Order1.findByTotal", query = "SELECT o FROM Order1 o WHERE o.total = :total")})
 public class Order1 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,12 +34,9 @@ public class Order1 implements Serializable {
     private Date orderDate;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total")
-    private double total;
-    @Basic(optional = false)
-    @Column(name = "orderdetail_id")
-    private int orderdetailId;
+    private Double total;
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Payment paymentId;
     @JsonIgnore
 
@@ -53,11 +48,6 @@ public class Order1 implements Serializable {
 
     public Order1(Integer id) {
         this.id = id;
-    }
-
-    public Order1(Integer id, int orderdetailId) {
-        this.id = id;
-        this.orderdetailId = orderdetailId;
     }
 
     public Integer getId() {
@@ -76,20 +66,12 @@ public class Order1 implements Serializable {
         this.orderDate = orderDate;
     }
 
-    public double getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(Double total) {
         this.total = total;
-    }
-
-    public int getOrderdetailId() {
-        return orderdetailId;
-    }
-
-    public void setOrderdetailId(int orderdetailId) {
-        this.orderdetailId = orderdetailId;
     }
 
     public Payment getPaymentId() {

@@ -17,7 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @author ADMIN
  */
 public interface ProductService {
-    ProdcutDto create(@RequestParam Map<String,String> params,List<MultipartFile> file, Store store);
-    
+
+    ProdcutDto create(@RequestParam Map<String, String> params, List<MultipartFile> file, Store store);
+
     Product findById(int id);
 }

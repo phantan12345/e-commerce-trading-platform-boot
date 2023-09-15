@@ -4,8 +4,10 @@
  */
 package com.ou.demo.service.impl;
 
+import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.repositories.ProductStoreRepository;
+import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ProductStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +22,15 @@ public class ProductStoreServiceImpl implements ProductStoreService{
     @Autowired
     private ProductStoreRepository ProductStoreRepository;
     
+  
+    
     @Override
     public ProductStore create(ProductStore ps) {
         return ProductStoreRepository.save(ps);
     }
 
     @Override
-    public ProductStore findByProduct(int id) {
+    public ProductStore findByProduct(Product id) {
         return ProductStoreRepository.findByProduct(id);
     }
     

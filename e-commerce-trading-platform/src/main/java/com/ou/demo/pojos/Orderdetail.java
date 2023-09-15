@@ -19,22 +19,8 @@ import java.math.BigDecimal;
     @NamedQuery(name = "Orderdetail.findAll", query = "SELECT o FROM Orderdetail o"),
     @NamedQuery(name = "Orderdetail.findById", query = "SELECT o FROM Orderdetail o WHERE o.id = :id"),
     @NamedQuery(name = "Orderdetail.findByQuatity", query = "SELECT o FROM Orderdetail o WHERE o.quatity = :quatity"),
-    @NamedQuery(name = "Orderdetail.findByPrice", query = "SELECT o FROM Orderdetail o WHERE o.total = :total")})
+    @NamedQuery(name = "Orderdetail.findByTotal", query = "SELECT o FROM Orderdetail o WHERE o.total = :total")})
 public class Orderdetail implements Serializable {
-
-    /**
-     * @return the total
-     */
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    /**
-     * @param total the total to set
-     */
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -77,7 +63,13 @@ public class Orderdetail implements Serializable {
         this.quatity = quatity;
     }
 
-  
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
 
     public Order1 getOrderId() {
         return orderId;

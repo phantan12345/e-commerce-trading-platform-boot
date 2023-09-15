@@ -34,7 +34,7 @@ public class Payment implements Serializable {
     private PaymentMethod paymentMethodId;
     @JsonIgnore
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId")
+    @OneToMany(mappedBy = "paymentId")
     private Set<Order1> order1Set;
 
     public Payment() {

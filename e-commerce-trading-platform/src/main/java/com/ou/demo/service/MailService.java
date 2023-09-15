@@ -4,16 +4,13 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.Product;
-import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.dto.Mail;
 
 /**
  *
  * @author ADMIN
  */
-public interface ProductStoreService {
-
-    ProductStore create(ProductStore ps);
-
-    ProductStore findByProduct(Product id);
+public interface MailService 
+{
+	public void sendEmail(Mail mail);
 }

@@ -28,13 +28,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
  * @author ADMIN
  */
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -64,9 +68,8 @@ public class UserController {
 
         String jwtResponse = jwtUtils.generateJwtToken(userDetails);
 
-      
-            return ResponseEntity.ok().body(jwtResponse);
-        
+        return ResponseEntity.ok().body(jwtResponse);
+
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -82,15 +85,14 @@ public class UserController {
             User u = this.UserService.findByUsername(user.getName());
             return new ResponseEntity<>(u, HttpStatus.OK);
         } else {
-            System.out.println("Principal ko tim thay");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @GetMapping("/test/")
-    @CrossOrigin(origins = {"127.0.0.1:5500"})
-    public ResponseEntity<String> test(Principal pricipal) {
-        return new ResponseEntity<>("SUCCESSFUL", HttpStatus.OK);
+    @PostMapping("/requestment/{id}")
+    public ResponseEntity<?> requestment(@PathVariable(value = "id") int id) {
+        
+        return new ResponseEntity<>(UserService.updateActice(id),HttpStatus.OK);
     }
 
 }
