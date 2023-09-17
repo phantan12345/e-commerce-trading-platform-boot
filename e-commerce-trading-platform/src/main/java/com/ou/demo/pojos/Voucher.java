@@ -8,11 +8,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
 @Entity
 @Table(name = "voucher")
 @NamedQueries({
@@ -28,12 +31,12 @@ public class Voucher implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "discount")
-    private Double discount;
+    private BigDecimal discount;
     @Column(name = "code")
     private String code;
     @JsonIgnore
+
     @OneToMany(mappedBy = "voucherId")
     private Set<ProductStore> productStoreSet;
     @JsonIgnore
@@ -54,14 +57,6 @@ public class Voucher implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
     }
 
     public String getCode() {

@@ -27,9 +27,8 @@ public class PaymentMethod implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "discount")
-    private Double discount;
+    private Long discount;
     @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentMethodId")
@@ -50,11 +49,11 @@ public class PaymentMethod implements Serializable {
         this.id = id;
     }
 
-    public Double getDiscount() {
+    public Long getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Double discount) {
+    public void setDiscount(Long discount) {
         this.discount = discount;
     }
 

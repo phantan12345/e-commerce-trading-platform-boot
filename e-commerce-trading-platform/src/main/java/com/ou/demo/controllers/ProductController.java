@@ -5,10 +5,13 @@
 package com.ou.demo.controllers;
 
 import com.ou.demo.dto.CartDto;
+import com.ou.demo.dto.ProdcutDto;
 import com.ou.demo.pojos.Product;
+import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.ProductService;
+import com.ou.demo.service.ProductStoreService;
 import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
 import com.ou.demo.service.receiptService;
@@ -18,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -45,6 +50,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductController {
 
     @Autowired
+    private ProductStoreService ProductStoreService;
+    
+    @Autowired
     private receiptService receiptService;
 
     @Autowired
@@ -58,7 +66,6 @@ public class ProductController {
 
     @PostMapping("/product/")
     public ResponseEntity<?> addPRoduct(@RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
-        System.out.println(file);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -83,10 +90,12 @@ public class ProductController {
             c.setCount(c.getCount() + 1);
         } else {
             Product p = productService.findById(productId);
+            ProductStore ps=ProductStoreService.findByProduct(p);
             CartDto c = new CartDto();
             c.setId(p.getId());
             c.setPrice(p.getPrice());
             c.setCount(1);
+            c.setVoucher(ps.getVoucherId());
             cart.put(productId, c);
         }
 
@@ -94,15 +103,20 @@ public class ProductController {
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
+    @GetMapping("/products/")
+    public ResponseEntity<?> getProducts() {
+        List<ProdcutDto> dto= productService.findAll();
+        return new ResponseEntity<>(dto,HttpStatus.OK);
+    }
+
     @PostMapping("/pay/")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public ResponseEntity<?> add(HttpSession s) {
+    public ResponseEntity<?> add(@RequestBody Map<String, CartDto> carts) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User userCuren = UserService.findByUsername(userDetails.getUsername());
-            Map<Integer, CartDto> carts=(Map<Integer, CartDto>) s.getAttribute("cart");
             return new ResponseEntity<>(this.receiptService.addReceipt(carts, userCuren), HttpStatus.OK);
         }
         return new ResponseEntity<>("loi ko them dc cart", HttpStatus.UNAUTHORIZED);

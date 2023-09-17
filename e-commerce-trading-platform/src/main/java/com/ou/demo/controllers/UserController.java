@@ -7,6 +7,7 @@ package com.ou.demo.controllers;
 import com.ou.demo.dto.Login;
 import com.ou.demo.pojos.User;
 import com.ou.demo.security.JwtUtils;
+import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -89,10 +90,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/requestment/{id}")
-    public ResponseEntity<?> requestment(@PathVariable(value = "id") int id) {
-        
-        return new ResponseEntity<>(UserService.updateActice(id),HttpStatus.OK);
-    }
+   
 
 }

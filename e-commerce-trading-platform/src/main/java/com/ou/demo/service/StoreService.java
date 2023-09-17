@@ -12,11 +12,11 @@ import com.ou.demo.pojos.User;
  * @author ADMIN
  */
 public interface StoreService {
-    
-     Store Create(Store store,User u);
-     
-     Store findStoreByUserID(User id);
-     
 
-        
+    Store Create(Store store, User u);
+
+    Store update(Store store);
+
+    Store findStoreByUserID(User id);
+
 }

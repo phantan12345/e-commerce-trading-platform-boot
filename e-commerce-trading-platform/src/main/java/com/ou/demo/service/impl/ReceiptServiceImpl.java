@@ -10,6 +10,7 @@ import com.ou.demo.pojos.Orderdetail;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.Voucher;
 import com.ou.demo.service.OrderService;
 import com.ou.demo.service.OrderdetailService;
 import com.ou.demo.service.ProductService;
@@ -17,6 +18,7 @@ import com.ou.demo.service.ProductStoreService;
 import com.ou.demo.service.receiptService;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Map;
 import org.hibernate.HibernateException;
@@ -38,35 +40,37 @@ public class ReceiptServiceImpl implements receiptService {
 
     @Autowired
     private OrderdetailService OrderdetailService;
-    
+
     @Autowired
     private ProductService ProductService;
-    
-    
+
     @Autowired
     private HttpSession s;
-    
-  
 
     @Override
-    public boolean addReceipt(Map<Integer, CartDto> carts, User user) {
+    public boolean addReceipt(Map<String, CartDto> carts, User user) {
         try {
-            double total = 0;
-            for (CartDto c : carts.values()) {
-                total += (c.getPrice().multiply(new BigDecimal(c.getCount()))).doubleValue();
-            }
+
             Order1 order = new Order1();
-            order.setTotal(total);
             order.setOrderDate(new Date());
-            Order1 o= OrderService.create(order);
-            
+            Order1 o = OrderService.create(order);
 
             for (CartDto c : carts.values()) {
                 Orderdetail d = new Orderdetail();
                 d.setQuatity(c.getCount());
-                Product p=ProductService.findById(c.getId());
-                d.setProductStoreId(ProductStoreService.findByProduct(p));
-                d.setTotal(c.getPrice().multiply(new BigDecimal(c.getCount())));
+                Product p = ProductService.findById(c.getId());
+                ProductStore ps = ProductStoreService.findByProduct(p);
+                d.setProductStoreId(ps);
+                if (d.getProductStoreId().getVoucherId() != null) {
+                    BigDecimal t = (c.getPrice().multiply(new BigDecimal(c.getCount())));
+                    BigDecimal total = t.subtract(t
+                            .multiply(ps.getVoucherId().getDiscount()));
+                    d.setTotal(total);
+
+                } else {
+                    d.setTotal(c.getPrice().multiply(new BigDecimal(c.getCount())));
+
+                }
                 d.setOrderId(o);
                 OrderdetailService.create(d);
             }

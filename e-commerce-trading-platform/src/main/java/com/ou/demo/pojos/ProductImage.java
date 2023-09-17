@@ -7,7 +7,6 @@ package com.ou.demo.pojos;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
-
 /**
  *
  * @author ADMIN

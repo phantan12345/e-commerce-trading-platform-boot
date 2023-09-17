@@ -4,26 +4,24 @@
  */
 package com.ou.demo.dto;
 
-import com.ou.demo.pojos.Voucher;
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
  * @author ADMIN
  */
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class CartDto {
+@NoArgsConstructor
+@ToString
+public class paypal {
 
-    private int id;
-    private int count;
-    private BigDecimal price;
-    private Voucher voucher;
-
+    private double price;
+    private String currency;
+    private String method;
+    private String intent;
+    private String description;
 }

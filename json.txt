@@ -1,21 +1,40 @@
-http://localhost:8080/api/signin/
+post http://localhost:8080/api/signin/
 {
     "username":"tan",
     "password":"tan"
 }
 
-http://localhost:8080/api/product/{productId}/comment
+post/get  http://localhost:8080/api/product/{productId}/comment comment
 
 {
    "coment":"san pham dep",
    "evaluate":3
 }
 
-http://localhost:8080/api/product/{Proid}/comment/{id}/comments
+post/get http://localhost:8080/api/product/{Proid}/comment/{id}/comments reply
 
 {
    "coment":"san pham dep",
    "evaluate":3
 }
 
+get http://localhost:8080/api/product/ lấy tất cả
+http://localhost:8080/api/product-store/ lấy các product của store
 
+get http://localhost:8080/api/cart/36/
+
+{
+    "36": {
+        "id": 36,
+        "count": 1,
+        "price": 697.00,
+        "voucher": null
+    }
+}
+
+
+http://localhost:8080/api/voucher/
+{
+    "discount":"user",
+    "code":"user"
+}

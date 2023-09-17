@@ -8,10 +8,13 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.ou.demo.dto.Mail;
 import com.ou.demo.pojos.Role;
+import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
+import com.ou.demo.repositories.StoreReponsitory;
 import com.ou.demo.repositories.UserRepository;
 import com.ou.demo.service.MailService;
 import com.ou.demo.service.RoleService;
+import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
 import java.io.IOException;
 import java.util.HashSet;
@@ -51,6 +54,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ImageServiceImpl imageService;
 
+//    @Autowired
+//    private StoreService StoreService;
     public User findByUsername(String user) {
         return UserRepository.findByUsername(user);
     }
@@ -77,11 +82,11 @@ public class UserServiceImpl implements UserService {
 
             User u = new User();
             u.setUsername(params.get("username"));
-            u.setEmail(params.get("email"));
             u.setPassword(this.passwordEncoder.encode(params.get("password")));
+            u.setEmail(params.get("email"));
 
             u.setRoleId(roleService.findRoleByRoleName("USER"));
-            u.setActive(Boolean.FALSE);
+            u.setActive(Boolean.TRUE);
 
             u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
             User user = UserRepository.save(u);
@@ -103,22 +108,21 @@ public class UserServiceImpl implements UserService {
     public User updateActice(int id) {
 
         User user = UserRepository.findById(id).get();
-        if (user.getActive() == Boolean.FALSE) {
-            user.setActive(Boolean.TRUE);
-
-        } else {
-            user.setActive(Boolean.FALSE);
-            user.setRoleId(roleService.findRoleByRoleName("SALER"));
-            
-            Mail mail = new Mail();
-            mail.setMailFrom("2051050435tan@ou.edu.vn");
-            mail.setMailTo(user.getEmail());
-            mail.setMailSubject("Spring Boot - Email Register Saller");
-            mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ MỞ CỬA HÀNG THÀNH CÔNG");
-            MailService.sendEmail(mail);
+        try {
+            if (user.getRoleId().getRoleName().equals(roleService.findRoleByRoleName("USER").getRoleName())) {
+                user.setRoleId(roleService.findRoleByRoleName("SALER"));
+                return UserRepository.save(user);
+            }
+        } catch (Exception e) {
 
         }
-        return UserRepository.save(user);
+        return null;
+
+    }
+
+    @Override
+    public User findById(int id) {
+        return UserRepository.findById(id).get();
     }
 
 }

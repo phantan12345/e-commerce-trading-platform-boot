@@ -9,6 +9,8 @@ import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.Store;
 import java.util.List;
 import java.util.Map;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ProductService {
 
-    ProdcutDto create(@RequestParam Map<String, String> params, List<MultipartFile> file, Store store);
+    ProdcutDto create( Map<String, String> params, List<MultipartFile> file, Store store);
 
     Product findById(int id);
+
+    List<ProdcutDto> findAll();
+
 }

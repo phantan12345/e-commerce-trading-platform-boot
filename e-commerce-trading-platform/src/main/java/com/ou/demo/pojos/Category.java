@@ -30,7 +30,6 @@ public class Category implements Serializable {
     @Column(name = "name")
     private String name;
     @JsonIgnore
-
     @OneToMany(mappedBy = "categoryId")
     private Set<Product> productSet;
     @JsonIgnore
@@ -38,6 +37,8 @@ public class Category implements Serializable {
     @OneToMany(mappedBy = "categoryId")
     private Set<Category> categorySet;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JsonIgnore
+
     @ManyToOne
     private Category categoryId;
 

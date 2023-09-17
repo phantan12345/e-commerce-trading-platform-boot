@@ -7,12 +7,13 @@ package com.ou.demo.pojos;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
 @Entity
 @Table(name = "orderdetail")
 @NamedQueries({
@@ -30,13 +31,12 @@ public class Orderdetail implements Serializable {
     private Integer id;
     @Column(name = "quatity")
     private Integer quatity;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total")
     private BigDecimal total;
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Order1 orderId;
-    @JoinColumn(name = "product-store_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private ProductStore productStoreId;
 
@@ -63,13 +63,7 @@ public class Orderdetail implements Serializable {
         this.quatity = quatity;
     }
 
-    public BigDecimal getTotal() {
-        return total;
-    }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
 
     public Order1 getOrderId() {
         return orderId;

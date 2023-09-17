@@ -29,7 +29,7 @@ public class ProdcutDto {
     @NotBlank
     private BigDecimal price;
     @NotBlank
-    private List<ProductImage> productImageSet;
+    private List<String> productImage;
     @NotBlank
     private Category categoryId;
 }

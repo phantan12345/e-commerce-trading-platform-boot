@@ -4,18 +4,12 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.Product;
-import com.ou.demo.pojos.ProductImage;
-import java.util.List;
+import com.ou.demo.pojos.Voucher;
 
 /**
  *
  * @author ADMIN
  */
-public interface ProductImageService {
-
-    ProductImage create(ProductImage img);
-
-    List<ProductImage> findByProdctId(Product id);
-
+public interface VoucherService {
+    Voucher create(Voucher vou);
 }

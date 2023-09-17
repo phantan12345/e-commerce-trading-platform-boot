@@ -4,8 +4,11 @@
  */
 package com.ou.demo.service;
 
+import com.ou.demo.dto.ProdcutDto;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.Store;
+import java.util.List;
 
 /**
  *
@@ -16,4 +19,7 @@ public interface ProductStoreService {
     ProductStore create(ProductStore ps);
 
     ProductStore findByProduct(Product id);
+
+    List<ProdcutDto> findAllByStore(Store s);
+
 }
