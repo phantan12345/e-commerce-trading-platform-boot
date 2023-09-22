@@ -15,6 +15,7 @@ import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ProductStoreService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,19 @@ public class ProductStoreServiceImpl implements ProductStoreService {
         }
         return listDto;
     }
+
+//    @Override
+//    public List<ProductStore> stat(Map<String, String> params,Store s) {
+//        String month = params.get("month");
+//        String year = params.get("year");
+//        String name = params.get("year");
+//
+//        if (month != null && !month.isEmpty() && year != null && !year.isEmpty()&& s!=null) {
+//            return ProductStoreRepository.stat( Integer.parseInt(month),Integer.parseInt(month. s);
+//
+//        }
+//        return null;
+//
+//    }
 
 }

@@ -16,11 +16,13 @@ import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ProductStoreService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -53,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductImageService ProductImageService;
 
     @Override
-    public ProdcutDto create( Map<String, String> params, List<MultipartFile> file, Store store) {
+    public ProdcutDto create(Map<String, String> params, List<MultipartFile> file, Store store) {
         Product p = new Product();
 
         p.setProductName(params.get("productName"));
@@ -106,6 +108,22 @@ public class ProductServiceImpl implements ProductService {
         return listDto;
     }
 
-    
+    @Override
+    public Page<Product> page(Pageable p) {
+        return productReponsitory.findAll(p);
+    }
+
+    @Override
+    public List<Product> findAllByOrderByPriceDesc() {
+        return productReponsitory.findAllByOrderByPriceDesc();
+    }
+
+    @Override
+    public List<Product> findAllByOrderByProductNameDesc() {
+        return productReponsitory.findAllByOrderByProductNameDesc();
+    }
+
+   
+   
 
 }

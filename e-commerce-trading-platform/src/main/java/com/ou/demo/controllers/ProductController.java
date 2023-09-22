@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,23 +46,19 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author ADMIN
  */
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class ProductController {
 
-    @Autowired
     private ProductStoreService ProductStoreService;
-    
-    @Autowired
+
     private receiptService receiptService;
 
-    @Autowired
     private ProductService productService;
 
-    @Autowired
     private UserService UserService;
 
-    @Autowired
     private StoreService storeService;
 
     @PostMapping("/product/")
@@ -90,7 +87,7 @@ public class ProductController {
             c.setCount(c.getCount() + 1);
         } else {
             Product p = productService.findById(productId);
-            ProductStore ps=ProductStoreService.findByProduct(p);
+            ProductStore ps = ProductStoreService.findByProduct(p);
             CartDto c = new CartDto();
             c.setId(p.getId());
             c.setPrice(p.getPrice());
@@ -105,8 +102,13 @@ public class ProductController {
 
     @GetMapping("/products/")
     public ResponseEntity<?> getProducts() {
-        List<ProdcutDto> dto= productService.findAll();
-        return new ResponseEntity<>(dto,HttpStatus.OK);
+        List<ProdcutDto> dto = productService.findAll();
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("/product/")
+    public Page<Product> getProducts(Pageable pageable) {
+        return productService.page(pageable);
     }
 
     @PostMapping("/pay/")
@@ -120,6 +122,17 @@ public class ProductController {
             return new ResponseEntity<>(this.receiptService.addReceipt(carts, userCuren), HttpStatus.OK);
         }
         return new ResponseEntity<>("loi ko them dc cart", HttpStatus.UNAUTHORIZED);
+
+    }
+
+    @GetMapping("/product/dsc/")
+    public ResponseEntity<?> get() {
+        return new ResponseEntity<>(productService.findAllByOrderByPriceDesc(), HttpStatus.OK);
+
+    }
+    @GetMapping("/product/namedsc/")
+    public ResponseEntity<?> getName() {
+        return new ResponseEntity<>(productService.findAllByOrderByProductNameDesc(), HttpStatus.OK);
 
     }
 

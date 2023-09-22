@@ -26,4 +26,11 @@ public interface ProductStoreRepository extends JpaRepository<ProductStore, Inte
 
     @Query("SELECT p FROM ProductStore p WHERE p.storeId = ?1")
     List<ProductStore> findByStore(Store id);
+
+//    @Query("select ps.id,od.total,o.order_date,s.store_name\n"
+//            + "from Order1 o , orderdetail od,ProductStore ps , Store s\n"
+//            + "where o.id=od.order_id and ps.id=od.product_store_id and s.id=ps.store_id\n"
+//            + "and o.active=1 and month(o.order_date)=?1 and year(o.order_date)=?2 and s.storeName=?3"
+//            + "order by o.order_date asc")
+//    List<ProductStore> stat(int month ,int year,String name);
 }

@@ -6,8 +6,10 @@ package com.ou.demo.controllers;
 
 import com.ou.demo.pojos.Category;
 import com.ou.demo.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author ADMIN
  */
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class CategoryController {
 
-    @Autowired
     private CategoryService CategoryService;
 
     @GetMapping("/category/")
@@ -32,6 +34,10 @@ public class CategoryController {
         return ResponseEntity.ok(CategoryService.getAll());
     }
 
+    @Operation(
+            summary = "Get all accounts REST API"
+    )
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/category/")
     public ResponseEntity<?> create(@RequestBody Category c) {
 
@@ -50,6 +56,6 @@ public class CategoryController {
 
     @PutMapping("/category/{id}/")
     public ResponseEntity<?> updateCate(@RequestBody Category c, @PathVariable("id") int id) {
-        return ResponseEntity.ok(CategoryService.update(c,id));
+        return ResponseEntity.ok(CategoryService.update(c, id));
     }
 }

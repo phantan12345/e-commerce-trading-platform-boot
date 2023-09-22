@@ -12,6 +12,7 @@ import com.ou.demo.service.MailService;
 import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,17 +31,15 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author ADMIN
  */
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class StoreController {
 
-    @Autowired
     private MailService MailService;
 
-    @Autowired
     private StoreService storeService;
 
-    @Autowired
     private UserService UserService;
 
     @PostMapping("store/")

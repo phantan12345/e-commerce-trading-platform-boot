@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 public class PaypalConfig {
@@ -38,7 +39,7 @@ public class PaypalConfig {
     }
 
     @Bean
-    public APIContext apiContext() throws PayPalRESTException {
+    public APIContext apiContext(HttpServletRequest request) throws PayPalRESTException {
         APIContext apiContext = new APIContext(authTokenCredential().getAccessToken());
         apiContext.setConfigurationMap(paypalSdkConfig());
         return apiContext;

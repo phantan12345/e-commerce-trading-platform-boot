@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,20 +39,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author ADMIN
  */
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
     private UserService UserService;
 
-    @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
     private HttpServletResponse response;
 
     @PostMapping("/signup/")

@@ -9,6 +9,7 @@ import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -21,5 +22,7 @@ public interface ProductStoreService {
     ProductStore findByProduct(Product id);
 
     List<ProdcutDto> findAllByStore(Store s);
+
+//    List<ProductStore> stat(Map<String, String> params,Store s);
 
 }

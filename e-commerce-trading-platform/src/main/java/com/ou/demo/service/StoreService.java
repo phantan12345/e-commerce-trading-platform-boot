@@ -18,5 +18,7 @@ public interface StoreService {
     Store update(Store store);
 
     Store findStoreByUserID(User id);
+    
+    Store findStoreById(int id);
 
 }

@@ -8,11 +8,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+
+@Data
 @Entity
 @Table(name = "product_store")
 @NamedQueries({
@@ -29,6 +32,8 @@ public class ProductStore implements Serializable {
     private Integer id;
     @Column(name = "count")
     private Integer count;
+    @Column(name = "active")
+    private Boolean active;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;

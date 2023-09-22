@@ -5,6 +5,7 @@
 package com.ou.demo.repositories;
 
 import com.ou.demo.pojos.Product;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author ADMIN
  */
-
 @Repository
 @Transactional
-public interface ProductReponsitory extends JpaRepository<Product, Integer>{
-    
+public interface ProductReponsitory extends JpaRepository<Product, Integer> {
+
+    List<Product> findAllByOrderByPriceDesc();
+
+    List<Product> findAllByOrderByProductNameDesc();
+
 }

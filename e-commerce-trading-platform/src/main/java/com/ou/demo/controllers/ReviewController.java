@@ -8,6 +8,7 @@ import com.ou.demo.pojos.Reriew;
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.ReviewService;
 import com.ou.demo.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author ADMIN
  */
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class ReviewController {
 
-    @Autowired
     private ReviewService ReviewService;
 
-    @Autowired
     private UserService UserService;
 
     @PostMapping("/product/{id}/comment")

@@ -55,4 +55,9 @@ public class StoreServiceImpl implements StoreService {
             return null;
         }
     }
+
+    @Override
+    public Store findStoreById(int id) {
+        return storeReponsitory.findById(id).get();
+    }
 }

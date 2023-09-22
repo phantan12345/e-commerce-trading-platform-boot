@@ -9,11 +9,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.*;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
 @Entity
 @Table(name = "order1")
 @NamedQueries({
@@ -31,6 +33,8 @@ public class Order1 implements Serializable {
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
+    @Column(name = "active")
+    private Boolean active;
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     @ManyToOne
     private Payment paymentId;
