@@ -139,8 +139,8 @@ public class ProductController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User userCuren = UserService.findByUsername(userDetails.getUsername());
 
-            boolean cart = this.receiptService.addReceipt(carts, userCuren);
-            if (cart == false) {
+            Object cart = this.receiptService.addReceipt(carts, userCuren);
+            if (cart == null) {
                 return new ResponseEntity<>("ERROR PAYMENT METHOD ",
                         HttpStatus.BAD_REQUEST
                 );

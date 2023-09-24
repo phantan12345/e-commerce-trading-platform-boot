@@ -45,7 +45,7 @@ public class ReceiptServiceImpl implements receiptService {
     private ProductService ProductService;
 
     @Override
-    public boolean addReceipt(Map<String, CartDto> carts, User user) {
+    public Object addReceipt(Map<String, CartDto> carts, User user) {
         try {
 
             Order1 order = new Order1();
@@ -56,28 +56,37 @@ public class ReceiptServiceImpl implements receiptService {
                 Orderdetail d = new Orderdetail();
                 d.setQuatity(c.getCount());
                 Product p = ProductService.findById(c.getId());
-                ProductStore ps = ProductStoreService.findByProduct(p);
-                if (c.getCount() < ps.getCount()) {
-                    d.setProductStoreId(ps);
-                    if (d.getProductStoreId().getVoucherId() != null) {
-                        BigDecimal t = (p.getPrice().multiply(new BigDecimal(c.getCount())));
-                        BigDecimal total = t.subtract(t
-                                .multiply(ps.getVoucherId().getDiscount()));
-                        d.setTotal(total);
+                if (p.getActive() == Boolean.TRUE) {
+                    ProductStore ps = ProductStoreService.findByProduct(p);
+                    if (c.getCount() < ps.getCount()) {
+                        d.setProductStoreId(ps);
+                        if (d.getProductStoreId().getVoucherId() != null) {
+                            BigDecimal t = (p.getPrice().multiply(new BigDecimal(c.getCount())));
+                            BigDecimal total = t.subtract(t
+                                    .multiply(ps.getVoucherId().getDiscount()));
+                            d.setTotal(total);
+                            if (user.getVoucherSet().remove(d.getProductStoreId().getVoucherId())) {
 
+                                System.out.println("voucher da xoa");
+                            }
+
+                        } else {
+                            d.setTotal(p.getPrice().multiply(new BigDecimal(c.getCount())));
+
+                        }
+                        d.setOrderId(o);
+                        Orderdetail od = OrderdetailService.create(d);
+
+                        int count = ps.getCount() - od.getQuatity();
+                        ps.setCount(count);
+                        ProductStoreService.create(ps);
+                        return true;
                     } else {
-                        d.setTotal(p.getPrice().multiply(new BigDecimal(c.getCount())));
-
+                        return false;
                     }
-                    d.setOrderId(o);
-                    Orderdetail od = OrderdetailService.create(d);
-
-                    int count = ps.getCount() - od.getQuatity();
-                    ps.setCount(count);
-                    ProductStoreService.create(ps);
-                    return true;
                 } else {
-                    return false;
+                    return p.getProductName()+" đã dừng bán";
+
                 }
 
             }
