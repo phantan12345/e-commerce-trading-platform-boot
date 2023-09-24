@@ -5,7 +5,6 @@
 package com.ou.demo.dto;
 
 import com.ou.demo.pojos.Category;
-import com.ou.demo.pojos.ProductImage;
 import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,23 +13,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- *
- * @author ADMIN
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProdcutDto {
+public class ProductInput {
+
     private Integer id;
     @NotBlank
     private String productName;
     @NotBlank
     private BigDecimal price;
-    private String voucher;
     @NotBlank
-    private List<String> productImage;
+    private int cateId;
     @NotBlank
-    private Category categoryId;
+    private int count;
 }

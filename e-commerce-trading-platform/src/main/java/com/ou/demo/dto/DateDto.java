@@ -4,23 +4,20 @@
  */
 package com.ou.demo.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author ADMIN
  */
 @Data
-@AllArgsConstructor
 @Builder
-public class Login {
-
-    @NotBlank(message = "username is null")
-    private String username;
-
-    @NotBlank(message = "passsword is null")
-    private String password;
+@NoArgsConstructor
+@AllArgsConstructor
+public class DateDto {
+    private int month;
+    private int year;
 }

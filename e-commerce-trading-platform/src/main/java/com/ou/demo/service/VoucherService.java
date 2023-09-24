@@ -11,5 +11,9 @@ import com.ou.demo.pojos.Voucher;
  * @author ADMIN
  */
 public interface VoucherService {
+
     Voucher create(Voucher vou);
+
+    Voucher findByid(int id);
+    Voucher findByCode(String code);
 }

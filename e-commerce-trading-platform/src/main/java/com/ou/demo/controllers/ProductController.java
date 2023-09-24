@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -69,9 +70,22 @@ public class ProductController {
             User user = UserService.findByUsername(userDetails.getUsername());
 
             Store store = storeService.findStoreByUserID(user);
-            return ResponseEntity.ok().body(productService.create(params, file, store));
+
+            if (store.getActive() == Boolean.TRUE) {
+                ProdcutDto dto = productService.create(params, file, store);
+                if (dto == null) {
+                    return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
+                } else {
+                    return new ResponseEntity<>(dto, HttpStatus.OK);
+
+                }
+            } else {
+                return new ResponseEntity<>("error add products", HttpStatus.FORBIDDEN);
+
+            }
+
         } else {
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -90,7 +104,6 @@ public class ProductController {
             ProductStore ps = ProductStoreService.findByProduct(p);
             CartDto c = new CartDto();
             c.setId(p.getId());
-            c.setPrice(p.getPrice());
             c.setCount(1);
             c.setVoucher(ps.getVoucherId());
             cart.put(productId, c);
@@ -103,7 +116,13 @@ public class ProductController {
     @GetMapping("/products/")
     public ResponseEntity<?> getProducts() {
         List<ProdcutDto> dto = productService.findAll();
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        if (dto != null) {
+            return new ResponseEntity<>(
+                    dto, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(
+                "orror find products", HttpStatus.BAD_REQUEST);
+
     }
 
     @GetMapping("/product/")
@@ -119,9 +138,19 @@ public class ProductController {
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User userCuren = UserService.findByUsername(userDetails.getUsername());
-            return new ResponseEntity<>(this.receiptService.addReceipt(carts, userCuren), HttpStatus.OK);
+
+            boolean cart = this.receiptService.addReceipt(carts, userCuren);
+            if (cart == false) {
+                return new ResponseEntity<>("ERROR PAYMENT METHOD ",
+                        HttpStatus.BAD_REQUEST
+                );
+            } else {
+
+                return new ResponseEntity<>(
+                        cart, HttpStatus.OK);
+            }
         }
-        return new ResponseEntity<>("loi ko them dc cart", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
 
     }
 
@@ -130,10 +159,26 @@ public class ProductController {
         return new ResponseEntity<>(productService.findAllByOrderByPriceDesc(), HttpStatus.OK);
 
     }
+
     @GetMapping("/product/namedsc/")
     public ResponseEntity<?> getName() {
         return new ResponseEntity<>(productService.findAllByOrderByProductNameDesc(), HttpStatus.OK);
 
+    }
+
+    @GetMapping("search/")
+    public ResponseEntity<?> search(@RequestParam Map<String, String> params) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+
+            List<Product> list = productService.search(params);
+            if (list != null) {
+                return ResponseEntity.ok().body(list);
+            }
+            return new ResponseEntity<>("LIST NULL", HttpStatus.BAD_REQUEST);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

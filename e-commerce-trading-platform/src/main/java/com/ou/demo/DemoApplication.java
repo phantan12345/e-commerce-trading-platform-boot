@@ -34,10 +34,6 @@ public class DemoApplication  {
         return cloudinary;
     }
 
-    @Bean
-    public MultipartResolver multipartResolver() {
-        return new StandardServletMultipartResolver();
-    }
 
     @Bean
     public ModelMapper modelMapper() {

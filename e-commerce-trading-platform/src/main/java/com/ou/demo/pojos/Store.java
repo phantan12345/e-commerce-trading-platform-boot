@@ -8,20 +8,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
-import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
-@Data
 @Entity
 @Table(name = "store")
 @NamedQueries({
     @NamedQuery(name = "Store.findAll", query = "SELECT s FROM Store s"),
     @NamedQuery(name = "Store.findById", query = "SELECT s FROM Store s WHERE s.id = :id"),
     @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName"),
-    @NamedQuery(name = "Store.findByAdress", query = "SELECT s FROM Store s WHERE s.adress = :adress")})
+    @NamedQuery(name = "Store.findByAdress", query = "SELECT s FROM Store s WHERE s.adress = :adress"),
+    @NamedQuery(name = "Store.findByActive", query = "SELECT s FROM Store s WHERE s.active = :active")})
 public class Store implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,7 +39,6 @@ public class Store implements Serializable {
     @ManyToOne(optional = false)
     private User userId;
     @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
     private Set<ProductStore> productStoreSet;
 
@@ -73,6 +71,14 @@ public class Store implements Serializable {
 
     public void setAdress(String adress) {
         this.adress = adress;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public User getUserId() {

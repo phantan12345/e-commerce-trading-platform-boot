@@ -22,6 +22,7 @@ public interface CategoryService {
     List<Category> getCateByCateId(int cate);
 
     Category findCateById(int id);
-    
-    Category update(Category cate,int id);
+
+    Category update(Category cate, int id);
+
 }

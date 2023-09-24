@@ -10,12 +10,14 @@ import com.ou.demo.dto.Mail;
 import com.ou.demo.pojos.Role;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.Voucher;
 import com.ou.demo.repositories.StoreReponsitory;
 import com.ou.demo.repositories.UserRepository;
 import com.ou.demo.service.MailService;
 import com.ou.demo.service.RoleService;
 import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
+import com.ou.demo.service.VoucherService;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -54,6 +56,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ImageServiceImpl imageService;
 
+   
+
 //    @Autowired
 //    private StoreService StoreService;
     public User findByUsername(String user) {
@@ -77,6 +81,7 @@ public class UserServiceImpl implements UserService {
                 users.getUsername(), users.getPassword(), authorities);
     }
 
+    @Override
     public boolean addUsers(Map<String, String> params, MultipartFile file) {
         try {
 
@@ -97,11 +102,11 @@ public class UserServiceImpl implements UserService {
             mail.setMailSubject("Spring Boot - Email Register");
             mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
             MailService.sendEmail(mail);
+            return true;
         } catch (Exception e) {
+            return false;
 
         }
-        return false;
-
     }
 
     @Override
@@ -124,5 +129,19 @@ public class UserServiceImpl implements UserService {
     public User findById(int id) {
         return UserRepository.findById(id).get();
     }
+
+    @Override
+    public User update(User user) {
+        try {
+            if (user != null) {
+                return UserRepository.save(user);
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+  
 
 }

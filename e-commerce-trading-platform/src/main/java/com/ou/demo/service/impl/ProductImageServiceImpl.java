@@ -6,6 +6,7 @@ package com.ou.demo.service.impl;
 
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
+import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.repositories.ProductImageReponsitory;
 import com.ou.demo.service.ProductImageService;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ProductImageServiceImpl implements ProductImageService{
     }
 
     @Override
-    public List<ProductImage> findByProdctId(Product id) {
+    public List<ProductImage> findByProdctId(ProductStore id) {
         return ProductImageReponsitory.findByProdcutId(id);
     }
     

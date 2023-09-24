@@ -4,22 +4,16 @@
  */
 package com.ou.demo.service;
 
-import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.Voucher;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author ADMIN
  */
-public interface StoreService {
+public interface UserVoucherService {
 
-    Store Create(Store store, User u);
-
-    Store update(Store store);
-
-    Store findStoreByUserID(User id);
-    
-    Store findStoreById(int id);
-    Store delete(Store s);
+    User addVoucherUser(User user, Voucher voucher);
 
 }

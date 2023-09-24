@@ -5,6 +5,7 @@
 package com.ou.demo.service;
 
 import com.ou.demo.dto.ProdcutDto;
+import com.ou.demo.dto.ProductInput;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
@@ -34,5 +35,10 @@ public interface ProductService {
 
     List<Product> findAllByOrderByProductNameDesc();
 
+    List<Product> search(Map<String, String> params);
+
+    Product delete(Product ps);
+
+    Product update(Product ps);
 
 }

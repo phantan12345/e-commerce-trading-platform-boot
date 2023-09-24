@@ -44,9 +44,6 @@ public class ReceiptServiceImpl implements receiptService {
     @Autowired
     private ProductService ProductService;
 
-    @Autowired
-    private HttpSession s;
-
     @Override
     public boolean addReceipt(Map<String, CartDto> carts, User user) {
         try {
@@ -60,26 +57,35 @@ public class ReceiptServiceImpl implements receiptService {
                 d.setQuatity(c.getCount());
                 Product p = ProductService.findById(c.getId());
                 ProductStore ps = ProductStoreService.findByProduct(p);
-                d.setProductStoreId(ps);
-                if (d.getProductStoreId().getVoucherId() != null) {
-                    BigDecimal t = (c.getPrice().multiply(new BigDecimal(c.getCount())));
-                    BigDecimal total = t.subtract(t
-                            .multiply(ps.getVoucherId().getDiscount()));
-                    d.setTotal(total);
+                if (c.getCount() < ps.getCount()) {
+                    d.setProductStoreId(ps);
+                    if (d.getProductStoreId().getVoucherId() != null) {
+                        BigDecimal t = (p.getPrice().multiply(new BigDecimal(c.getCount())));
+                        BigDecimal total = t.subtract(t
+                                .multiply(ps.getVoucherId().getDiscount()));
+                        d.setTotal(total);
 
+                    } else {
+                        d.setTotal(p.getPrice().multiply(new BigDecimal(c.getCount())));
+
+                    }
+                    d.setOrderId(o);
+                    Orderdetail od = OrderdetailService.create(d);
+
+                    int count = ps.getCount() - od.getQuatity();
+                    ps.setCount(count);
+                    ProductStoreService.create(ps);
+                    return true;
                 } else {
-                    d.setTotal(c.getPrice().multiply(new BigDecimal(c.getCount())));
-
+                    return false;
                 }
-                d.setOrderId(o);
-                OrderdetailService.create(d);
+
             }
-            s.setAttribute("cart", null);
-            return true;
-        } catch (HibernateException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
             return false;
         }
+        return false;
+
     }
 
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import lombok.Data;
 
+
 /**
  *
  * @author ADMIN
@@ -63,7 +64,7 @@ public class Orderdetail implements Serializable {
         this.quatity = quatity;
     }
 
-
+ 
 
     public Order1 getOrderId() {
         return orderId;

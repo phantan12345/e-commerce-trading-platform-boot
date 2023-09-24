@@ -5,8 +5,11 @@
 package com.ou.demo.service.impl;
 
 import com.ou.demo.pojos.Orderdetail;
+import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.repositories.OrderdetailRepository;
 import com.ou.demo.service.OrderdetailService;
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +27,17 @@ public class OrderdetailServiceImpl implements OrderdetailService{
     public Orderdetail create(Orderdetail od) {
         return OrderdetailRepository.save(od);
     }
+
+    @Override
+    public Orderdetail findByProductStore(ProductStore ps) {
+        return OrderdetailRepository.findByproductStoreId(ps);
+    }
+
+    @Override
+    public List<Orderdetail> findByDate(int month ,int year) {
+        return OrderdetailRepository.findByMonthAndYear(month,year);
+    }
+    
+    
     
 }

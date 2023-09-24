@@ -39,8 +39,15 @@ public class User implements Serializable {
     private String avatar;
     @Column(name = "email")
     private String email;
+    @Column(name = "Phone")
+    private String phone;
     @Column(name = "active")
     private Boolean active;
+    @JoinTable(name = "user_voucher", joinColumns = {
+        @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "voucher_id", referencedColumnName = "id")})
+    @ManyToMany
+    private Set<Voucher> voucherSet;
     @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
@@ -48,13 +55,9 @@ public class User implements Serializable {
     @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<CodeUser> codeUserSet;
-    @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Reriew> reriewSet;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Role roleId;
 
     public User() {
@@ -112,20 +115,20 @@ public class User implements Serializable {
         this.active = active;
     }
 
+    public Set<Voucher> getVoucherSet() {
+        return voucherSet;
+    }
+
+    public void setVoucherSet(Set<Voucher> voucherSet) {
+        this.voucherSet = voucherSet;
+    }
+
     public Set<Store> getStoreSet() {
         return storeSet;
     }
 
     public void setStoreSet(Set<Store> storeSet) {
         this.storeSet = storeSet;
-    }
-
-    public Set<CodeUser> getCodeUserSet() {
-        return codeUserSet;
-    }
-
-    public void setCodeUserSet(Set<CodeUser> codeUserSet) {
-        this.codeUserSet = codeUserSet;
     }
 
     public Set<Reriew> getReriewSet() {

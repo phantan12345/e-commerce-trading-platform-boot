@@ -6,6 +6,7 @@ package com.ou.demo.service;
 
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
+import com.ou.demo.pojos.ProductStore;
 import java.util.List;
 
 /**
@@ -16,6 +17,6 @@ public interface ProductImageService {
 
     ProductImage create(ProductImage img);
 
-    List<ProductImage> findByProdctId(Product id);
+    List<ProductImage> findByProdctId(ProductStore id);
 
 }

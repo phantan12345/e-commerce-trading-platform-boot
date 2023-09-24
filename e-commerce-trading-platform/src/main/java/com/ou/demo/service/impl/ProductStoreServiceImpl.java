@@ -5,17 +5,21 @@
 package com.ou.demo.service.impl;
 
 import com.ou.demo.dto.ProdcutDto;
+import com.ou.demo.pojos.Order1;
+import com.ou.demo.pojos.Orderdetail;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.repositories.ProductStoreRepository;
+import com.ou.demo.service.OrderdetailService;
 import com.ou.demo.service.ProductImageService;
 import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ProductStoreService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,9 @@ public class ProductStoreServiceImpl implements ProductStoreService {
 
     @Autowired
     private ProductImageService ProductImageService;
+
+    @Autowired
+    private OrderdetailService OrderdetailService;
 
     @Override
     public ProductStore create(ProductStore ps) {
@@ -50,7 +57,7 @@ public class ProductStoreServiceImpl implements ProductStoreService {
         List<ProdcutDto> listDto = new ArrayList<>();
 
         for (ProductStore product : list) {
-            List<String> img = ProductImageService.findByProdctId(product.getProductId())
+            List<String> img = ProductImageService.findByProdctId(product)
                     .stream()
                     .map(ProductImage::getUrl)
                     .collect(Collectors.toList());
@@ -65,18 +72,24 @@ public class ProductStoreServiceImpl implements ProductStoreService {
         return listDto;
     }
 
-//    @Override
-//    public List<ProductStore> stat(Map<String, String> params,Store s) {
-//        String month = params.get("month");
-//        String year = params.get("year");
-//        String name = params.get("year");
-//
-//        if (month != null && !month.isEmpty() && year != null && !year.isEmpty()&& s!=null) {
-//            return ProductStoreRepository.stat( Integer.parseInt(month),Integer.parseInt(month. s);
-//
-//        }
-//        return null;
-//
-//    }
+    @Override
+    public ProductStore findById(int id) {
+        return ProductStoreRepository.findById(id).get();
+    }
+
+    @Override
+    public Object stat() {
+
+        Order1 or = new Order1();
+        Set<Orderdetail> orderDetails = or.getOrderdetailSet();
+        return orderDetails;
+    }
+
+    @Override
+    public ProductStore findlByStore(Store s) {
+        return ProductStoreRepository.findByproductId(s);
+    }
+
+   
 
 }

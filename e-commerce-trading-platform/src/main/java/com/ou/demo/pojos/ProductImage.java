@@ -7,6 +7,7 @@ package com.ou.demo.pojos;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
+
 /**
  *
  * @author ADMIN
@@ -27,9 +28,9 @@ public class ProductImage implements Serializable {
     private Integer id;
     @Column(name = "url")
     private String url;
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Product productId;
+    private ProductStore productStoreId;
 
     public ProductImage() {
     }
@@ -54,12 +55,12 @@ public class ProductImage implements Serializable {
         this.url = url;
     }
 
-    public Product getProductId() {
-        return productId;
+    public ProductStore getProductStoreId() {
+        return productStoreId;
     }
 
-    public void setProductId(Product productId) {
-        this.productId = productId;
+    public void setProductStoreId(ProductStore productStoreId) {
+        this.productStoreId = productStoreId;
     }
 
     @Override

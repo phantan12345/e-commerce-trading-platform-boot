@@ -4,13 +4,18 @@
  */
 package com.ou.demo.service;
 
+import com.ou.demo.dto.DateDto;
 import com.ou.demo.pojos.Order1;
-
+import com.ou.demo.pojos.Store;
+import java.util.List;
 
 /**
  *
  * @author ADMIN
  */
 public interface OrderService {
+
     Order1 create(Order1 o);
+
+    Object findOrderByStore(Store store, DateDto dto);
 }

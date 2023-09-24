@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
  * @author ADMIN
  */
 @Service
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryReponsitory categoryReponsitory;
-    
+
     @Override
     public Category findCateByName(String name) {
         return categoryReponsitory.findCateByName(name);
@@ -32,12 +32,12 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Category create(Category c,int id) {
-        
-        if(id!=0){
-            Category cate=categoryReponsitory.findById(id).get();
+    public Category create(Category c, int id) {
+
+        if (id != 0) {
+            Category cate = categoryReponsitory.findById(id).get();
             c.setCategoryId(cate);
-        }       
+        }
         return categoryReponsitory.save(c);
     }
 
@@ -48,16 +48,16 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public List<Category> getCateByCateId(int c) {
-        Category cate=categoryReponsitory.findById(c).get();
+        Category cate = categoryReponsitory.findById(c).get();
         return categoryReponsitory.findCateByCateId(cate);
     }
 
     @Override
-    public Category update(Category cate,int id) {
-        Category c=categoryReponsitory.findById(id).get();
+    public Category update(Category cate, int id) {
+        Category c = categoryReponsitory.findById(id).get();
         c.setName(cate.getName());
         c.setCategoryId(cate.getCategoryId());
         return categoryReponsitory.save(c);
     }
-    
+
 }

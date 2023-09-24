@@ -6,14 +6,18 @@ package com.ou.demo.controllers;
 
 import com.ou.demo.dto.Login;
 import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.Voucher;
 import com.ou.demo.security.JwtUtils;
 import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
+import com.ou.demo.service.VoucherService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +27,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,18 +59,19 @@ public class UserController {
 
     private HttpServletResponse response;
 
+    private VoucherService VoucherService;
+
     @PostMapping("/signup/")
-    public ResponseEntity<?> registerUser(@Valid @RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
-        UserService.addUsers(params, file);
-        return ResponseEntity.ok("User registered successfully!");
+    public ResponseEntity<?> registerUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
+        boolean user = UserService.addUsers(params, file);
+        return new ResponseEntity<>(user == false ? "error User registered successfully!" : new ResponseEntity<>(user, HttpStatus.OK),
+                HttpStatus.OK);
     }
 
     @PostMapping(path = "/signin/")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login login) throws Exception {
-
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login login, BindingResult bindingResult) throws Exception {
         authenticate(login.getUsername(), login.getPassword());
         final UserDetails userDetails = UserService.loadUserByUsername(login.getUsername());
-        User user = UserService.findByUsername(userDetails.getUsername());
 
         String jwtResponse = jwtUtils.generateJwtToken(userDetails);
 
@@ -78,16 +86,16 @@ public class UserController {
 
     @GetMapping("/current-user/")
     @CrossOrigin
-    public ResponseEntity<User> details(Principal user) {
+    public ResponseEntity<?> details(Principal user) {
 
         if (user != null) {
             User u = this.UserService.findByUsername(user.getName());
             return new ResponseEntity<>(u, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
     }
 
-   
+    
 
 }

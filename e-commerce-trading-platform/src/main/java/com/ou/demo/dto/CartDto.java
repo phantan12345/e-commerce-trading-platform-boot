@@ -23,7 +23,6 @@ public class CartDto {
 
     private int id;
     private int count;
-    private BigDecimal price;
     private Voucher voucher;
 
 }

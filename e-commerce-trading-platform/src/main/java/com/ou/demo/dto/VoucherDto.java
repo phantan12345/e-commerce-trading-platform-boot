@@ -4,23 +4,23 @@
  */
 package com.ou.demo.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author ADMIN
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Login {
+public class VoucherDto {
 
-    @NotBlank(message = "username is null")
-    private String username;
+    @NotNull
+    private int id;
 
-    @NotBlank(message = "passsword is null")
-    private String password;
 }

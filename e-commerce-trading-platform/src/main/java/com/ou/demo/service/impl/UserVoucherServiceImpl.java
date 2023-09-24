@@ -4,8 +4,11 @@
  */
 package com.ou.demo.service.impl;
 
+import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
-import com.ou.demo.repositories.VoucherRepository;
+import com.ou.demo.repositories.UserRepository;
+import com.ou.demo.service.UserService;
+import com.ou.demo.service.UserVoucherService;
 import com.ou.demo.service.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,24 +18,17 @@ import org.springframework.stereotype.Service;
  * @author ADMIN
  */
 @Service
-public class VoucherServiceImpl implements VoucherService{
+public class UserVoucherServiceImpl implements UserVoucherService{
 
     @Autowired
-    private VoucherRepository VoucherRepository;
-    
-    @Override
-    public Voucher create(Voucher vou) {
-        return VoucherRepository.save(vou);
-    }
+    private VoucherService VoucherService;
+
+    @Autowired
+    private UserService UserService;
 
     @Override
-    public Voucher findByid(int id) {
-        return VoucherRepository.findById(id).get();
-    }
+    public User addVoucherUser(User user, Voucher voucher) {
+        return UserService.update(user);
 
-    @Override
-    public Voucher findByCode(String code) {
-        return VoucherRepository.findByCode(code);
     }
-    
 }

@@ -9,19 +9,18 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.*;
-import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
-@Data
 @Entity
 @Table(name = "order1")
 @NamedQueries({
     @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o"),
     @NamedQuery(name = "Order1.findById", query = "SELECT o FROM Order1 o WHERE o.id = :id"),
-    @NamedQuery(name = "Order1.findByOrderDate", query = "SELECT o FROM Order1 o WHERE o.orderDate = :orderDate")})
+    @NamedQuery(name = "Order1.findByOrderDate", query = "SELECT o FROM Order1 o WHERE o.orderDate = :orderDate"),
+    @NamedQuery(name = "Order1.findByActive", query = "SELECT o FROM Order1 o WHERE o.active = :active")})
 public class Order1 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,7 +38,6 @@ public class Order1 implements Serializable {
     @ManyToOne
     private Payment paymentId;
     @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -64,6 +62,14 @@ public class Order1 implements Serializable {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Payment getPaymentId() {

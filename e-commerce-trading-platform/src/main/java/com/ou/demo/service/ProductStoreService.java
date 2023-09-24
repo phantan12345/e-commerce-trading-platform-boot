@@ -23,6 +23,10 @@ public interface ProductStoreService {
 
     List<ProdcutDto> findAllByStore(Store s);
 
-//    List<ProductStore> stat(Map<String, String> params,Store s);
+    ProductStore findById(int id);
+
+    ProductStore findlByStore(Store s);
+
+    Object stat();
 
 }

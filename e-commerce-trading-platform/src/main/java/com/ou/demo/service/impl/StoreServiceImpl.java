@@ -4,11 +4,15 @@
  */
 package com.ou.demo.service.impl;
 
+import com.ou.demo.pojos.Product;
+import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.StoreReponsitory;
+import com.ou.demo.service.ProductService;
 import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +28,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ProductService ProductService;
 
     @Override
     public Store Create(Store store, User u) {
@@ -48,7 +55,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store update(Store id) {
         try {
-            
+
             return this.storeReponsitory.save(id);
 
         } catch (Exception e) {
@@ -59,5 +66,16 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store findStoreById(int id) {
         return storeReponsitory.findById(id).get();
+    }
+
+    @Override
+    public Store delete(Store s) {
+        for (ProductStore ps : s.getProductStoreSet()) {
+            Product p = ps.getProductId();
+            p.setActive(Boolean.FALSE);
+            ProductService.update(p);
+        }
+        s.setActive(Boolean.FALSE);
+        return storeReponsitory.save(s);
     }
 }

@@ -43,10 +43,6 @@ public class Product implements Serializable {
     @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Set<ProductImage> productImageSet;
-    @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductStore> productStoreSet;
     @JsonIgnore
 
@@ -98,14 +94,6 @@ public class Product implements Serializable {
 
     public void setCategoryId(Category categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Set<ProductImage> getProductImageSet() {
-        return productImageSet;
-    }
-
-    public void setProductImageSet(Set<ProductImage> productImageSet) {
-        this.productImageSet = productImageSet;
     }
 
     public Set<ProductStore> getProductStoreSet() {

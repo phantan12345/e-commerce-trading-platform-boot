@@ -5,6 +5,9 @@
 package com.ou.demo.service;
 
 import com.ou.demo.pojos.Orderdetail;
+import com.ou.demo.pojos.ProductStore;
+import java.util.Date;
+import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,5 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface OrderdetailService {
+
     Orderdetail create(Orderdetail od);
+
+    Orderdetail findByProductStore(ProductStore ps);
+
+    List<Orderdetail> findByDate(int month, int year);
 }

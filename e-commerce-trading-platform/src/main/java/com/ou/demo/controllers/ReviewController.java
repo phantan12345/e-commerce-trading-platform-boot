@@ -43,9 +43,10 @@ public class ReviewController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User currentUser = UserService.findByUsername(userDetails.getUsername());
             Reriew Reriew = ReviewService.addComment(c, currentUser, id, 0);
-            return new ResponseEntity<>(Reriew, HttpStatus.CREATED);
+            return new ResponseEntity<>(Reriew == null ? "orror find products"
+                    : new ResponseEntity(Reriew, HttpStatus.BAD_REQUEST), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -59,7 +60,7 @@ public class ReviewController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User currentUser = UserService.findByUsername(userDetails.getUsername());
             Reriew Reriew = ReviewService.addComment(c, currentUser, proId, id);
-            return new ResponseEntity<>(Reriew == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.UNAUTHORIZED) : Reriew, HttpStatus.OK);
+            return new ResponseEntity<>(Reriew == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.BAD_REQUEST) : Reriew, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

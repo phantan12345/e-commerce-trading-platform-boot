@@ -6,16 +6,14 @@ package com.ou.demo.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Set;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
-@Data
 @Entity
 @Table(name = "voucher")
 @NamedQueries({
@@ -31,18 +29,18 @@ public class Voucher implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "discount")
     private BigDecimal discount;
     @Column(name = "code")
     private String code;
     @JsonIgnore
-
+    @ManyToMany(mappedBy = "voucherSet")
+    private Set<User> userSet;
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "voucherId")
     private Set<ProductStore> productStoreSet;
-    @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voucherId")
-    private Set<CodeUser> codeUserSet;
 
     public Voucher() {
     }
@@ -59,6 +57,14 @@ public class Voucher implements Serializable {
         this.id = id;
     }
 
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
+    }
+
     public String getCode() {
         return code;
     }
@@ -67,20 +73,20 @@ public class Voucher implements Serializable {
         this.code = code;
     }
 
+    public Set<User> getUserSet() {
+        return userSet;
+    }
+
+    public void setUserSet(Set<User> userSet) {
+        this.userSet = userSet;
+    }
+
     public Set<ProductStore> getProductStoreSet() {
         return productStoreSet;
     }
 
     public void setProductStoreSet(Set<ProductStore> productStoreSet) {
         this.productStoreSet = productStoreSet;
-    }
-
-    public Set<CodeUser> getCodeUserSet() {
-        return codeUserSet;
-    }
-
-    public void setCodeUserSet(Set<CodeUser> codeUserSet) {
-        this.codeUserSet = codeUserSet;
     }
 
     @Override

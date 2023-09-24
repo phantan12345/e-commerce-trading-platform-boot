@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
         p.setProductName(params.get("productName"));
         BigDecimal price = new BigDecimal(params.get("price"));
         p.setPrice(price);
-        p.setCategoryId(CategoryService.findCateByName(params.get("category")));
+        p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("cateid"))));
         p.setActive(Boolean.TRUE);
         ProductStore ps = new ProductStore();
         ps.setCount(Integer.parseInt(params.get("count")));
@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
         for (MultipartFile f : file) {
             ProductImage img = new ProductImage();
             img.setUrl(ImageService.Cloudinary(f).get("secure_url").toString());
-            img.setProductId(p);
+            img.setProductStoreId(ps);
             ProductImageService.create(img);
 
         }
@@ -93,17 +93,18 @@ public class ProductServiceImpl implements ProductService {
         List<ProdcutDto> listDto = new ArrayList<>();
 
         for (Product product : list) {
-            List<String> img = ProductImageService.findByProdctId(product)
-                    .stream()
-                    .map(ProductImage::getUrl)
-                    .collect(Collectors.toList());
-            ProdcutDto dto = ProdcutDto.builder().id(product.getId())
-                    .productName(product.getProductName())
-                    .price(product.getPrice())
-                    .categoryId(product.getCategoryId())
-                    .productImage(img).build();
-            listDto.add(dto);
-
+            if (product.getActive() != Boolean.FALSE) {
+                List<String> img = ProductImageService.findByProdctId(ProductStoreService.findByProduct(product))
+                        .stream()
+                        .map(ProductImage::getUrl)
+                        .collect(Collectors.toList());
+                ProdcutDto dto = ProdcutDto.builder().id(product.getId())
+                        .productName(product.getProductName())
+                        .price(product.getPrice())
+                        .categoryId(product.getCategoryId())
+                        .productImage(img).build();
+                listDto.add(dto);
+            }
         }
         return listDto;
     }
@@ -123,7 +124,33 @@ public class ProductServiceImpl implements ProductService {
         return productReponsitory.findAllByOrderByProductNameDesc();
     }
 
-   
-   
+    @Override
+    public List<Product> search(Map<String, String> params) {
+
+        String name = params.get("productName");
+        String cate = params.get("cate");
+        String start = params.get("minPrice");
+        String end = params.get("maxPrice");
+
+        if (name != null && !name.isEmpty()) {
+            return productReponsitory.searchProducts(name,
+                    cate == null ? null : CategoryService.findCateById(Integer.parseInt(cate)),
+                    start == null ? null : new BigDecimal(start),
+                    end == null ? null : new BigDecimal(end));
+        }
+        return null;
+
+    }
+
+    @Override
+    public Product delete(Product product) {
+        product.setActive(Boolean.FALSE);
+        return productReponsitory.save(product);
+    }
+
+    @Override
+    public Product update(Product ps) {
+        return productReponsitory.save(ps);
+    }
 
 }
