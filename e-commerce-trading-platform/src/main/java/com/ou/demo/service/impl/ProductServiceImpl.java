@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
         for (MultipartFile f : file) {
             ProductImage img = new ProductImage();
             img.setUrl(ImageService.Cloudinary(f).get("secure_url").toString());
-            img.setProductStoreId(ps);
+            img.setProductId(p);
             ProductImageService.create(img);
 
         }
@@ -94,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
 
         for (Product product : list) {
             if (product.getActive() != Boolean.FALSE) {
-                List<String> img = ProductImageService.findByProdctId(ProductStoreService.findByProduct(product))
+                List<String> img = ProductImageService.findByProdctId(product)
                         .stream()
                         .map(ProductImage::getUrl)
                         .collect(Collectors.toList());

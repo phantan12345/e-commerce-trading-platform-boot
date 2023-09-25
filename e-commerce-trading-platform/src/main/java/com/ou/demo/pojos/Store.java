@@ -39,6 +39,7 @@ public class Store implements Serializable {
     @ManyToOne(optional = false)
     private User userId;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
     private Set<ProductStore> productStoreSet;
 

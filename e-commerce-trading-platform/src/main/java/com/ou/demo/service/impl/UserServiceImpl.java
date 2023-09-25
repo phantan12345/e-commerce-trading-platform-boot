@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             u.setUsername(params.get("username"));
             u.setPassword(this.passwordEncoder.encode(params.get("password")));
             u.setEmail(params.get("email"));
-
+            u.setPhone(params.get("phone"));
             u.setRoleId(roleService.findRoleByRoleName("USER"));
             
             u.setActive(Boolean.TRUE);

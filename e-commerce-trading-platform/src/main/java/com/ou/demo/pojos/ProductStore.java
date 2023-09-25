@@ -18,7 +18,7 @@ import jakarta.persistence.*;
 @NamedQueries({
     @NamedQuery(name = "ProductStore.findAll", query = "SELECT p FROM ProductStore p"),
     @NamedQuery(name = "ProductStore.findById", query = "SELECT p FROM ProductStore p WHERE p.id = :id"),
-    @NamedQuery(name = "ProductStore.findByCount", query = "SELECT p FROM ProductStore p WHERE p.count = :count"),})
+    @NamedQuery(name = "ProductStore.findByCount", query = "SELECT p FROM ProductStore p WHERE p.count = :count")})
 public class ProductStore implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,11 +29,6 @@ public class ProductStore implements Serializable {
     private Integer id;
     @Column(name = "count")
     private Integer count;
-
-    @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
-    private Set<ProductImage> productImageSet;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
@@ -44,7 +39,6 @@ public class ProductStore implements Serializable {
     @ManyToOne
     private Voucher voucherId;
     @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -69,14 +63,6 @@ public class ProductStore implements Serializable {
 
     public void setCount(Integer count) {
         this.count = count;
-    }
-
-    public Set<ProductImage> getProductImageSet() {
-        return productImageSet;
-    }
-
-    public void setProductImageSet(Set<ProductImage> productImageSet) {
-        this.productImageSet = productImageSet;
     }
 
     public Product getProductId() {

@@ -29,7 +29,7 @@ public class ProductImageServiceImpl implements ProductImageService{
     }
 
     @Override
-    public List<ProductImage> findByProdctId(ProductStore id) {
+    public List<ProductImage> findByProdctId(Product id) {
         return ProductImageReponsitory.findByProdcutId(id);
     }
     

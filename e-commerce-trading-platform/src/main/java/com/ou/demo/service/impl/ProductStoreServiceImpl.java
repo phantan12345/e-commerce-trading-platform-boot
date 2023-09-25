@@ -37,8 +37,6 @@ public class ProductStoreServiceImpl implements ProductStoreService {
     @Autowired
     private ProductImageService ProductImageService;
 
-    @Autowired
-    private OrderdetailService OrderdetailService;
 
     @Override
     public ProductStore create(ProductStore ps) {
@@ -57,7 +55,7 @@ public class ProductStoreServiceImpl implements ProductStoreService {
         List<ProdcutDto> listDto = new ArrayList<>();
 
         for (ProductStore product : list) {
-            List<String> img = ProductImageService.findByProdctId(product)
+            List<String> img = ProductImageService.findByProdctId(product.getProductId())
                     .stream()
                     .map(ProductImage::getUrl)
                     .collect(Collectors.toList());

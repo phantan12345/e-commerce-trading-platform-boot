@@ -38,6 +38,7 @@ public class Order1 implements Serializable {
     @ManyToOne
     private Payment paymentId;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
 

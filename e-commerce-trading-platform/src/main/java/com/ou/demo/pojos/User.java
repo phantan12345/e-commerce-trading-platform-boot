@@ -22,7 +22,8 @@ import jakarta.persistence.*;
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-    @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active")})
+    @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active"),
+    @NamedQuery(name = "User.findByPhone", query = "SELECT u FROM User u WHERE u.phone = :phone")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,10 +40,10 @@ public class User implements Serializable {
     private String avatar;
     @Column(name = "email")
     private String email;
-    @Column(name = "Phone")
-    private String phone;
     @Column(name = "active")
     private Boolean active;
+    @Column(name = "Phone")
+    private String phone;
     @JoinTable(name = "user_voucher", joinColumns = {
         @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "voucher_id", referencedColumnName = "id")})
@@ -113,6 +114,14 @@ public class User implements Serializable {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Set<Voucher> getVoucherSet() {

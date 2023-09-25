@@ -17,6 +17,6 @@ public interface ProductImageService {
 
     ProductImage create(ProductImage img);
 
-    List<ProductImage> findByProdctId(ProductStore id);
+    List<ProductImage> findByProdctId(Product id);
 
 }

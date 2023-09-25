@@ -21,6 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface ProductImageReponsitory extends JpaRepository<ProductImage, Integer> {
 
-    @Query("SELECT p FROM ProductImage p WHERE p.productStoreId = ?1")
-    List<ProductImage> findByProdcutId(ProductStore id);
+    @Query("SELECT p FROM ProductImage p WHERE p.productId = ?1")
+    List<ProductImage> findByProdcutId(Product id);
 }

@@ -56,7 +56,7 @@ public class StoreController {
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User user = UserService.findByUsername(userDetails.getUsername());
-
+            
             Store store = storeService.Create(s, user);
             return new ResponseEntity<>(store == null ? "orror find products"
                     : new ResponseEntity(store, HttpStatus.OK), HttpStatus.BAD_REQUEST);

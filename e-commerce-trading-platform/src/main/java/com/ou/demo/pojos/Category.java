@@ -7,17 +7,6 @@ package com.ou.demo.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.*;
 
 /**
@@ -38,6 +27,7 @@ public class Category implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "name")
     private String name;
     @JsonIgnore
@@ -56,6 +46,11 @@ public class Category implements Serializable {
 
     public Category(Integer id) {
         this.id = id;
+    }
+
+    public Category(Integer id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Integer getId() {

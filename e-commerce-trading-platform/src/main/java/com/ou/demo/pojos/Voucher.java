@@ -37,8 +37,8 @@ public class Voucher implements Serializable {
     @JsonIgnore
     @ManyToMany(mappedBy = "voucherSet")
     private Set<User> userSet;
-    
     @JsonIgnore
+
     @OneToMany(mappedBy = "voucherId")
     private Set<ProductStore> productStoreSet;
 

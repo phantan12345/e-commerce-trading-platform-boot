@@ -6,10 +6,12 @@ package com.ou.demo.service.impl;
 
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.Role;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.StoreReponsitory;
 import com.ou.demo.service.ProductService;
+import com.ou.demo.service.RoleService;
 import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
 import java.util.Set;
@@ -32,19 +34,23 @@ public class StoreServiceImpl implements StoreService {
     @Autowired
     private ProductService ProductService;
 
+    @Autowired
+    private RoleService RoleService;
+
     @Override
     public Store Create(Store store, User u) {
 
-        try {
-
-            store.setUserId(u);
-            store.setActive(Boolean.FALSE);
-            userService.updateActice(u.getId());
+        store.setUserId(u);
+        store.setActive(Boolean.FALSE);
+        Role role = RoleService.findRoleByRoleName("SELLER");
+        if (role != null) {
+            u.setRoleId(role);
+            userService.update(u);
             return this.storeReponsitory.save(store);
-
-        } catch (Exception e) {
-            return null;
         }
+
+        return null;
+
     }
 
     @Override

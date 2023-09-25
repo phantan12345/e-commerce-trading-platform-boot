@@ -66,8 +66,14 @@ public class ProductStoreController {
             User user = UserService.findByUsername(userDetails.getUsername());
             Store s = StoreService.findStoreByUserID(user);
             List<ProdcutDto> dto = ProductStoreService.findAllByStore(s);
-            return new ResponseEntity<>(dto == null ? "orror find products"
-                    : new ResponseEntity(dto, HttpStatus.OK), HttpStatus.BAD_REQUEST);
+            if (dto == null) {
+                return new ResponseEntity<>("orror find products",
+                        HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>(
+                        dto, HttpStatus.OK);
+            }
+
         } else {
             return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
@@ -103,7 +109,7 @@ public class ProductStoreController {
     }
 
     @DeleteMapping("product-store/{id}")
-    public ResponseEntity<?> delete( @PathVariable("id") int id) {
+    public ResponseEntity<?> delete(@PathVariable("id") int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
 
