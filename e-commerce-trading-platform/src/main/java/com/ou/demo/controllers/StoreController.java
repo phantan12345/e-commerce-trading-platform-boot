@@ -22,6 +22,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,8 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author ADMIN
  */
+@CrossOrigin
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api")
@@ -89,6 +92,7 @@ public class StoreController {
         Store s = storeService.findStoreById(id);
         if (s != null) {
             s.setActive(Boolean.TRUE);
+//            s.getUserId().setRoleId(roleId);
             Mail mail = new Mail();
             mail.setMailFrom("2051050435tan@ou.edu.vn");
             mail.setMailTo(s.getUserId().getEmail());

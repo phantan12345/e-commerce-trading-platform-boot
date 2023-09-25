@@ -47,6 +47,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author ADMIN
  */
+@CrossOrigin
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api")

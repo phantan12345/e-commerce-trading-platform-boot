@@ -91,6 +91,7 @@ public class UserServiceImpl implements UserService {
             u.setEmail(params.get("email"));
 
             u.setRoleId(roleService.findRoleByRoleName("USER"));
+            
             u.setActive(Boolean.TRUE);
 
             u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());

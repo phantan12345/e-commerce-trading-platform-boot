@@ -46,6 +46,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author ADMIN
  */
+@CrossOrigin
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api")
