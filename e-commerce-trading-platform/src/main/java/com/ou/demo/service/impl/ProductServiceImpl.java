@@ -14,6 +14,12 @@ import com.ou.demo.service.CategoryService;
 import com.ou.demo.service.ProductImageService;
 import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ProductStoreService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +60,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductImageService ProductImageService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public ProdcutDto create(Map<String, String> params, List<MultipartFile> file, Store store) {
@@ -98,6 +108,7 @@ public class ProductServiceImpl implements ProductService {
                         .stream()
                         .map(ProductImage::getUrl)
                         .collect(Collectors.toList());
+
                 ProdcutDto dto = ProdcutDto.builder().id(product.getId())
                         .productName(product.getProductName())
                         .price(product.getPrice())
@@ -126,20 +137,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> search(Map<String, String> params) {
+//        CriteriaBuilder builder=
+//        Predicate predicate = builder.conjunction();
 
-        String name = params.get("productName");
-        String cate = params.get("cate");
-        String start = params.get("minPrice");
-        String end = params.get("maxPrice");
-
-        if (name != null && !name.isEmpty()) {
-            return productReponsitory.searchProducts(name,
-                    cate == null ? null : CategoryService.findCateById(Integer.parseInt(cate)),
-                    start == null ? null : new BigDecimal(start),
-                    end == null ? null : new BigDecimal(end));
-        }
         return null;
-
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -29,7 +30,8 @@ public class Store implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "store_name")
+    @Column(name = "store_name", unique = true)
+    @NotNull(message = "IS NULL")
     private String storeName;
     @Column(name = "adress")
     private String adress;

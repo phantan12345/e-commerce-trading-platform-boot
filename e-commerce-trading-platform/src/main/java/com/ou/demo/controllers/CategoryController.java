@@ -6,6 +6,7 @@ package com.ou.demo.controllers;
 
 import com.ou.demo.pojos.Category;
 import com.ou.demo.service.CategoryService;
+import jakarta.validation.Valid;
 //import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,12 +34,13 @@ public class CategoryController {
 
     private CategoryService CategoryService;
 
+    @GetMapping("/categorys")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(CategoryService.getAll(), HttpStatus.OK);
     }
 
     @PostMapping("/category/")
-    public ResponseEntity<?> create(@RequestBody Category c) {
+    public ResponseEntity<?> create(@RequestBody @Valid Category c) {
         Category cate = CategoryService.create(c, 0);
         if (cate == null) {
             return new ResponseEntity<>("error create", HttpStatus.BAD_REQUEST);

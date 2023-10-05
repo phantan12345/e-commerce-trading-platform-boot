@@ -18,6 +18,13 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>6.0.0.Alpha7</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.paypal.sdk</groupId>
             <artifactId>rest-api-sdk</artifactId>
             <version>1.4.2</version>

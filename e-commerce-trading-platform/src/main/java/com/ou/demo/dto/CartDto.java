@@ -5,6 +5,7 @@
 package com.ou.demo.dto;
 
 import com.ou.demo.pojos.Voucher;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartDto {
-
     private int id;
     private int count;
     private Voucher voucher;

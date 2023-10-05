@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -28,7 +29,8 @@ public class Category implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "name")
+    @Column(name = "name" , unique = true,length = 255)
+    @NotNull(message = "CATEGORY NAME IS NULL")
     private String name;
     @JsonIgnore
     @OneToMany(mappedBy = "categoryId")

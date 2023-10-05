@@ -56,8 +56,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ImageServiceImpl imageService;
 
-   
-
 //    @Autowired
 //    private StoreService StoreService;
     public User findByUsername(String user) {
@@ -83,20 +81,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean addUsers(Map<String, String> params, MultipartFile file) {
-        try {
 
-            User u = new User();
-            u.setUsername(params.get("username"));
-            u.setPassword(this.passwordEncoder.encode(params.get("password")));
-            u.setEmail(params.get("email"));
-            u.setPhone(params.get("phone"));
-            u.setRoleId(roleService.findRoleByRoleName("USER"));
-            
-            u.setActive(Boolean.TRUE);
+        User u = new User();
+        u.setUsername(params.get("username"));
+        u.setPassword(this.passwordEncoder.encode(params.get("password")));
+        u.setEmail(params.get("email"));
+        u.setPhone(params.get("phone"));
+        u.setRoleId(roleService.findRoleByRoleName("USER"));
 
-            u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
-            User user = UserRepository.save(u);
+        u.setActive(Boolean.TRUE);
 
+        u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
+        User user1 = u;
+        User user = UserRepository.save(u);
+        if (user != null) {
             Mail mail = new Mail();
             mail.setMailFrom("2051050435tan@ou.edu.vn");
             mail.setMailTo(user.getEmail());
@@ -104,10 +102,10 @@ public class UserServiceImpl implements UserService {
             mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
             MailService.sendEmail(mail);
             return true;
-        } catch (Exception e) {
-            return false;
-
         }
+
+        return false;
+
     }
 
     @Override
@@ -142,7 +140,5 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
-  
 
 }

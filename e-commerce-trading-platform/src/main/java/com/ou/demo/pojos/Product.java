@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -31,12 +34,14 @@ public class Product implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "product_name")
+    @NotNull(message = "PRODUCT NAME IS NULL")
     private String productName;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
+    @NotNull(message = "PRICE IS NULL")
     private BigDecimal price;
     @Column(name = "active")
     private Boolean active;
+    @NotNull(message = "CATEGORY NAME IS NULL")
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;

@@ -20,12 +20,12 @@ import lombok.NoArgsConstructor;
 public class ProductInput {
 
     private Integer id;
-    @NotBlank
+    @NotBlank(message = "PRODUCT NAME IS NULL")
     private String productName;
     @NotBlank
     private BigDecimal price;
-    @NotBlank
+    @NotBlank(message = "CATEGORY IS NULL")
     private int cateId;
-    @NotBlank
+    @NotBlank(message = "COUNT IS NULL")
     private int count;
 }

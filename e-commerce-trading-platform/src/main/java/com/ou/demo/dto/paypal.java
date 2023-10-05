@@ -4,6 +4,7 @@
  */
 package com.ou.demo.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,14 @@ import lombok.ToString;
 @ToString
 public class paypal {
 
+    @NotNull(message = "PRICE IS NULL")
     private double price;
+    @NotNull(message = "CURRENCY IS NULL")
     private String currency;
+    @NotNull(message = "METHOD IS NULL")
     private String method;
+    @NotNull(message = "INTENT IS NULL")
     private String intent;
+    @NotNull(message = "DESCRIPTION IS NULL")
     private String description;
 }

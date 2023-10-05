@@ -61,10 +61,15 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth
                         -> auth.requestMatchers("/**").permitAll().
-                        requestMatchers(HttpMethod.POST, "/api/category/").hasRole("admin")
+                        requestMatchers( "/api/**").permitAll().
+                        requestMatchers(HttpMethod.GET, "/api/**").authenticated().
+                        requestMatchers(HttpMethod.POST, "/api/**").authenticated().
+                        requestMatchers(HttpMethod.PUT, "/api/**").authenticated().
+                        requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
                         .anyRequest().authenticated()
                 );
 

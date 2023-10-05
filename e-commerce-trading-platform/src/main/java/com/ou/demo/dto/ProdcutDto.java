@@ -23,14 +23,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProdcutDto {
+
     private Integer id;
-    @NotBlank
+    @NotBlank(message = "PRODUCT NAME IS NULL")
     private String productName;
-    @NotBlank
+    @NotBlank(message = "PRICE  IS NULL")
     private BigDecimal price;
     private String voucher;
-    @NotBlank
+    @NotBlank(message = "IMAGE  IS NULL")
     private List<String> productImage;
-    @NotBlank
+    @NotBlank(message = "NOT CATEGORY")
     private Category categoryId;
+    
 }

@@ -72,8 +72,10 @@ public class UserController {
 
     @PostMapping(path = "/signin/")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login login, BindingResult bindingResult) throws Exception {
-        authenticate(login.getUsername(), login.getPassword());
         final UserDetails userDetails = UserService.loadUserByUsername(login.getUsername());
+
+      
+        authenticate(login.getUsername(), login.getPassword());
 
         String jwtResponse = jwtUtils.generateJwtToken(userDetails);
 
@@ -97,7 +99,5 @@ public class UserController {
             return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
     }
-
-    
 
 }

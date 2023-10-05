@@ -8,6 +8,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -32,16 +37,27 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @NotNull(message = "NOT NULL")
+    @NotBlank(message = "NOT NULL")
     @Column(name = "username")
     private String username;
     @Column(name = "password")
+    @NotNull(message = "NOT NULL")
+    @NotBlank(message = "NOT NULL")
     private String password;
+    @NotNull(message = "NOT NULL")
+    @NotBlank(message = "NOT NULL")
     @Column(name = "avatar")
     private String avatar;
+    @NotNull(message = "NOT NULL")
+    @NotBlank(message = "NOT NULL")
     @Column(name = "email")
+    @Email(message = "NOT FORMAT")
     private String email;
     @Column(name = "active")
     private Boolean active;
+    @NotNull(message = "NOT NULL")
+    @NotBlank(message = "NOT NULL")
     @Column(name = "Phone")
     private String phone;
     @JoinTable(name = "user_voucher", joinColumns = {

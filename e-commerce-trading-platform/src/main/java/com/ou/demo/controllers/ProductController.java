@@ -16,6 +16,7 @@ import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
 import com.ou.demo.service.receiptService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class ProductController {
     private StoreService storeService;
 
     @PostMapping("/product/")
-    public ResponseEntity<?> addPRoduct(@RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
+    public ResponseEntity<?> addPRoduct(@Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();

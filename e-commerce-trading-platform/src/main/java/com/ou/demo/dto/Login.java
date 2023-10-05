@@ -5,6 +5,7 @@
 package com.ou.demo.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,9 +19,9 @@ import lombok.Data;
 @Builder
 public class Login {
 
-    @NotBlank(message = "username is null")
+    @NotNull(message = "USERNAME IS NULL")
     private String username;
 
-    @NotBlank(message = "passsword is null")
+    @NotNull(message = "PASSWORD IS NULL")
     private String password;
 }
