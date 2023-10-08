@@ -78,11 +78,11 @@ public class ProductStoreServiceImpl implements ProductStoreService {
     @Override
     public Object stat() {
 
-        Order1 or = new Order1();
+       Order1 or = new Order1();
         Set<Orderdetail> orderDetails = or.getOrderdetailSet();
         return orderDetails;
     }
-
+ 
     @Override
     public ProductStore findlByStore(Store s) {
         return ProductStoreRepository.findByproductId(s);

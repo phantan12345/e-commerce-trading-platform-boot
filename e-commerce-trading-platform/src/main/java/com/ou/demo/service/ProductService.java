@@ -29,7 +29,7 @@ public interface ProductService {
 
     List<ProdcutDto> findAll();
 
-    Page<Product> page(Pageable p);
+    Page<Product> page(int  page);
 
     List<Product> findAllByOrderByPriceDesc();
 

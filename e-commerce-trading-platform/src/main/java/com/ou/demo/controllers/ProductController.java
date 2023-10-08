@@ -128,8 +128,8 @@ public class ProductController {
     }
 
     @GetMapping("/product/")
-    public Page<Product> getProducts(Pageable pageable) {
-        return productService.page(pageable);
+    public ResponseEntity<?> getProducts(@RequestParam int page) {
+        return new ResponseEntity<>(productService.page(page).getContent(), HttpStatus.OK);
     }
 
     @PostMapping("/pay/")
@@ -165,7 +165,6 @@ public class ProductController {
     @GetMapping("/product/namedsc/")
     public ResponseEntity<?> getName() {
         return new ResponseEntity<>(productService.findAllByOrderByProductNameDesc(), HttpStatus.OK);
-
     }
 
     @GetMapping("search/")

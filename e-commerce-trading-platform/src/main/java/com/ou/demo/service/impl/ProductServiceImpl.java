@@ -14,6 +14,7 @@ import com.ou.demo.service.CategoryService;
 import com.ou.demo.service.ProductImageService;
 import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ProductStoreService;
+import com.ou.demo.util.GenericSpecifications;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -30,8 +31,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -121,7 +125,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> page(Pageable p) {
+    public Page<Product> page(int page) {
+        Pageable p = PageRequest.of(page, 5, Sort.by("productName").descending());
         return productReponsitory.findAll(p);
     }
 
@@ -137,10 +142,38 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> search(Map<String, String> params) {
-//        CriteriaBuilder builder=
-//        Predicate predicate = builder.conjunction();
+        List<Specification<Product>> list = new ArrayList<>();
 
-        return null;
+        String kw = params.get("kw");
+        if (kw != null && !kw.isEmpty()) {
+            Specification<Product> spec = GenericSpecifications.fieldContains("productName", kw);
+            list.add(spec);
+
+        }
+
+        String cate = params.get("cate");
+        if (cate != null && !cate.isEmpty()) {
+            Specification<Product> spec = GenericSpecifications.fieldEquals("categoryId", cate);
+            list.add(spec);
+
+        }
+
+        String from = params.get("from");
+        if (from != null && !from.isEmpty()) {
+            Specification<Product> spec = GenericSpecifications.hasLess("price", from);
+
+            list.add(spec);
+
+        }
+        String to = params.get("to");
+        if (to != null && !to.isEmpty()) {
+            Specification<Product> spec = GenericSpecifications.hasThan("price", to);
+            list.add(spec);
+
+        }
+
+        return productReponsitory.findAll(GenericSpecifications.createSpecification(list));
+
     }
 
     @Override
