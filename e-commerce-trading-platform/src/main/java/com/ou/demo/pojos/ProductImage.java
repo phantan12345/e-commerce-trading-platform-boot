@@ -7,6 +7,7 @@ package com.ou.demo.pojos;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -14,6 +15,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "product_image")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProductImage.findAll", query = "SELECT p FROM ProductImage p"),
     @NamedQuery(name = "ProductImage.findById", query = "SELECT p FROM ProductImage p WHERE p.id = :id"),

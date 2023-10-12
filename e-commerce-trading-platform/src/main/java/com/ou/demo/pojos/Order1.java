@@ -10,12 +10,16 @@ import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  *
  * @author ADMIN
  */
 @Entity
 @Table(name = "order1")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o"),
     @NamedQuery(name = "Order1.findById", query = "SELECT o FROM Order1 o WHERE o.id = :id"),
@@ -38,7 +42,6 @@ public class Order1 implements Serializable {
     @ManyToOne
     private Payment paymentId;
     @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -81,6 +84,7 @@ public class Order1 implements Serializable {
         this.paymentId = paymentId;
     }
 
+    @XmlTransient
     public Set<Orderdetail> getOrderdetailSet() {
         return orderdetailSet;
     }

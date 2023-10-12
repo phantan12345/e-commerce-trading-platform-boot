@@ -10,12 +10,16 @@ import java.math.BigDecimal;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  *
  * @author ADMIN
  */
 @Entity
 @Table(name = "voucher")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Voucher.findAll", query = "SELECT v FROM Voucher v"),
     @NamedQuery(name = "Voucher.findById", query = "SELECT v FROM Voucher v WHERE v.id = :id"),
@@ -34,11 +38,9 @@ public class Voucher implements Serializable {
     private BigDecimal discount;
     @Column(name = "code")
     private String code;
-    @JsonIgnore
     @ManyToMany(mappedBy = "voucherSet")
     private Set<User> userSet;
     @JsonIgnore
-
     @OneToMany(mappedBy = "voucherId")
     private Set<ProductStore> productStoreSet;
 
@@ -73,6 +75,7 @@ public class Voucher implements Serializable {
         this.code = code;
     }
 
+    @XmlTransient
     public Set<User> getUserSet() {
         return userSet;
     }
@@ -81,6 +84,7 @@ public class Voucher implements Serializable {
         this.userSet = userSet;
     }
 
+    @XmlTransient
     public Set<ProductStore> getProductStoreSet() {
         return productStoreSet;
     }

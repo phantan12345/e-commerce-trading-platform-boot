@@ -7,6 +7,8 @@ package com.ou.demo.pojos;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+
+import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 
 /**
@@ -16,6 +18,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "orderdetail")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Orderdetail.findAll", query = "SELECT o FROM Orderdetail o"),
     @NamedQuery(name = "Orderdetail.findById", query = "SELECT o FROM Orderdetail o WHERE o.id = :id"),

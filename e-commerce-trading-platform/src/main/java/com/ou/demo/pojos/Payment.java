@@ -9,12 +9,16 @@ import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  *
  * @author ADMIN
  */
 @Entity
 @Table(name = "payment")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
     @NamedQuery(name = "Payment.findById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
@@ -29,11 +33,7 @@ public class Payment implements Serializable {
     private Integer id;
     @Column(name = "payment")
     private String payment;
-    @JoinColumn(name = "payment_method_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private PaymentMethod paymentMethodId;
-    @JsonIgnore
-
+     @JsonIgnore
     @OneToMany(mappedBy = "paymentId")
     private Set<Order1> order1Set;
 
@@ -60,14 +60,7 @@ public class Payment implements Serializable {
         this.payment = payment;
     }
 
-    public PaymentMethod getPaymentMethodId() {
-        return paymentMethodId;
-    }
-
-    public void setPaymentMethodId(PaymentMethod paymentMethodId) {
-        this.paymentMethodId = paymentMethodId;
-    }
-
+    @XmlTransient
     public Set<Order1> getOrder1Set() {
         return order1Set;
     }
@@ -100,5 +93,5 @@ public class Payment implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Payment[ id=" + id + " ]";
     }
-
+    
 }

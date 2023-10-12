@@ -5,13 +5,14 @@
 package com.ou.demo.service.impl;
 
 import com.ou.demo.pojos.Product;
-import com.ou.demo.pojos.Reriew;
+import com.ou.demo.pojos.Review;
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.ReviewRepository;
 import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ReviewService;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,15 +30,15 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewRepository ReviewRepository;
 
     @Override
-    public Reriew addComment(Reriew r, User userId, int proId, int reply) {
+    public Review addComment(Review r, User userId, int proId, int reply) {
         Product p = ProductService.findById(proId);
 
-        Reriew replyComment = null;
+        Review replyComment = null;
 
         if (reply != 0) {
-            replyComment = ReviewRepository.findById(reply).get();
+            replyComment = this.findCommentById(reply);
 
-            r.setReriewId(replyComment);
+            r.setReviewId(replyComment);
         }
         r.setUserId(userId);
         r.setProductId(p);
@@ -47,18 +48,22 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Reriew findCommentById(int id) {
-        return ReviewRepository.findById(id).get();
+    public Review findCommentById(int id) {
+        Review optionalReview = ReviewRepository.findById(id);
+        if (optionalReview!=null) {
+            return optionalReview;
+        }
+        return null;
     }
 
     @Override
-    public List<Reriew> findAllCommentsByProductId(Product id) {
+    public List<Review> findAllCommentsByProductId(Product id) {
         return ReviewRepository.findAll();
 
     }
 
     @Override
-    public boolean deleteComment(Reriew id) {
+    public boolean deleteComment(Review id) {
         try {
             ReviewRepository.delete(id);
             return true;
@@ -69,23 +74,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Reriew getComment(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean deleteComment(int id, int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<Reriew> getAllByCommentId(Reriew c) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Reriew getAllByProductId(Product p) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Review> getAllByCommentId(Review c) {
+        return ReviewRepository.findByreviewId(c);
     }
 
 }

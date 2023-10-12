@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -16,6 +18,7 @@ import jakarta.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "product_store")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProductStore.findAll", query = "SELECT p FROM ProductStore p"),
     @NamedQuery(name = "ProductStore.findById", query = "SELECT p FROM ProductStore p WHERE p.id = :id"),
@@ -30,22 +33,16 @@ public class ProductStore implements Serializable {
     private Integer id;
     @Column(name = "count")
     private Integer count;
-    @NotNull(message = "IS NULL")
-
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    @NotNull(message = "IS NULL")
-
     private Product productId;
     @JoinColumn(name = "store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    @NotNull(message = "IS NULL")
-
     private Store storeId;
     @JoinColumn(name = "voucher_id", referencedColumnName = "id")
     @ManyToOne
     private Voucher voucherId;
-    @JsonIgnore
+     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -96,6 +93,7 @@ public class ProductStore implements Serializable {
         this.voucherId = voucherId;
     }
 
+    @XmlTransient
     public Set<Orderdetail> getOrderdetailSet() {
         return orderdetailSet;
     }
@@ -128,5 +126,5 @@ public class ProductStore implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.ProductStore[ id=" + id + " ]";
     }
-
+    
 }

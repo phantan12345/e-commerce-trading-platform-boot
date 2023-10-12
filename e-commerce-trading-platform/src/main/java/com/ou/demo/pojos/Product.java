@@ -9,9 +9,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -19,6 +19,7 @@ import jakarta.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "product")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
@@ -34,28 +35,24 @@ public class Product implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "product_name")
-    @NotNull(message = "PRODUCT NAME IS NULL")
     private String productName;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
-    @NotNull(message = "PRICE IS NULL")
     private BigDecimal price;
     @Column(name = "active")
     private Boolean active;
-    @NotNull(message = "CATEGORY NAME IS NULL")
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;
-    @JsonIgnore
+     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
-    @JsonIgnore
-
+      @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    private Set<Review> reviewSet;
+       @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductStore> productStoreSet;
-    @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Set<Reriew> reriewSet;
 
     public Product() {
     }
@@ -104,6 +101,7 @@ public class Product implements Serializable {
         this.categoryId = categoryId;
     }
 
+    @XmlTransient
     public Set<ProductImage> getProductImageSet() {
         return productImageSet;
     }
@@ -112,20 +110,22 @@ public class Product implements Serializable {
         this.productImageSet = productImageSet;
     }
 
+    @XmlTransient
+    public Set<Review> getReviewSet() {
+        return reviewSet;
+    }
+
+    public void setReviewSet(Set<Review> reviewSet) {
+        this.reviewSet = reviewSet;
+    }
+
+    @XmlTransient
     public Set<ProductStore> getProductStoreSet() {
         return productStoreSet;
     }
 
     public void setProductStoreSet(Set<ProductStore> productStoreSet) {
         this.productStoreSet = productStoreSet;
-    }
-
-    public Set<Reriew> getReriewSet() {
-        return reriewSet;
-    }
-
-    public void setReriewSet(Set<Reriew> reriewSet) {
-        this.reriewSet = reriewSet;
     }
 
     @Override
@@ -152,5 +152,5 @@ public class Product implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Product[ id=" + id + " ]";
     }
-
+    
 }

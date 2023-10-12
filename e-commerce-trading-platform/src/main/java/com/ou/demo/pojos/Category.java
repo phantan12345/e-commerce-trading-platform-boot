@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -16,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "category")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
     @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"),
@@ -29,8 +31,7 @@ public class Category implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "name" , unique = true,length = 255)
-    @NotNull(message = "CATEGORY NAME IS NULL")
+    @Column(name = "name")
     private String name;
     @JsonIgnore
     @OneToMany(mappedBy = "categoryId")
@@ -39,7 +40,6 @@ public class Category implements Serializable {
     @OneToMany(mappedBy = "categoryId")
     private Set<Category> categorySet;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @JsonIgnore
     @ManyToOne
     private Category categoryId;
 
@@ -71,6 +71,7 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+    @XmlTransient
     public Set<Product> getProductSet() {
         return productSet;
     }
@@ -79,6 +80,7 @@ public class Category implements Serializable {
         this.productSet = productSet;
     }
 
+    @XmlTransient
     public Set<Category> getCategorySet() {
         return categorySet;
     }

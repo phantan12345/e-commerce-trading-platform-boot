@@ -109,10 +109,7 @@ DROP TABLE IF EXISTS `payment`;
 CREATE TABLE `payment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `payment` varchar(45) DEFAULT NULL,
-  `payment_method_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_payment_payment_method1_idx` (`payment_method_id`),
-  CONSTRAINT `fk_payment_payment_method1` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -123,29 +120,6 @@ CREATE TABLE `payment` (
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `payment_method`
---
-
-DROP TABLE IF EXISTS `payment_method`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `payment_method` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `discount` decimal(10,0) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `payment_method`
---
-
-LOCK TABLES `payment_method` WRITE;
-/*!40000 ALTER TABLE `payment_method` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payment_method` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -233,42 +207,42 @@ CREATE TABLE `product_store` (
 
 LOCK TABLES `product_store` WRITE;
 /*!40000 ALTER TABLE `product_store` DISABLE KEYS */;
-INSERT INTO `product_store` VALUES (11,44,1,NULL,100),(12,45,1,NULL,100),(13,46,1,NULL,100),(14,47,1,NULL,100),(15,48,1,NULL,100),(16,49,1,NULL,100),(17,50,1,NULL,100),(18,51,1,NULL,100),(19,52,1,NULL,100),(20,53,1,NULL,100),(21,54,1,NULL,100),(22,55,1,NULL,100),(23,56,1,NULL,100),(24,57,1,NULL,100),(25,58,1,NULL,100);
 /*!40000 ALTER TABLE `product_store` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `reriew`
+-- Table structure for table `review`
 --
 
-DROP TABLE IF EXISTS `reriew`;
+DROP TABLE IF EXISTS `review`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reriew` (
+CREATE TABLE `review` (
   `id` int NOT NULL AUTO_INCREMENT,
   `coment` varchar(45) DEFAULT NULL,
   `date_content` date DEFAULT NULL,
   `evaluate` int DEFAULT NULL,
   `user_id` int NOT NULL,
   `product_id` int NOT NULL,
-  `reriew_id` int NOT NULL,
+  `review_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_reriew_user1_idx` (`user_id`),
   KEY `fk_reriew_product1_idx` (`product_id`),
-  KEY `fk_reriew_reriew1_idx1` (`reriew_id`),
+  KEY `fk_review_review1_idx` (`review_id`),
   CONSTRAINT `fk_reriew_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-  CONSTRAINT `fk_reriew_reriew1` FOREIGN KEY (`reriew_id`) REFERENCES `reriew` (`id`),
-  CONSTRAINT `fk_reriew_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_reriew_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_review_review1` FOREIGN KEY (`review_id`) REFERENCES `review` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reriew`
+-- Dumping data for table `review`
 --
 
-LOCK TABLES `reriew` WRITE;
-/*!40000 ALTER TABLE `reriew` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reriew` ENABLE KEYS */;
+LOCK TABLES `review` WRITE;
+/*!40000 ALTER TABLE `review` DISABLE KEYS */;
+INSERT INTO `review` VALUES (7,'san pham dep','2023-10-13',3,27,44,NULL),(8,'san pham dep','2023-10-13',3,27,44,7),(9,'san pham dep','2023-10-13',3,27,44,7),(10,'san pham dep','2023-10-13',3,27,44,7);
+/*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -338,8 +312,8 @@ CREATE TABLE `user` (
   `avatar` varchar(255) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `active` tinyint(1) DEFAULT NULL,
-  `role_id` int NOT NULL,
   `Phone` varchar(10) DEFAULT NULL,
+  `role_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_role_idx` (`role_id`),
   CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
@@ -352,7 +326,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (25,'user','$2a$10$VwdOFxmmizbEr1i7eJ2k9.OwA85OOg.uB/h7X7UHRaJ4rdNp.iG26','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515598/cgttzknzwjj9riejx173.png','wahodo1861@htoal.com',1,2,'0372745193'),(26,'admin','$2a$10$jzElKY2EQuQHE7/rxVyGoesNQaRI9rQyH5GiCj0PKOh.mrNFb3IfG','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515707/oazgkehdppgqduiq2wmt.png','wahodo1861@htoal.com',1,2,'0372745193'),(27,'seller','$2a$10$RBcH0WKf.ErWzCrgEZ.P7uIc6UosWtGj20Brmmlgyuc2cZMY/BQoC','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515791/kwnuvsg3rvq0qnk3vbgz.png','wahodo1861@htoal.com',1,3,'0372745193');
+INSERT INTO `user` VALUES (25,'user','$2a$10$VwdOFxmmizbEr1i7eJ2k9.OwA85OOg.uB/h7X7UHRaJ4rdNp.iG26','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515598/cgttzknzwjj9riejx173.png','wahodo1861@htoal.com',1,'0372745193',2),(26,'admin','$2a$10$jzElKY2EQuQHE7/rxVyGoesNQaRI9rQyH5GiCj0PKOh.mrNFb3IfG','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515707/oazgkehdppgqduiq2wmt.png','wahodo1861@htoal.com',1,'0372745193',2),(27,'seller','$2a$10$RBcH0WKf.ErWzCrgEZ.P7uIc6UosWtGj20Brmmlgyuc2cZMY/BQoC','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515791/kwnuvsg3rvq0qnk3vbgz.png','wahodo1861@htoal.com',1,'0372745193',3);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -424,4 +398,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-05 22:20:01
+-- Dump completed on 2023-10-13  1:34:40

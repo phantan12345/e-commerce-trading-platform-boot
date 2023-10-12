@@ -4,8 +4,9 @@
  */
 package com.ou.demo.service;
 
+import com.ou.demo.dto.ReviewDto;
 import com.ou.demo.pojos.Product;
-import com.ou.demo.pojos.Reriew;
+import com.ou.demo.pojos.Review;
 import com.ou.demo.pojos.User;
 import java.util.List;
 
@@ -13,22 +14,17 @@ import java.util.List;
  *
  * @author ADMIN
  */
-
 public interface ReviewService {
 
-    Reriew addComment(Reriew c, User userId, int proId, int reply);
+    Review addComment(Review c, User userId, int proId, int reply);
 
-    Reriew findCommentById(int id);
+    Review findCommentById(int id);
 
-    List<Reriew> findAllCommentsByProductId(Product id);
+    List<Review> findAllCommentsByProductId(Product id);
 
-    boolean deleteComment(Reriew id);
+    boolean deleteComment(Review id);
 
-    Reriew getComment(User user);
+    List<Review> getAllByCommentId(Review c);
 
-    boolean deleteComment(int id, int userId);
 
-    List<Reriew> getAllByCommentId(Reriew c);
-
-    public Reriew getAllByProductId(Product p);
 }

@@ -10,19 +10,23 @@ import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  *
  * @author ADMIN
  */
 @Entity
-@Table(name = "reriew")
+@Table(name = "review")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Reriew.findAll", query = "SELECT r FROM Reriew r"),
-    @NamedQuery(name = "Reriew.findById", query = "SELECT r FROM Reriew r WHERE r.id = :id"),
-    @NamedQuery(name = "Reriew.findByComent", query = "SELECT r FROM Reriew r WHERE r.coment = :coment"),
-    @NamedQuery(name = "Reriew.findByDateContent", query = "SELECT r FROM Reriew r WHERE r.dateContent = :dateContent"),
-    @NamedQuery(name = "Reriew.findByEvaluate", query = "SELECT r FROM Reriew r WHERE r.evaluate = :evaluate")})
-public class Reriew implements Serializable {
+    @NamedQuery(name = "Review.findAll", query = "SELECT r FROM Review r"),
+    @NamedQuery(name = "Review.findById", query = "SELECT r FROM Review r WHERE r.id = :id"),
+    @NamedQuery(name = "Review.findByComent", query = "SELECT r FROM Review r WHERE r.coment = :coment"),
+    @NamedQuery(name = "Review.findByDateContent", query = "SELECT r FROM Review r WHERE r.dateContent = :dateContent"),
+    @NamedQuery(name = "Review.findByEvaluate", query = "SELECT r FROM Review r WHERE r.evaluate = :evaluate")})
+public class Review implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,20 +45,20 @@ public class Reriew implements Serializable {
     @ManyToOne(optional = false)
     private Product productId;
     @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reriewId")
-    private Set<Reriew> reriewSet;
-    @JoinColumn(name = "reriew_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reviewId")
+    private Set<Review> reviewSet;
+    @JoinColumn(name = "review_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Reriew reriewId;
+    @JsonIgnore
+    private Review reviewId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
 
-    public Reriew() {
+    public Review() {
     }
 
-    public Reriew(Integer id) {
+    public Review(Integer id) {
         this.id = id;
     }
 
@@ -98,20 +102,21 @@ public class Reriew implements Serializable {
         this.productId = productId;
     }
 
-    public Set<Reriew> getReriewSet() {
-        return reriewSet;
+    @XmlTransient
+    public Set<Review> getReviewSet() {
+        return reviewSet;
     }
 
-    public void setReriewSet(Set<Reriew> reriewSet) {
-        this.reriewSet = reriewSet;
+    public void setReviewSet(Set<Review> reviewSet) {
+        this.reviewSet = reviewSet;
     }
 
-    public Reriew getReriewId() {
-        return reriewId;
+    public Review getReviewId() {
+        return reviewId;
     }
 
-    public void setReriewId(Reriew reriewId) {
-        this.reriewId = reriewId;
+    public void setReviewId(Review reviewId) {
+        this.reviewId = reviewId;
     }
 
     public User getUserId() {
@@ -132,10 +137,10 @@ public class Reriew implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reriew)) {
+        if (!(object instanceof Review)) {
             return false;
         }
-        Reriew other = (Reriew) object;
+        Review other = (Review) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -144,7 +149,7 @@ public class Reriew implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ou.demo.pojos.Reriew[ id=" + id + " ]";
+        return "com.ou.demo.pojos.Review[ id=" + id + " ]";
     }
 
 }

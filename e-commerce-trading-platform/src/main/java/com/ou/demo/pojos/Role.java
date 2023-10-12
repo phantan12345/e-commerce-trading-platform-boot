@@ -9,12 +9,16 @@ import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  *
  * @author ADMIN
  */
 @Entity
 @Table(name = "role")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
     @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
@@ -29,8 +33,7 @@ public class Role implements Serializable {
     private Integer id;
     @Column(name = "role_name")
     private String roleName;
-    @JsonIgnore
-
+     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleId")
     private Set<User> userSet;
 
@@ -57,6 +60,7 @@ public class Role implements Serializable {
         this.roleName = roleName;
     }
 
+    @XmlTransient
     public Set<User> getUserSet() {
         return userSet;
     }
@@ -89,5 +93,5 @@ public class Role implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Role[ id=" + id + " ]";
     }
-
+    
 }

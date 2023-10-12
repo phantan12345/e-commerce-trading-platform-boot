@@ -8,11 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -20,6 +18,7 @@ import jakarta.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "user")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
@@ -37,27 +36,16 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @NotNull(message = "NOT NULL")
-    @NotBlank(message = "NOT NULL")
     @Column(name = "username")
     private String username;
     @Column(name = "password")
-    @NotNull(message = "NOT NULL")
-    @NotBlank(message = "NOT NULL")
     private String password;
-    @NotNull(message = "NOT NULL")
-    @NotBlank(message = "NOT NULL")
     @Column(name = "avatar")
     private String avatar;
-    @NotNull(message = "NOT NULL")
-    @NotBlank(message = "NOT NULL")
     @Column(name = "email")
-    @Email(message = "NOT FORMAT")
     private String email;
     @Column(name = "active")
     private Boolean active;
-    @NotNull(message = "NOT NULL")
-    @NotBlank(message = "NOT NULL")
     @Column(name = "Phone")
     private String phone;
     @JoinTable(name = "user_voucher", joinColumns = {
@@ -65,14 +53,12 @@ public class User implements Serializable {
         @JoinColumn(name = "voucher_id", referencedColumnName = "id")})
     @ManyToMany
     private Set<Voucher> voucherSet;
-    @JsonIgnore
-
+     @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<Review> reviewSet;
+      @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Store> storeSet;
-    @JsonIgnore
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Reriew> reriewSet;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Role roleId;
@@ -140,6 +126,7 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
+    @XmlTransient
     public Set<Voucher> getVoucherSet() {
         return voucherSet;
     }
@@ -148,20 +135,22 @@ public class User implements Serializable {
         this.voucherSet = voucherSet;
     }
 
+    @XmlTransient
+    public Set<Review> getReviewSet() {
+        return reviewSet;
+    }
+
+    public void setReviewSet(Set<Review> reviewSet) {
+        this.reviewSet = reviewSet;
+    }
+
+    @XmlTransient
     public Set<Store> getStoreSet() {
         return storeSet;
     }
 
     public void setStoreSet(Set<Store> storeSet) {
         this.storeSet = storeSet;
-    }
-
-    public Set<Reriew> getReriewSet() {
-        return reriewSet;
-    }
-
-    public void setReriewSet(Set<Reriew> reriewSet) {
-        this.reriewSet = reriewSet;
     }
 
     public Role getRoleId() {
@@ -196,5 +185,5 @@ public class User implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.User[ id=" + id + " ]";
     }
-
+    
 }

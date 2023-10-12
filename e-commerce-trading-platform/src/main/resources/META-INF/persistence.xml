@@ -19,6 +19,7 @@
     <class>com.ou.demo.pojos.Order</class>
     <class>com.ou.demo.pojos.Order1</class>
     <class>com.ou.demo.pojos.Reriew</class>
+    <class>com.ou.demo.pojos.Review</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/trading?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
