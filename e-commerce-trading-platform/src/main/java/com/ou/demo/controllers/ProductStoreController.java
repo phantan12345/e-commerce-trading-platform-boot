@@ -6,6 +6,7 @@ package com.ou.demo.controllers;
 
 import com.ou.demo.dto.DateDto;
 import com.ou.demo.dto.ProdcutDto;
+import com.ou.demo.dto.ProductStoreDto;
 import com.ou.demo.dto.VoucherDto;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
@@ -79,6 +80,18 @@ public class ProductStoreController {
         }
     }
 
+    @GetMapping("product-store/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable int id) {
+        ProductStoreDto dto = ProductStoreService.getDto(ProductService.findById(id));
+        if (dto == null) {
+            return new ResponseEntity<>("orror find products",
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(
+                    dto, HttpStatus.OK);
+        }
+    }
+
     @PutMapping("product-store/{id}")
     public ResponseEntity<?> addVou(@RequestBody VoucherDto dto, @PathVariable("id") int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -102,7 +115,7 @@ public class ProductStoreController {
             User user = UserService.findByUsername(userDetails.getUsername());
 
             Store s = StoreService.findStoreByUserID(user);
-            return ResponseEntity.ok().body(OrderService.findOrderByStore(s, dto));
+            return ResponseEntity.ok().body(OrderService.stat(s, dto));
         } else {
             return ResponseEntity.badRequest().build();
         }

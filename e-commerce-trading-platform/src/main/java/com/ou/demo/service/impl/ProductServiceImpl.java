@@ -4,6 +4,7 @@
  */
 package com.ou.demo.service.impl;
 
+import com.ou.demo.dto.PageDto;
 import com.ou.demo.dto.ProdcutDto;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
@@ -125,9 +126,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> page(int page) {
-        Pageable p = PageRequest.of(page, 5, Sort.by("productName").descending());
-        return productReponsitory.findAll(p);
+    public PageDto page(int p) {
+        Pageable pageable = PageRequest.of(p, 3);
+        List<ProdcutDto> listDto = new ArrayList<>();
+        Page<Product> page = productReponsitory.findAll(pageable);
+        for (Product product : page.getContent()) {
+            if (product.getActive() != Boolean.FALSE) {
+                List<String> img = ProductImageService.findByProdctId(product)
+                        .stream()
+                        .map(ProductImage::getUrl)
+                        .collect(Collectors.toList());
+
+                ProdcutDto dto = ProdcutDto.builder().id(product.getId())
+                        .productName(product.getProductName())
+                        .price(product.getPrice())
+                        .categoryId(product.getCategoryId())
+                        .productImage(img).build();
+                listDto.add(dto);
+            }
+        }
+
+        return PageDto.builder().listProduct(listDto).totalPage(page.getTotalPages()).build();
     }
 
     @Override
@@ -160,14 +179,14 @@ public class ProductServiceImpl implements ProductService {
 
         String from = params.get("from");
         if (from != null && !from.isEmpty()) {
-            Specification<Product> spec = GenericSpecifications.hasLess("price", from);
+            Specification<Product> spec = GenericSpecifications.hasThan("price", from);
 
             list.add(spec);
 
         }
         String to = params.get("to");
         if (to != null && !to.isEmpty()) {
-            Specification<Product> spec = GenericSpecifications.hasThan("price", to);
+            Specification<Product> spec = GenericSpecifications.hasLess("price", to);
             list.add(spec);
 
         }

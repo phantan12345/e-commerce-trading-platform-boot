@@ -113,7 +113,7 @@ public class StoreController {
 
         Store s = storeService.findStoreById(id);
         if (s != null) {
-            return ResponseEntity.ok().body(OrderService.findOrderByStore(s, dto));
+            return ResponseEntity.ok().body(OrderService.stat(s, dto));
         }
         return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
 

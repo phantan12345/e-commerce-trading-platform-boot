@@ -129,12 +129,11 @@ public class ProductController {
 
     @GetMapping("/product/")
     public ResponseEntity<?> getProducts(@RequestParam int page) {
-        return new ResponseEntity<>(productService.page(page).getContent(), HttpStatus.OK);
+        return new ResponseEntity<>(productService.page(page), HttpStatus.OK);
     }
 
     @PostMapping("/pay/")
     @ResponseStatus(HttpStatus.OK)
-    @CrossOrigin
     public ResponseEntity<?> add(@RequestBody Map<String, CartDto> carts) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {

@@ -10,6 +10,7 @@ import com.ou.demo.pojos.Store;
 import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,17 +24,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProdcutDto {
-
-    private Integer id;
-    @NotBlank(message = "PRODUCT NAME IS NULL")
+public class ProductStoreDto {
     private String productName;
-    @NotBlank(message = "PRICE  IS NULL")
     private BigDecimal price;
-    private String voucher;
-    @NotBlank(message = "IMAGE  IS NULL")
     private List<String> productImage;
-    @NotBlank(message = "NOT CATEGORY")
     private Category categoryId;
-    
+    private Store store;
 }

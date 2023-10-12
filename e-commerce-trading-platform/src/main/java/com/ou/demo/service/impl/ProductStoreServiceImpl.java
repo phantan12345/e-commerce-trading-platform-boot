@@ -5,6 +5,7 @@
 package com.ou.demo.service.impl;
 
 import com.ou.demo.dto.ProdcutDto;
+import com.ou.demo.dto.ProductStoreDto;
 import com.ou.demo.pojos.Order1;
 import com.ou.demo.pojos.Orderdetail;
 import com.ou.demo.pojos.Product;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,8 @@ public class ProductStoreServiceImpl implements ProductStoreService {
     @Autowired
     private ProductImageService ProductImageService;
 
+    @Autowired
+    private ModelMapper ModelMapper;
 
     @Override
     public ProductStore create(ProductStore ps) {
@@ -78,16 +82,29 @@ public class ProductStoreServiceImpl implements ProductStoreService {
     @Override
     public Object stat() {
 
-       Order1 or = new Order1();
+        Order1 or = new Order1();
         Set<Orderdetail> orderDetails = or.getOrderdetailSet();
         return orderDetails;
     }
- 
+
     @Override
     public ProductStore findlByStore(Store s) {
         return ProductStoreRepository.findByproductId(s);
     }
 
-   
+    @Override
+    public ProductStoreDto getDto(Product id) {
+        ProductStore ps = ProductStoreRepository.findByProduct(id);
+        List<String> productImageUrls = new ArrayList<>();
+        ps.getProductId().getProductImageSet().forEach(p -> productImageUrls.add(p.getUrl()));
+        return ProductStoreDto.builder()
+                .price(ps.getProductId().getPrice())
+                .productName(ps.getProductId().getProductName())
+                .productImage(productImageUrls)
+                .categoryId(ps.getProductId().getCategoryId())
+                .store(ps.getStoreId())
+                .build();
+
+    }
 
 }

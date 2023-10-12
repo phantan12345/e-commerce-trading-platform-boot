@@ -16,5 +16,5 @@ public interface OrderService {
 
     Order1 create(Order1 o);
 
-    Object findOrderByStore(Store store, DateDto dto);
+    Object stat(Store store, DateDto dto);
 }

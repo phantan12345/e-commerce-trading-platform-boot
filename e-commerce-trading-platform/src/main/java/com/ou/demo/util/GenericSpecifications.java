@@ -22,11 +22,11 @@ public class GenericSpecifications {
     }
 
     public static <T> Specification<T> hasThan(String fieldName, String value) {
-        return (root, query, builder) -> builder.greaterThan(root.get(fieldName), value);
+        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get(fieldName), value);
     }
 
     public static <T> Specification<T> hasLess(String fieldName, String value) {
-        return (root, query, builder) -> builder.lessThan(root.get(fieldName), value);
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get(fieldName), value);
     }
 
    

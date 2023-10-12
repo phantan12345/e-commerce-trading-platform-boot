@@ -4,6 +4,7 @@
  */
 package com.ou.demo.service;
 
+import com.ou.demo.dto.PageDto;
 import com.ou.demo.dto.ProdcutDto;
 import com.ou.demo.dto.ProductInput;
 import com.ou.demo.pojos.Product;
@@ -29,7 +30,7 @@ public interface ProductService {
 
     List<ProdcutDto> findAll();
 
-    Page<Product> page(int  page);
+    PageDto page(int  page);
 
     List<Product> findAllByOrderByPriceDesc();
 

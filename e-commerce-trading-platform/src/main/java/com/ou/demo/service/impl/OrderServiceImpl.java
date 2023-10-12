@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Object findOrderByStore(Store store, DateDto monthAndYear) {
+    public Object stat(Store store, DateDto monthAndYear) {
         List<StatDto> listDto = new ArrayList<>();
 
         List<Orderdetail> date = OrderdetailService.findByDate(monthAndYear.getMonth(), monthAndYear.getYear());
