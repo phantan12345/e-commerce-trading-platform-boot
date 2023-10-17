@@ -5,7 +5,10 @@
 package com.ou.demo.controllers;
 
 import com.ou.demo.dto.CartDto;
+import com.ou.demo.dto.CartInput;
 import com.ou.demo.dto.ProdcutDto;
+import com.ou.demo.dto.ProductInput;
+import com.ou.demo.pojos.Payment;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
@@ -32,6 +35,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,7 +69,7 @@ public class ProductController {
     private StoreService storeService;
 
     @PostMapping("/product/")
-    public ResponseEntity<?> addPRoduct(@Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
+    public ResponseEntity<?> addPRoduct(@Valid @RequestParam ProductInput p, @RequestPart List<MultipartFile> file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -74,7 +78,7 @@ public class ProductController {
             Store store = storeService.findStoreByUserID(user);
 
             if (store.getActive() == Boolean.TRUE) {
-                ProdcutDto dto = productService.create(params, file, store);
+                ProdcutDto dto = productService.create(p, file, store);
                 if (dto == null) {
                     return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
                 } else {
@@ -107,7 +111,13 @@ public class ProductController {
             CartDto c = new CartDto();
             c.setId(p.getId());
             c.setCount(1);
-            c.setVoucher(ps.getVoucherId());
+            if (ps.getVoucherId() == null) {
+                c.setVoucher(null);
+            } else {
+                c.setVoucher(ps.getVoucherId());
+
+            }
+
             cart.put(productId, c);
         }
 
@@ -133,8 +143,8 @@ public class ProductController {
     }
 
     @PostMapping("/pay/")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> add(@RequestBody Map<String, CartDto> carts) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> add(@RequestBody CartInput carts) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -178,6 +188,30 @@ public class ProductController {
             return new ResponseEntity<>("LIST NULL", HttpStatus.BAD_REQUEST);
         } else {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<?> deletePRoduct(@RequestPart int id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Product p = productService.findById(id);
+
+            if (p != null) {
+                Product dto = productService.delete(p);
+                if (dto == null) {
+                    return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
+                } else {
+                    return new ResponseEntity<>(dto, HttpStatus.OK);
+
+                }
+            } else {
+                return new ResponseEntity<>("error add products", HttpStatus.FORBIDDEN);
+
+            }
+
+        } else {
+            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
     }
 

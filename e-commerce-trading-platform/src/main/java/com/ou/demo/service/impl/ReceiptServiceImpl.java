@@ -5,6 +5,7 @@
 package com.ou.demo.service.impl;
 
 import com.ou.demo.dto.CartDto;
+import com.ou.demo.dto.CartInput;
 import com.ou.demo.pojos.Order1;
 import com.ou.demo.pojos.Orderdetail;
 import com.ou.demo.pojos.Product;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +47,14 @@ public class ReceiptServiceImpl implements receiptService {
     private ProductService ProductService;
 
     @Override
-    public Object addReceipt(Map<String, CartDto> carts, User user) {
+    public Object addReceipt(CartInput carts, User user) {
         try {
 
             Order1 order = new Order1();
             order.setOrderDate(new Date());
             Order1 o = OrderService.create(order);
 
-            for (CartDto c : carts.values()) {
+            for (CartDto c : carts.getCarts()) {
                 Orderdetail d = new Orderdetail();
                 d.setQuatity(c.getCount());
                 Product p = ProductService.findById(c.getId());
@@ -67,7 +69,7 @@ public class ReceiptServiceImpl implements receiptService {
                             d.setTotal(total);
                             if (user.getVoucherSet().remove(d.getProductStoreId().getVoucherId())) {
 
-                                System.out.println("voucher da xoa");
+                                return "voucher da xoa";
                             }
 
                         } else {
@@ -76,7 +78,8 @@ public class ReceiptServiceImpl implements receiptService {
                         }
                         d.setOrderId(o);
                         Orderdetail od = OrderdetailService.create(d);
-
+                        order.setPaymentId(carts.getPayment());
+                        order.setActive(Boolean.TRUE);
                         int count = ps.getCount() - od.getQuatity();
                         ps.setCount(count);
                         ProductStoreService.create(ps);
@@ -85,7 +88,7 @@ public class ReceiptServiceImpl implements receiptService {
                         return false;
                     }
                 } else {
-                    return p.getProductName()+" đã dừng bán";
+                    return p.getProductName() + " đã dừng bán";
 
                 }
 

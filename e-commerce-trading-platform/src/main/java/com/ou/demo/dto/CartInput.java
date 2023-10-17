@@ -4,9 +4,8 @@
  */
 package com.ou.demo.dto;
 
-import com.ou.demo.pojos.Voucher;
-import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import com.ou.demo.pojos.Payment;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartDto {
-    private int id;
-    private int count;
-    private Voucher voucher;
+public class CartInput {
+    List<CartDto> carts;
+    Payment payment;
 }

@@ -5,7 +5,9 @@
 package com.ou.demo.service;
 
 import com.ou.demo.dto.CartDto;
+import com.ou.demo.dto.CartInput;
 import com.ou.demo.pojos.User;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,6 +16,6 @@ import java.util.Map;
  */
 public interface receiptService {
 
-    Object addReceipt(Map<String, CartDto> carts, User user);
+    Object addReceipt(CartInput carts, User user);
 
 }

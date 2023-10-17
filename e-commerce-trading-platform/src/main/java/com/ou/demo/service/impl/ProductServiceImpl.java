@@ -6,6 +6,7 @@ package com.ou.demo.service.impl;
 
 import com.ou.demo.dto.PageDto;
 import com.ou.demo.dto.ProdcutDto;
+import com.ou.demo.dto.ProductInput;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
 import com.ou.demo.pojos.ProductStore;
@@ -70,16 +71,15 @@ public class ProductServiceImpl implements ProductService {
     private EntityManager entityManager;
 
     @Override
-    public ProdcutDto create(Map<String, String> params, List<MultipartFile> file, Store store) {
+    public ProdcutDto create(ProductInput pro, List<MultipartFile> file, Store store) {
         Product p = new Product();
 
-        p.setProductName(params.get("productName"));
-        BigDecimal price = new BigDecimal(params.get("price"));
-        p.setPrice(price);
-        p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("cateid"))));
+        p.setProductName(pro.getProductName());
+        p.setPrice(pro.getPrice());
+        p.setCategoryId(CategoryService.findCateById(pro.getCateId()));
         p.setActive(Boolean.TRUE);
         ProductStore ps = new ProductStore();
-        ps.setCount(Integer.parseInt(params.get("count")));
+        ps.setCount(pro.getCount());
         ps.setStoreId(store);
         ps.setProductId(p);
         productReponsitory.save(p);
@@ -198,6 +198,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product delete(Product product) {
         product.setActive(Boolean.FALSE);
+         
         return productReponsitory.save(product);
     }
 
