@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ProductService {
 
-    ProdcutDto create(ProductInput p, List<MultipartFile> file, Store store);
+    ProdcutDto create(Map<String,String> params, List<MultipartFile> file, Store store);
 
     Product findById(int id);
 

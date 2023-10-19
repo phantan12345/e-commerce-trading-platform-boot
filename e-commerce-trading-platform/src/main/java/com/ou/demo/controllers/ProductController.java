@@ -69,7 +69,7 @@ public class ProductController {
     private StoreService storeService;
 
     @PostMapping("/product/")
-    public ResponseEntity<?> addPRoduct(@Valid @RequestParam ProductInput p, @RequestPart List<MultipartFile> file) {
+    public ResponseEntity<?> addPRoduct(@Valid @RequestParam Map<String,String> params, @RequestPart List<MultipartFile> file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -78,7 +78,7 @@ public class ProductController {
             Store store = storeService.findStoreByUserID(user);
 
             if (store.getActive() == Boolean.TRUE) {
-                ProdcutDto dto = productService.create(p, file, store);
+                ProdcutDto dto = productService.create(params, file, store);
                 if (dto == null) {
                     return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
                 } else {
