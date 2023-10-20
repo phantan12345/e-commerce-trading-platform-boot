@@ -107,6 +107,15 @@ public class StoreController {
         return new ResponseEntity<>("no find store", HttpStatus.BAD_REQUEST);
 
     }
+    
+    
+     @GetMapping("/requestment/")
+    public ResponseEntity<?> getRequestment() {
+
+       
+        return new ResponseEntity<>(storeService.getRequestment(), HttpStatus.BAD_REQUEST);
+
+    }
 
     @GetMapping("stat/{id}")
     public ResponseEntity<?> getStat(@PathVariable("id") int id, @RequestBody DateDto dto) {

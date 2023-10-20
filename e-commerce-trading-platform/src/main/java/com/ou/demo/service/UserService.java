@@ -2,6 +2,7 @@ package com.ou.demo.service;
 
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,8 @@ public interface UserService extends UserDetailsService {
     User findById(int id);
     
     User update(User user);
+    
+    List<User> listUser();
     
 
 }

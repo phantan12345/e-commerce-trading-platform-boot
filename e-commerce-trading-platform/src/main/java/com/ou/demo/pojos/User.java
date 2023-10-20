@@ -10,12 +10,13 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
 @Entity
 @Table(name = "user")
 @XmlRootElement
@@ -46,6 +47,7 @@ public class User implements Serializable {
     private String email;
     @Column(name = "active")
     private Boolean active;
+
     @Column(name = "Phone")
     private String phone;
     @JoinTable(name = "user_voucher", joinColumns = {
@@ -53,10 +55,10 @@ public class User implements Serializable {
         @JoinColumn(name = "voucher_id", referencedColumnName = "id")})
     @ManyToMany
     private Set<Voucher> voucherSet;
-     @JsonIgnore
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Review> reviewSet;
-      @JsonIgnore
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Store> storeSet;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
@@ -70,96 +72,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    @XmlTransient
-    public Set<Voucher> getVoucherSet() {
-        return voucherSet;
-    }
-
-    public void setVoucherSet(Set<Voucher> voucherSet) {
-        this.voucherSet = voucherSet;
-    }
-
-    @XmlTransient
-    public Set<Review> getReviewSet() {
-        return reviewSet;
-    }
-
-    public void setReviewSet(Set<Review> reviewSet) {
-        this.reviewSet = reviewSet;
-    }
-
-    @XmlTransient
-    public Set<Store> getStoreSet() {
-        return storeSet;
-    }
-
-    public void setStoreSet(Set<Store> storeSet) {
-        this.storeSet = storeSet;
-    }
-
-    public Role getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Role roleId) {
-        this.roleId = roleId;
-    }
 
     @Override
     public int hashCode() {
@@ -185,5 +98,5 @@ public class User implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.User[ id=" + id + " ]";
     }
-    
+
 }

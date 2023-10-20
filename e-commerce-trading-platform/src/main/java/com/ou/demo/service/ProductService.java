@@ -40,6 +40,6 @@ public interface ProductService {
 
     Product delete(Product ps);
 
-    Product update(Product ps);
+    Product update(Product p );
 
 }

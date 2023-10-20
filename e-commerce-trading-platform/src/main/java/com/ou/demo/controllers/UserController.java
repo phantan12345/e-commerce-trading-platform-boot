@@ -5,6 +5,7 @@
 package com.ou.demo.controllers;
 
 import com.ou.demo.dto.Login;
+import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
 import com.ou.demo.security.JwtUtils;
@@ -74,7 +75,6 @@ public class UserController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login login, BindingResult bindingResult) throws Exception {
         final UserDetails userDetails = UserService.loadUserByUsername(login.getUsername());
 
-      
         authenticate(login.getUsername(), login.getPassword());
 
         String jwtResponse = jwtUtils.generateJwtToken(userDetails);
@@ -98,6 +98,12 @@ public class UserController {
         } else {
             return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @GetMapping("users/")
+    public ResponseEntity<?> getUsers() {
+        return new ResponseEntity<>(UserService.listUser(), HttpStatus.OK);
+
     }
 
 }

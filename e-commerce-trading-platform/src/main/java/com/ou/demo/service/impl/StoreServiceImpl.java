@@ -45,6 +45,7 @@ public class StoreServiceImpl implements StoreService {
         Role role = RoleService.findRoleByRoleName("SELLER");
         if (role != null) {
             u.setRoleId(role);
+
             userService.update(u);
             return this.storeReponsitory.save(store);
         }
@@ -61,7 +62,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store update(Store id) {
         try {
-
+            
             return this.storeReponsitory.save(id);
 
         } catch (Exception e) {
@@ -83,5 +84,10 @@ public class StoreServiceImpl implements StoreService {
         }
         s.setActive(Boolean.FALSE);
         return storeReponsitory.save(s);
+    }
+
+    @Override
+    public Store getRequestment() {
+        return storeReponsitory.findStoreByActive(Boolean.FALSE);
     }
 }

@@ -21,5 +21,7 @@ public interface StoreService {
     
     Store findStoreById(int id);
     Store delete(Store s);
+    
+    Store getRequestment();
 
 }

@@ -13,6 +13,7 @@ import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
+import com.ou.demo.service.CategoryService;
 import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ProductStoreService;
 import com.ou.demo.service.StoreService;
@@ -68,8 +69,10 @@ public class ProductController {
 
     private StoreService storeService;
 
+    private CategoryService CategoryService;
+
     @PostMapping("/product/")
-    public ResponseEntity<?> addPRoduct(@Valid @RequestParam Map<String,String> params, @RequestPart List<MultipartFile> file) {
+    public ResponseEntity<?> addPRoduct(@Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -213,6 +216,29 @@ public class ProductController {
         } else {
             return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PutMapping("/product/{id}")
+    public ResponseEntity<?> updateProduct(@RequestBody ProductInput dto, @PathVariable int id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Product p = productService.findById(id);
+            if (p == null) {
+
+                return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
+            } else {
+                p.setProductName(dto.getProductName());
+                p.setActive(dto.getActive());
+                p.setCategoryId(CategoryService.findCateById(dto.getCateId()));
+                p.setPrice(dto.getPrice());
+                return new ResponseEntity<>(productService.update(p), HttpStatus.OK);
+
+            }
+        } else {
+            return new ResponseEntity<>("error add products", HttpStatus.FORBIDDEN);
+
+        }
+
     }
 
 }

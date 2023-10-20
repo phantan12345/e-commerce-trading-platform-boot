@@ -20,6 +20,7 @@ import com.ou.demo.service.UserService;
 import com.ou.demo.service.VoucherService;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -90,7 +91,6 @@ public class UserServiceImpl implements UserService {
         u.setRoleId(roleService.findRoleByRoleName("USER"));
 
         u.setActive(Boolean.TRUE);
-
         u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
         User user1 = u;
         User user = UserRepository.save(u);
@@ -139,6 +139,11 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public List<User> listUser() {
+        return UserRepository.findAll();
     }
 
 }
