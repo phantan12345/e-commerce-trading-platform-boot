@@ -9,17 +9,22 @@ import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  *
  * @author ADMIN
  */
 @Entity
 @Table(name = "store")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Store.findAll", query = "SELECT s FROM Store s"),
     @NamedQuery(name = "Store.findById", query = "SELECT s FROM Store s WHERE s.id = :id"),
     @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName"),
-    @NamedQuery(name = "Store.findByAdress", query = "SELECT s FROM Store s WHERE s.adress = :adress")})
+    @NamedQuery(name = "Store.findByAdress", query = "SELECT s FROM Store s WHERE s.adress = :adress"),
+    @NamedQuery(name = "Store.findByActive", query = "SELECT s FROM Store s WHERE s.active = :active")})
 public class Store implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,13 +37,15 @@ public class Store implements Serializable {
     private String storeName;
     @Column(name = "adress")
     private String adress;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
-    private Set<ProductStore> productStoreSet;
+    @Column(name = "active")
+    private Boolean active;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
     @ManyToOne(optional = false)
     private User userId;
+        @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
+    private Set<ProductStore> productStoreSet;
 
     public Store() {
     }
@@ -71,12 +78,12 @@ public class Store implements Serializable {
         this.adress = adress;
     }
 
-    public Set<ProductStore> getProductStoreSet() {
-        return productStoreSet;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setProductStoreSet(Set<ProductStore> productStoreSet) {
-        this.productStoreSet = productStoreSet;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public User getUserId() {
@@ -85,6 +92,15 @@ public class Store implements Serializable {
 
     public void setUserId(User userId) {
         this.userId = userId;
+    }
+
+    @XmlTransient
+    public Set<ProductStore> getProductStoreSet() {
+        return productStoreSet;
+    }
+
+    public void setProductStoreSet(Set<ProductStore> productStoreSet) {
+        this.productStoreSet = productStoreSet;
     }
 
     @Override
@@ -111,5 +127,5 @@ public class Store implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Store[ id=" + id + " ]";
     }
-
+    
 }

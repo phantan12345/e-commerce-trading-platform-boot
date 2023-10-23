@@ -5,32 +5,23 @@
 package com.ou.demo.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
+@AllArgsConstructor
+@Builder
 public class Login {
 
-    @NotBlank
+    @NotNull(message = "USERNAME IS NULL")
     private String username;
 
-    @NotBlank
+    @NotNull(message = "PASSWORD IS NULL")
     private String password;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

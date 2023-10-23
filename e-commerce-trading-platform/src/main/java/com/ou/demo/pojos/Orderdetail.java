@@ -5,21 +5,25 @@
 package com.ou.demo.pojos;
 
 import java.io.Serializable;
-import java.util.Set;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
 @Entity
 @Table(name = "orderdetail")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Orderdetail.findAll", query = "SELECT o FROM Orderdetail o"),
     @NamedQuery(name = "Orderdetail.findById", query = "SELECT o FROM Orderdetail o WHERE o.id = :id"),
     @NamedQuery(name = "Orderdetail.findByQuatity", query = "SELECT o FROM Orderdetail o WHERE o.quatity = :quatity"),
-    @NamedQuery(name = "Orderdetail.findByPrice", query = "SELECT o FROM Orderdetail o WHERE o.price = :price")})
+    @NamedQuery(name = "Orderdetail.findByTotal", query = "SELECT o FROM Orderdetail o WHERE o.total = :total")})
 public class Orderdetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,12 +34,12 @@ public class Orderdetail implements Serializable {
     private Integer id;
     @Column(name = "quatity")
     private Integer quatity;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "price")
-    private Double price;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderdetailId")
-    private Set<Order> order1Set;
-    @JoinColumn(name = "product-store_id", referencedColumnName = "id")
+    @Column(name = "total")
+    private BigDecimal total;
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Order1 orderId;
+    @JoinColumn(name = "product_store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private ProductStore productStoreId;
 
@@ -62,20 +66,14 @@ public class Orderdetail implements Serializable {
         this.quatity = quatity;
     }
 
-    public Double getPrice() {
-        return price;
+
+
+    public Order1 getOrderId() {
+        return orderId;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Set<Order> getOrder1Set() {
-        return order1Set;
-    }
-
-    public void setOrder1Set(Set<Order> order1Set) {
-        this.order1Set = order1Set;
+    public void setOrderId(Order1 orderId) {
+        this.orderId = orderId;
     }
 
     public ProductStore getProductStoreId() {

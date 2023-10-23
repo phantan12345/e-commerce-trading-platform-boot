@@ -4,9 +4,13 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -14,6 +18,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "payment")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
     @NamedQuery(name = "Payment.findById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
@@ -22,15 +27,15 @@ public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Column(name = "payment")
     private String payment;
-    @ManyToOne
-    private PaymentMethod paymentMethod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentId")
-    private Set<Order> order1Set;
+    @JsonIgnore
+    @OneToMany(mappedBy = "paymentId")
+    private Set<Order1> order1Set;
 
     public Payment() {
     }
@@ -55,19 +60,12 @@ public class Payment implements Serializable {
         this.payment = payment;
     }
 
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public Set<Order> getOrder1Set() {
+    @XmlTransient
+    public Set<Order1> getOrder1Set() {
         return order1Set;
     }
 
-    public void setOrder1Set(Set<Order> order1Set) {
+    public void setOrder1Set(Set<Order1> order1Set) {
         this.order1Set = order1Set;
     }
 
@@ -95,5 +93,5 @@ public class Payment implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Payment[ id=" + id + " ]";
     }
-
+    
 }

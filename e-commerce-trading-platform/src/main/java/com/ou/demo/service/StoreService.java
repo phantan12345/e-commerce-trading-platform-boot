@@ -6,17 +6,24 @@ package com.ou.demo.service;
 
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
+import java.util.List;
 
 /**
  *
  * @author ADMIN
  */
 public interface StoreService {
-    
-     Store Create(Store store,User u);
-     
-     Store findStoreByUserID(User id);
-     
 
-        
+    Store Create(Store store, User u);
+
+    Store update(Store store);
+
+    Store findStoreByUserID(User id);
+    
+    Store findStoreById(int id);
+    Store delete(Store s);
+    
+    Store getRequestment();
+    List<Store> getStores();
+
 }

@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -16,6 +18,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "role")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
     @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
@@ -24,13 +27,15 @@ public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Column(name = "role_name")
     private String roleName;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleId")
+        @JsonIgnore
+
+    @OneToMany(mappedBy = "roleId")
     private Set<User> userSet;
 
     public Role() {
@@ -56,6 +61,7 @@ public class Role implements Serializable {
         this.roleName = roleName;
     }
 
+    @XmlTransient
     public Set<User> getUserSet() {
         return userSet;
     }

@@ -4,13 +4,32 @@
  */
 package com.ou.demo.service;
 
+import com.ou.demo.dto.ProdcutDto;
+import com.ou.demo.dto.ProductStoreDto;
+import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.Store;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author ADMIN
  */
 public interface ProductStoreService {
-    
+
     ProductStore create(ProductStore ps);
+
+    ProductStore findByProduct(Product id);
+
+    ProductStoreDto getDto(Product id);
+
+    List<ProdcutDto> findAllByStore(Store s);
+
+    ProductStore findById(int id);
+
+    ProductStore findlByStore(Store s);
+
+    Object stat();
+
 }

@@ -6,6 +6,7 @@ package com.ou.demo.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.demo.service.ImageService;
 import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,12 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
  * @author ADMIN
  */
 @Service
-public class ImageService {
+public class ImageServiceImpl implements ImageService{
 
     @Autowired
     private Cloudinary Cloudinary;
 
-    Map Cloudinary(MultipartFile file) {
+    @Override
+    public Map Cloudinary(MultipartFile file) {
         try {
             Map res = this.Cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
             return res;

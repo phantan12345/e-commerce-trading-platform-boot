@@ -12,7 +12,8 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 @SpringBootApplication
-public class DemoApplication {
+public class DemoApplication  {
+
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
@@ -33,14 +34,11 @@ public class DemoApplication {
         return cloudinary;
     }
 
-    @Bean
-    public MultipartResolver multipartResolver() {
-        return new StandardServletMultipartResolver();
-    }
 
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
 
 }

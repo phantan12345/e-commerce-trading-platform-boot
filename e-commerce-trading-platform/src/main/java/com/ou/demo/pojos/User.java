@@ -4,10 +4,13 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-
 import jakarta.persistence.*;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -15,6 +18,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "user")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
@@ -22,7 +26,8 @@ import jakarta.persistence.*;
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-    @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active")})
+    @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active"),
+    @NamedQuery(name = "User.findByPhone", query = "SELECT u FROM User u WHERE u.phone = :phone")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,14 +46,18 @@ public class User implements Serializable {
     private String email;
     @Column(name = "active")
     private Boolean active;
+    @Column(name = "Phone")
+    private String phone;
+        @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<Review> reviewSet;
+            @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Store> storeSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<CodeUser> codeUserSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Reriew> reriewSet;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Role roleId;
 
     public User() {
@@ -106,28 +115,30 @@ public class User implements Serializable {
         this.active = active;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @XmlTransient
+    public Set<Review> getReviewSet() {
+        return reviewSet;
+    }
+
+    public void setReviewSet(Set<Review> reviewSet) {
+        this.reviewSet = reviewSet;
+    }
+
+    @XmlTransient
     public Set<Store> getStoreSet() {
         return storeSet;
     }
 
     public void setStoreSet(Set<Store> storeSet) {
         this.storeSet = storeSet;
-    }
-
-    public Set<CodeUser> getCodeUserSet() {
-        return codeUserSet;
-    }
-
-    public void setCodeUserSet(Set<CodeUser> codeUserSet) {
-        this.codeUserSet = codeUserSet;
-    }
-
-    public Set<Reriew> getReriewSet() {
-        return reriewSet;
-    }
-
-    public void setReriewSet(Set<Reriew> reriewSet) {
-        this.reriewSet = reriewSet;
     }
 
     public Role getRoleId() {

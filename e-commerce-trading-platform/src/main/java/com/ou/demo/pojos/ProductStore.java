@@ -9,12 +9,16 @@ import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  *
  * @author ADMIN
  */
 @Entity
 @Table(name = "product_store")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProductStore.findAll", query = "SELECT p FROM ProductStore p"),
     @NamedQuery(name = "ProductStore.findById", query = "SELECT p FROM ProductStore p WHERE p.id = :id"),
@@ -35,10 +39,8 @@ public class ProductStore implements Serializable {
     @JoinColumn(name = "store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Store storeId;
-    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Voucher voucherId;
-    @JsonIgnore
+        @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -81,14 +83,7 @@ public class ProductStore implements Serializable {
         this.storeId = storeId;
     }
 
-    public Voucher getVoucherId() {
-        return voucherId;
-    }
-
-    public void setVoucherId(Voucher voucherId) {
-        this.voucherId = voucherId;
-    }
-
+    @XmlTransient
     public Set<Orderdetail> getOrderdetailSet() {
         return orderdetailSet;
     }
@@ -121,5 +116,5 @@ public class ProductStore implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.ProductStore[ id=" + id + " ]";
     }
-
+    
 }

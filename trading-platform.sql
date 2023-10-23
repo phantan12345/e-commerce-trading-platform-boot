@@ -24,12 +24,12 @@ DROP TABLE IF EXISTS `category`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `category` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
   `category_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_category_category1_idx` (`category_id`),
-  CONSTRAINT `fk_category_category1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_category_category1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,66 +38,35 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'iphone',NULL);
+INSERT INTO `category` VALUES (1,'SmartPhone',NULL),(2,'Iphone',1),(3,'SamSung',1),(4,'Sofa',NULL),(5,'Watch',NULL),(6,'Iphong 11',2),(7,'Iphone 12',2),(8,'Chair',NULL),(9,'Double Sofa',NULL),(10,'Single Sofa',NULL),(11,'wireless',NULL),(12,'wireless Pro',NULL),(13,'Iphone 15',2),(14,'Iphone 15 Pro',13),(15,'Iphone 11 Pro',6);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `code-user`
+-- Table structure for table `order1`
 --
 
-DROP TABLE IF EXISTS `code-user`;
+DROP TABLE IF EXISTS `order1`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `code-user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `voucher_code_voucher_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_code-user_voucher_code1_idx` (`voucher_code_voucher_id`),
-  KEY `fk_code-user_user1_idx` (`user_id`),
-  CONSTRAINT `fk_code-user_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `fk_code-user_voucher_code1` FOREIGN KEY (`voucher_code_voucher_id`) REFERENCES `voucher_code` (`voucher_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `code-user`
---
-
-LOCK TABLES `code-user` WRITE;
-/*!40000 ALTER TABLE `code-user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `code-user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `order`
---
-
-DROP TABLE IF EXISTS `order`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order` (
+CREATE TABLE `order1` (
   `id` int NOT NULL AUTO_INCREMENT,
   `order_date` date DEFAULT NULL,
-  `total` double DEFAULT NULL,
-  `orderdetail_id` int NOT NULL,
-  `payment_id` int NOT NULL,
+  `payment_id` int DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_order_orderdetail1_idx` (`orderdetail_id`),
   KEY `fk_order_payment1_idx` (`payment_id`),
-  CONSTRAINT `fk_order_orderdetail1` FOREIGN KEY (`orderdetail_id`) REFERENCES `orderdetail` (`id`),
   CONSTRAINT `fk_order_payment1` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `order`
+-- Dumping data for table `order1`
 --
 
-LOCK TABLES `order` WRITE;
-/*!40000 ALTER TABLE `order` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+LOCK TABLES `order1` WRITE;
+/*!40000 ALTER TABLE `order1` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order1` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -110,12 +79,15 @@ DROP TABLE IF EXISTS `orderdetail`;
 CREATE TABLE `orderdetail` (
   `id` int NOT NULL AUTO_INCREMENT,
   `quatity` int DEFAULT NULL,
-  `price` double DEFAULT NULL,
-  `product-store_id` int NOT NULL,
+  `total` decimal(10,0) DEFAULT NULL,
+  `order_id` int NOT NULL,
+  `product_store_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_orderdetail_product-store1_idx` (`product-store_id`),
-  CONSTRAINT `fk_orderdetail_product-store1` FOREIGN KEY (`product-store_id`) REFERENCES `product_store` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_orderdetail_order1_idx` (`order_id`),
+  KEY `fk_orderdetail_product_store1_idx` (`product_store_id`),
+  CONSTRAINT `fk_orderdetail_order1` FOREIGN KEY (`order_id`) REFERENCES `order1` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_orderdetail_product_store1` FOREIGN KEY (`product_store_id`) REFERENCES `product_store` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,10 +109,7 @@ DROP TABLE IF EXISTS `payment`;
 CREATE TABLE `payment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `payment` varchar(45) DEFAULT NULL,
-  `payment_method_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_payment_payment_method1_idx` (`payment_method_id`),
-  CONSTRAINT `fk_payment_payment_method1` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -154,29 +123,6 @@ LOCK TABLES `payment` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `payment_method`
---
-
-DROP TABLE IF EXISTS `payment_method`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `payment_method` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `discount` double DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `payment_method`
---
-
-LOCK TABLES `payment_method` WRITE;
-/*!40000 ALTER TABLE `payment_method` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payment_method` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `product`
 --
 
@@ -185,14 +131,14 @@ DROP TABLE IF EXISTS `product`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `product_name` varchar(45) DEFAULT NULL,
+  `product_name` varchar(255) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL,
   `category_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_product_category1_idx` (`category_id`),
-  CONSTRAINT `fk_product_category1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_product_category1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +147,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (15,'Iphone',145.00,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1694668222/i77ochfuvfgj9wdc08p2.jpg',1),(16,'Iphone',145.00,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1694668307/osgvtpptju9n3e3x9jsw.jpg',1),(17,'Iphone',145.00,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1694676300/x3rtwfsvko2e6mrrblrd.jpg',1);
+INSERT INTO `product` VALUES (44,'Modern Arm Sofa',679.00,1,4),(45,'Baltsar Chair',679.00,1,8),(46,'Baltsar Chair',679.00,1,8),(47,'Helmar Chair',679.00,1,8),(48,'iphone 11',679.00,1,8),(49,'iphone 11',679.00,1,6),(50,'iphone 15',679.00,1,13),(51,'iphone 15',679.00,1,14),(52,'Fllufy Sheep Sofa',679.00,1,9),(53,'Fllufy Sheep Sofa',356.00,1,10),(54,'Beat Studio Wireless',356.00,1,11),(55,'Beat Studio Wireless',356.00,1,11),(56,'Beat Studio Wireless',356.00,1,11),(57,'Beat Studio Wireless',356.00,1,12),(58,'Beat Studio Wireless',356.00,1,12);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,12 +160,12 @@ DROP TABLE IF EXISTS `product_image`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_image` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `url` varchar(45) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
   `product_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_product_image_product1_idx` (`product_id`),
   CONSTRAINT `fk_product_image_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,6 +174,7 @@ CREATE TABLE `product_image` (
 
 LOCK TABLES `product_image` WRITE;
 /*!40000 ALTER TABLE `product_image` DISABLE KEYS */;
+INSERT INTO `product_image` VALUES (39,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518131/jehacnjpibuwekr9p4ii.png',44),(40,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518778/m7dkvmwcvnsrjanledfl.png',45),(41,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518860/rm1pjhaodry8ru38f0sy.png',46),(42,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518880/ip4pfhpo9mixuzxkun9m.png',47),(43,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518902/fbyhkd72ntero9uhwfrh.jpg',48),(44,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518906/fuetacqblsuf0hp1nb5h.jpg',48),(45,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518927/t3pigsksfao2lekl8eai.jpg',49),(46,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518930/plimmc56oxsqzhgi2pkp.jpg',49),(47,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518951/sqykgo0r20fcgskafetq.jpg',50),(48,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518953/tvawztmpbfayumpx0iqn.jpg',50),(49,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518969/st23rrgdzcqg6fgsefwt.jpg',51),(50,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696518971/mfv7zkuffxutjzfx5fhs.jpg',51),(51,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519015/zhhwu82iuqfmxh0vawb4.png',52),(52,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519018/eruzjg2kyrycqfe8dmoc.png',52),(53,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519088/yy5yzdwxzyd8c7ax9b1s.png',53),(54,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519104/dflzh0wsebxvepjv4pnl.png',54),(55,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519106/bqf9xctkjxfvzt0ntmgk.png',54),(56,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519129/up5ux31q7pr07dmmdnpt.png',55),(57,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519131/tjozzgtes60p3bxhdgtv.png',55),(58,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519160/psblowjk8dlomnmcopl9.png',56),(59,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519162/mjk2afpnbxyfelyulncw.png',56),(60,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519167/awpvld7h7gydcjgicyrq.png',57),(61,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519169/jttw6wpfvlzrxsrprrr9.png',57),(62,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519175/b2c9cdtx4b7zbccexvam.png',58),(63,'https://res.cloudinary.com/ddznsqfbo/image/upload/v1696519178/tnmogdyvoevnmgwwhwbu.png',58);
 /*!40000 ALTER TABLE `product_image` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -240,18 +187,18 @@ DROP TABLE IF EXISTS `product_store`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_store` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `count` int DEFAULT NULL,
-  `store_id` int NOT NULL,
   `product_id` int NOT NULL,
+  `store_id` int NOT NULL,
   `voucher_id` int DEFAULT NULL,
+  `count` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_product-store_store1_idx` (`store_id`),
-  KEY `fk_product-store_product1_idx` (`product_id`),
-  KEY `fk_product-store_voucher1_idx` (`voucher_id`),
-  CONSTRAINT `fk_product-store_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-  CONSTRAINT `fk_product-store_store1` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`),
-  CONSTRAINT `fk_product-store_voucher1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_product_has_store_store1_idx` (`store_id`),
+  KEY `fk_product_has_store_product1_idx` (`product_id`),
+  KEY `fk_product_has_store_voucher1_idx` (`voucher_id`),
+  CONSTRAINT `fk_product_has_store_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_product_has_store_store1` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_product_has_store_voucher1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,42 +207,42 @@ CREATE TABLE `product_store` (
 
 LOCK TABLES `product_store` WRITE;
 /*!40000 ALTER TABLE `product_store` DISABLE KEYS */;
-INSERT INTO `product_store` VALUES (1,100,1,16,NULL),(2,100,1,17,NULL);
 /*!40000 ALTER TABLE `product_store` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `reriew`
+-- Table structure for table `review`
 --
 
-DROP TABLE IF EXISTS `reriew`;
+DROP TABLE IF EXISTS `review`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reriew` (
+CREATE TABLE `review` (
   `id` int NOT NULL AUTO_INCREMENT,
   `coment` varchar(45) DEFAULT NULL,
   `date_content` date DEFAULT NULL,
   `evaluate` int DEFAULT NULL,
   `user_id` int NOT NULL,
   `product_id` int NOT NULL,
-  `reriew_id` int NOT NULL,
+  `review_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_reriew_user1_idx` (`user_id`),
   KEY `fk_reriew_product1_idx` (`product_id`),
-  KEY `fk_reriew_reriew1_idx` (`reriew_id`),
+  KEY `fk_review_review1_idx` (`review_id`),
   CONSTRAINT `fk_reriew_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-  CONSTRAINT `fk_reriew_reriew1` FOREIGN KEY (`reriew_id`) REFERENCES `reriew` (`id`),
-  CONSTRAINT `fk_reriew_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_reriew_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_review_review1` FOREIGN KEY (`review_id`) REFERENCES `review` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reriew`
+-- Dumping data for table `review`
 --
 
-LOCK TABLES `reriew` WRITE;
-/*!40000 ALTER TABLE `reriew` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reriew` ENABLE KEYS */;
+LOCK TABLES `review` WRITE;
+/*!40000 ALTER TABLE `review` DISABLE KEYS */;
+INSERT INTO `review` VALUES (7,'san pham dep','2023-10-13',3,27,44,NULL),(8,'san pham dep','2023-10-13',3,27,44,7),(9,'san pham dep','2023-10-13',3,27,44,7),(10,'san pham dep','2023-10-13',3,27,44,7);
+/*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -318,7 +265,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'USER'),(2,'ADMIN'),(3,'SALER'),(4,'EMPLOYEE');
+INSERT INTO `role` VALUES (1,'ADMIN'),(2,'USER'),(3,'SELLER');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,11 +280,12 @@ CREATE TABLE `store` (
   `id` int NOT NULL AUTO_INCREMENT,
   `store_name` varchar(45) DEFAULT NULL,
   `adress` varchar(45) DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL,
   `user_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_store_user1_idx` (`user_id`),
   CONSTRAINT `fk_store_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -346,7 +294,7 @@ CREATE TABLE `store` (
 
 LOCK TABLES `store` WRITE;
 /*!40000 ALTER TABLE `store` DISABLE KEYS */;
-INSERT INTO `store` VALUES (1,'145','1445',3),(5,'13','13',3);
+INSERT INTO `store` VALUES (1,'Iphone Store','145 Nguyn Oanh',1,27);
 /*!40000 ALTER TABLE `store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -364,11 +312,12 @@ CREATE TABLE `user` (
   `avatar` varchar(255) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `active` tinyint(1) DEFAULT NULL,
+  `Phone` varchar(10) DEFAULT NULL,
   `role_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_role_idx` (`role_id`),
   CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -377,8 +326,35 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (3,'tan','$2a$10$KoKgd1dEXuc/VAVTkrF.VuXpSTS7tafqBwypFNWT14cWP2uhy9In.','https://res.cloudinary.com/ddznsqfbo/image/upload/v1694618960/pjdfwprgqcumipc9ljk6.png','phannhuttan@gmail.com',1,1);
+INSERT INTO `user` VALUES (25,'user','$2a$10$VwdOFxmmizbEr1i7eJ2k9.OwA85OOg.uB/h7X7UHRaJ4rdNp.iG26','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515598/cgttzknzwjj9riejx173.png','wahodo1861@htoal.com',1,'0372745193',2),(26,'admin','$2a$10$jzElKY2EQuQHE7/rxVyGoesNQaRI9rQyH5GiCj0PKOh.mrNFb3IfG','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515707/oazgkehdppgqduiq2wmt.png','wahodo1861@htoal.com',1,'0372745193',2),(27,'seller','$2a$10$RBcH0WKf.ErWzCrgEZ.P7uIc6UosWtGj20Brmmlgyuc2cZMY/BQoC','https://res.cloudinary.com/ddznsqfbo/image/upload/v1696515791/kwnuvsg3rvq0qnk3vbgz.png','wahodo1861@htoal.com',1,'0372745193',3);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_voucher`
+--
+
+DROP TABLE IF EXISTS `user_voucher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_voucher` (
+  `user_id` int NOT NULL,
+  `voucher_id` int NOT NULL,
+  PRIMARY KEY (`user_id`,`voucher_id`),
+  KEY `fk_user_has_voucher_voucher1_idx` (`voucher_id`),
+  KEY `fk_user_has_voucher_user1_idx` (`user_id`),
+  CONSTRAINT `fk_user_has_voucher_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_user_has_voucher_voucher1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_voucher`
+--
+
+LOCK TABLES `user_voucher` WRITE;
+/*!40000 ALTER TABLE `user_voucher` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_voucher` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -390,9 +366,10 @@ DROP TABLE IF EXISTS `voucher`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `voucher` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `discount` double DEFAULT NULL,
+  `discount` decimal(10,1) DEFAULT NULL,
+  `code` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -402,56 +379,6 @@ CREATE TABLE `voucher` (
 LOCK TABLES `voucher` WRITE;
 /*!40000 ALTER TABLE `voucher` DISABLE KEYS */;
 /*!40000 ALTER TABLE `voucher` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `voucher_code`
---
-
-DROP TABLE IF EXISTS `voucher_code`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `voucher_code` (
-  `code` int NOT NULL,
-  `voucher_id` int NOT NULL,
-  PRIMARY KEY (`voucher_id`),
-  KEY `fk_voucher_code_voucher1_idx` (`voucher_id`),
-  CONSTRAINT `fk_voucher_code_voucher1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `voucher_code`
---
-
-LOCK TABLES `voucher_code` WRITE;
-/*!40000 ALTER TABLE `voucher_code` DISABLE KEYS */;
-/*!40000 ALTER TABLE `voucher_code` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `voucher_money`
---
-
-DROP TABLE IF EXISTS `voucher_money`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `voucher_money` (
-  `money` double NOT NULL,
-  `voucher_id` int NOT NULL,
-  PRIMARY KEY (`voucher_id`),
-  KEY `fk_voucher_money_voucher1_idx` (`voucher_id`),
-  CONSTRAINT `fk_voucher_money_voucher1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `voucher_money`
---
-
-LOCK TABLES `voucher_money` WRITE;
-/*!40000 ALTER TABLE `voucher_money` DISABLE KEYS */;
-/*!40000 ALTER TABLE `voucher_money` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -471,4 +398,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-14 15:00:52
+-- Dump completed on 2023-10-13  1:34:40

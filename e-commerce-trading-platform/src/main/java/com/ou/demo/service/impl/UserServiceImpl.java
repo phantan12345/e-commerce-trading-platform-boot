@@ -6,13 +6,21 @@ package com.ou.demo.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.demo.dto.Mail;
 import com.ou.demo.pojos.Role;
+import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.Voucher;
+import com.ou.demo.repositories.StoreReponsitory;
 import com.ou.demo.repositories.UserRepository;
+import com.ou.demo.service.MailService;
 import com.ou.demo.service.RoleService;
+import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
+import com.ou.demo.service.VoucherService;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +43,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserServiceImpl implements UserService {
 
     @Autowired
+    private MailService MailService;
+
+    @Autowired
     private UserRepository UserRepository;
 
     @Autowired
@@ -44,8 +55,10 @@ public class UserServiceImpl implements UserService {
     private RoleService roleService;
 
     @Autowired
-    private ImageService imageService;
-    
+    private ImageServiceImpl imageService;
+
+//    @Autowired
+//    private StoreService StoreService;
     public User findByUsername(String user) {
         return UserRepository.findByUsername(user);
     }
@@ -67,27 +80,70 @@ public class UserServiceImpl implements UserService {
                 users.getUsername(), users.getPassword(), authorities);
     }
 
-    public User addUsers(Map<String, String> params, MultipartFile file) {
+    @Override
+    public boolean addUsers(Map<String, String> params, MultipartFile file) {
+
         User u = new User();
         u.setUsername(params.get("username"));
-        u.setEmail(params.get("email"));
         u.setPassword(this.passwordEncoder.encode(params.get("password")));
-
+        u.setEmail(params.get("email"));
+        u.setPhone(params.get("phone"));
         u.setRoleId(roleService.findRoleByRoleName("USER"));
-        u.setActive(Boolean.FALSE);
-        
-        u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
-        
-       
 
-        return UserRepository.save(u);
+        u.setActive(Boolean.TRUE);
+        u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
+        User user1 = u;
+        User user = UserRepository.save(u);
+        if (user != null) {
+            Mail mail = new Mail();
+            mail.setMailFrom("2051050435tan@ou.edu.vn");
+            mail.setMailTo(user.getEmail());
+            mail.setMailSubject("Spring Boot - Email Register");
+            mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
+            MailService.sendEmail(mail);
+            return true;
+        }
+
+        return false;
+
     }
 
     @Override
     public User updateActice(int id) {
-        User user=UserRepository.findById(id).get();
-        user.setActive(Boolean.TRUE);
-        return UserRepository.save(user);
+
+        User user = UserRepository.findById(id).get();
+        try {
+            if (user.getRoleId().getRoleName().equals(roleService.findRoleByRoleName("USER").getRoleName())) {
+                user.setRoleId(roleService.findRoleByRoleName("SALER"));
+                return UserRepository.save(user);
+            }
+        } catch (Exception e) {
+
+        }
+        return null;
+
+    }
+
+    @Override
+    public User findById(int id) {
+        return UserRepository.findById(id).get();
+    }
+
+    @Override
+    public User update(User user) {
+        try {
+            if (user != null) {
+                return UserRepository.save(user);
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public List<User> listUser() {
+        return UserRepository.findAll();
     }
 
 }

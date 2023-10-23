@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -16,6 +18,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "category")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
     @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"),
@@ -24,19 +27,22 @@ public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "name")
     private String name;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+    @OneToMany(mappedBy = "categoryId")
     private Set<Product> productSet;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
+        @JsonIgnore
+
+    @OneToMany(mappedBy = "categoryId")
     private Set<Category> categorySet;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Category categoryId;
 
     public Category() {
@@ -44,6 +50,11 @@ public class Category implements Serializable {
 
     public Category(Integer id) {
         this.id = id;
+    }
+
+    public Category(Integer id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Integer getId() {
@@ -62,6 +73,7 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+    @XmlTransient
     public Set<Product> getProductSet() {
         return productSet;
     }
@@ -70,6 +82,7 @@ public class Category implements Serializable {
         this.productSet = productSet;
     }
 
+    @XmlTransient
     public Set<Category> getCategorySet() {
         return categorySet;
     }
