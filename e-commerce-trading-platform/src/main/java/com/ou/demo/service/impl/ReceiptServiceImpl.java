@@ -63,9 +63,8 @@ public class ReceiptServiceImpl implements receiptService {
                     if (c.getCount() < ps.getCount()) {
                         d.setProductStoreId(ps);
                         if (d.getProductStoreId().getVoucherId() != null) {
-                            BigDecimal t = (p.getPrice().multiply(new BigDecimal(c.getCount())));
-                            BigDecimal total = t.subtract(t
-                                    .multiply(ps.getVoucherId().getDiscount()));
+                            BigDecimal total = c.getPrice();
+
                             d.setTotal(total);
                             if (user.getVoucherSet().remove(d.getProductStoreId().getVoucherId())) {
 
@@ -83,7 +82,7 @@ public class ReceiptServiceImpl implements receiptService {
                         int count = ps.getCount() - od.getQuatity();
                         ps.setCount(count);
                         ProductStoreService.create(ps);
-                        return true;
+
                     } else {
                         return false;
                     }

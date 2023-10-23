@@ -85,6 +85,22 @@ public class StoreController {
             return ResponseEntity.accepted().build();
         }
     }
+    
+        @GetMapping("stores/")
+    public ResponseEntity<?> getStores() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+            List<Store> store = storeService.getStores();
+
+            if (store  == null) {
+                return new ResponseEntity<>("USER NOT ACCEPTED", HttpStatus.NOT_ACCEPTABLE);
+            } else {
+                return ResponseEntity.ok(store);
+
+            }
+
+    }
 
     @PostMapping("/requestment/{id}")
     public ResponseEntity<?> requestment(@PathVariable(value = "id") int id) {

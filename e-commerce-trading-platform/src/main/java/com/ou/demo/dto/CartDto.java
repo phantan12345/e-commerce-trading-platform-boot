@@ -23,5 +23,5 @@ import lombok.NoArgsConstructor;
 public class CartDto {
     private int id;
     private int count;
-    private Voucher voucher;
+    private  BigDecimal price;
 }

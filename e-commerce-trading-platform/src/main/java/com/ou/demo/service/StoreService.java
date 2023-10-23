@@ -6,6 +6,7 @@ package com.ou.demo.service;
 
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
+import java.util.List;
 
 /**
  *
@@ -23,5 +24,6 @@ public interface StoreService {
     Store delete(Store s);
     
     Store getRequestment();
+    List<Store> getStores();
 
 }

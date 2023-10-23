@@ -128,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PageDto page(int p) {
-        Pageable pageable = PageRequest.of(p, 3);
+        Pageable pageable = PageRequest.of(p, 8);
         List<ProdcutDto> listDto = new ArrayList<>();
         Page<Product> page = productReponsitory.findAll(pageable);
         for (Product product : page.getContent()) {

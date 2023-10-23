@@ -114,12 +114,7 @@ public class ProductController {
             CartDto c = new CartDto();
             c.setId(p.getId());
             c.setCount(1);
-            if (ps.getVoucherId() == null) {
-                c.setVoucher(null);
-            } else {
-                c.setVoucher(ps.getVoucherId());
-
-            }
+           
 
             cart.put(productId, c);
         }
@@ -195,7 +190,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<?> deletePRoduct(@RequestPart int id) {
+    public ResponseEntity<?> deletePRoduct(@PathVariable int id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             Product p = productService.findById(id);

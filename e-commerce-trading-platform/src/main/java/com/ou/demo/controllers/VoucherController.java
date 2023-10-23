@@ -62,8 +62,8 @@ public class VoucherController {
 
     @GetMapping("voucher/code/")
     public ResponseEntity<?> getByCode(@RequestParam String code) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+        
+         
             Voucher v = VoucherService.findByCode(code);
 
             if (v == null) {
@@ -73,9 +73,7 @@ public class VoucherController {
                 return new ResponseEntity<>(v, HttpStatus.OK);
             }
 
-        } else {
-            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
-        }
+       
     }
 
 }

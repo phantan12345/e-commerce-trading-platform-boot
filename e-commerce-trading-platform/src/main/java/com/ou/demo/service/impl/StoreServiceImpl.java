@@ -14,6 +14,7 @@ import com.ou.demo.service.ProductService;
 import com.ou.demo.service.RoleService;
 import com.ou.demo.service.StoreService;
 import com.ou.demo.service.UserService;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,5 +90,10 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store getRequestment() {
         return storeReponsitory.findStoreByActive(Boolean.FALSE);
+    }
+
+    @Override
+    public List<Store> getStores() {
+        return  storeReponsitory.findAll();
     }
 }
