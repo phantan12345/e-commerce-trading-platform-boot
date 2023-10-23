@@ -33,7 +33,7 @@ public class Payment implements Serializable {
     private Integer id;
     @Column(name = "payment")
     private String payment;
-     @JsonIgnore
+    @JsonIgnore
     @OneToMany(mappedBy = "paymentId")
     private Set<Order1> order1Set;
 

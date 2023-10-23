@@ -4,7 +4,6 @@
  */
 package com.ou.demo.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -44,13 +43,10 @@ public class Product implements Serializable {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;
-     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
-      @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Review> reviewSet;
-       @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductStore> productStoreSet;
 

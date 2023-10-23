@@ -92,20 +92,7 @@ public class ProductStoreController {
         }
     }
 
-    @PutMapping("product-store/{id}")
-    public ResponseEntity<?> addVou(@RequestBody VoucherDto dto, @PathVariable("id") int id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
 
-            Voucher vou = VoucherService.findByid(dto.getId());
-
-            ProductStore ps = ProductStoreService.findById(id);
-            ps.setVoucherId(vou);
-            return ResponseEntity.ok().body(ProductStoreService.create(ps));
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-    }
 
     @GetMapping("stat/")
     public ResponseEntity<?> getStat(@RequestBody DateDto dto) {

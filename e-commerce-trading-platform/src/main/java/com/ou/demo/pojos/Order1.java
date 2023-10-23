@@ -9,7 +9,24 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.*;
-
+import java.math.BigDecimal;
+;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -17,6 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author ADMIN
  */
+
+
+@Data
 @Entity
 @Table(name = "order1")
 @XmlRootElement
@@ -38,10 +58,16 @@ public class Order1 implements Serializable {
     private Date orderDate;
     @Column(name = "active")
     private Boolean active;
+    @Column(name = "total")
+    private BigDecimal total;
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     @ManyToOne
     private Payment paymentId;
+    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Voucher voucherId;
     @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -82,6 +108,14 @@ public class Order1 implements Serializable {
 
     public void setPaymentId(Payment paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public Voucher getVoucherId() {
+        return voucherId;
+    }
+
+    public void setVoucherId(Voucher voucherId) {
+        this.voucherId = voucherId;
     }
 
     @XmlTransient

@@ -5,6 +5,8 @@
 package com.ou.demo.dto;
 
 import com.ou.demo.pojos.Payment;
+import com.ou.demo.pojos.Voucher;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +22,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartInput {
-    List<CartDto> carts;
-    Payment payment;
+    private List<CartDto> carts;
+    private Payment payment;
+    private int voucher;
+    private BigDecimal total;
 }

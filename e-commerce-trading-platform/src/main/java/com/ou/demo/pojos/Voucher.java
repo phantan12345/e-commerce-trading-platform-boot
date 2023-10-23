@@ -38,11 +38,10 @@ public class Voucher implements Serializable {
     private BigDecimal discount;
     @Column(name = "code")
     private String code;
-    @ManyToMany(mappedBy = "voucherSet")
-    private Set<User> userSet;
     @JsonIgnore
-    @OneToMany(mappedBy = "voucherId")
-    private Set<ProductStore> productStoreSet;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voucherId")
+    private Set<Order1> order1Set;
 
     public Voucher() {
     }
@@ -76,21 +75,12 @@ public class Voucher implements Serializable {
     }
 
     @XmlTransient
-    public Set<User> getUserSet() {
-        return userSet;
+    public Set<Order1> getOrder1Set() {
+        return order1Set;
     }
 
-    public void setUserSet(Set<User> userSet) {
-        this.userSet = userSet;
-    }
-
-    @XmlTransient
-    public Set<ProductStore> getProductStoreSet() {
-        return productStoreSet;
-    }
-
-    public void setProductStoreSet(Set<ProductStore> productStoreSet) {
-        this.productStoreSet = productStoreSet;
+    public void setOrder1Set(Set<Order1> order1Set) {
+        this.order1Set = order1Set;
     }
 
     @Override

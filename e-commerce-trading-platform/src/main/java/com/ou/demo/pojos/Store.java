@@ -42,7 +42,8 @@ public class Store implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
-     @JsonIgnore
+        @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
     private Set<ProductStore> productStoreSet;
 

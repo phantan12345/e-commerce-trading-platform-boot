@@ -16,6 +16,7 @@ import com.ou.demo.service.OrderService;
 import com.ou.demo.service.OrderdetailService;
 import com.ou.demo.service.ProductService;
 import com.ou.demo.service.ProductStoreService;
+import com.ou.demo.service.VoucherService;
 import com.ou.demo.service.receiptService;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -46,12 +47,17 @@ public class ReceiptServiceImpl implements receiptService {
     @Autowired
     private ProductService ProductService;
 
+    @Autowired
+    private VoucherService VoucherService;
+
     @Override
     public Object addReceipt(CartInput carts, User user) {
         try {
-
+            Voucher vou = VoucherService.findByid(carts.getVoucher());
             Order1 order = new Order1();
             order.setOrderDate(new Date());
+            order.setTotal(carts.getTotal());
+            order.setVoucherId(vou);
             Order1 o = OrderService.create(order);
 
             for (CartDto c : carts.getCarts()) {
@@ -62,26 +68,20 @@ public class ReceiptServiceImpl implements receiptService {
                     ProductStore ps = ProductStoreService.findByProduct(p);
                     if (c.getCount() < ps.getCount()) {
                         d.setProductStoreId(ps);
-                        if (d.getProductStoreId().getVoucherId() != null) {
-                            BigDecimal total = c.getPrice();
+                        BigDecimal total = c.getPrice();
 
-                            d.setTotal(total);
-                            if (user.getVoucherSet().remove(d.getProductStoreId().getVoucherId())) {
+                        d.setTotal(total);
 
-                                return "voucher da xoa";
-                            }
-
-                        } else {
-                            d.setTotal(p.getPrice().multiply(new BigDecimal(c.getCount())));
-
-                        }
                         d.setOrderId(o);
                         Orderdetail od = OrderdetailService.create(d);
+
                         order.setPaymentId(carts.getPayment());
-                        order.setActive(Boolean.TRUE);
+                        o.setActive(Boolean.TRUE);
                         int count = ps.getCount() - od.getQuatity();
                         ps.setCount(count);
                         ProductStoreService.create(ps);
+                        OrderService.create(o);
+ 
 
                     } else {
                         return false;

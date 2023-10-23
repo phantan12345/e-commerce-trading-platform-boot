@@ -39,10 +39,8 @@ public class ProductStore implements Serializable {
     @JoinColumn(name = "store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Store storeId;
-    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
-    @ManyToOne
-    private Voucher voucherId;
-     @JsonIgnore
+        @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -83,14 +81,6 @@ public class ProductStore implements Serializable {
 
     public void setStoreId(Store storeId) {
         this.storeId = storeId;
-    }
-
-    public Voucher getVoucherId() {
-        return voucherId;
-    }
-
-    public void setVoucherId(Voucher voucherId) {
-        this.voucherId = voucherId;
     }
 
     @XmlTransient

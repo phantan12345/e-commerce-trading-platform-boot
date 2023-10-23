@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.*;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -36,7 +37,8 @@ public class Category implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "categoryId")
     private Set<Product> productSet;
-    @JsonIgnore
+        @JsonIgnore
+
     @OneToMany(mappedBy = "categoryId")
     private Set<Category> categorySet;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -121,5 +123,5 @@ public class Category implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Category[ id=" + id + " ]";
     }
-
+    
 }

@@ -44,12 +44,12 @@ public class Review implements Serializable {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reviewId")
+        @JsonIgnore
+
+    @OneToMany(mappedBy = "reviewId")
     private Set<Review> reviewSet;
     @JoinColumn(name = "review_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @JsonIgnore
+    @ManyToOne
     private Review reviewId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -151,5 +151,5 @@ public class Review implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Review[ id=" + id + " ]";
     }
-
+    
 }
