@@ -55,3 +55,13 @@ https://code.visualstudio.com/docs/supporting/FAQ
 6. Real-Time Updates: Use WebSocket technology to provide real-time updates to users about the status of auctions they are participating in.
 7. Responsive Design: Tailwind CSS will ensure that your application is responsive and looks great on various devices.
 8. Data Communication: Axios will facilitate communication between the frontend and backend, ensuring seamless data transfer.
+## Run Project
+### Run Spring Boot (BE)
+    1. Open folder server by Netbeans
+    2. Built folder
+    3. Run file /src/main/java/com/nhs
+    /social/SocialApplication.java
+### Run Reactjs (FE)
+    1. Open folder myweb by Visual Studio Code
+    2. Type npm install in terminal to install packages
+    3. To run server type npm run start 
