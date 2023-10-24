@@ -54,10 +54,13 @@ CREATE TABLE `order1` (
   `order_date` date DEFAULT NULL,
   `payment_id` int DEFAULT NULL,
   `active` tinyint(1) DEFAULT NULL,
+  `voucher_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_order_payment1_idx` (`payment_id`),
+  KEY `fk_order1_voucher1_idx` (`voucher_id`),
+  CONSTRAINT `fk_order1_voucher1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`),
   CONSTRAINT `fk_order_payment1` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,7 +90,7 @@ CREATE TABLE `orderdetail` (
   KEY `fk_orderdetail_product_store1_idx` (`product_store_id`),
   CONSTRAINT `fk_orderdetail_order1` FOREIGN KEY (`order_id`) REFERENCES `order1` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_orderdetail_product_store1` FOREIGN KEY (`product_store_id`) REFERENCES `product_store` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +113,7 @@ CREATE TABLE `payment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `payment` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +141,7 @@ CREATE TABLE `product` (
   PRIMARY KEY (`id`),
   KEY `fk_product_category1_idx` (`category_id`),
   CONSTRAINT `fk_product_category1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,7 +168,7 @@ CREATE TABLE `product_image` (
   PRIMARY KEY (`id`),
   KEY `fk_product_image_product1_idx` (`product_id`),
   CONSTRAINT `fk_product_image_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,16 +192,13 @@ CREATE TABLE `product_store` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_id` int NOT NULL,
   `store_id` int NOT NULL,
-  `voucher_id` int DEFAULT NULL,
   `count` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_product_has_store_store1_idx` (`store_id`),
   KEY `fk_product_has_store_product1_idx` (`product_id`),
-  KEY `fk_product_has_store_voucher1_idx` (`voucher_id`),
   CONSTRAINT `fk_product_has_store_product1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_product_has_store_store1` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_product_has_store_voucher1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_product_has_store_store1` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,6 +207,7 @@ CREATE TABLE `product_store` (
 
 LOCK TABLES `product_store` WRITE;
 /*!40000 ALTER TABLE `product_store` DISABLE KEYS */;
+INSERT INTO `product_store` VALUES (1,44,1,111),(2,45,1,100),(3,46,1,100),(4,47,1,100),(5,48,1,100),(6,49,1,NULL),(7,50,1,100),(8,51,1,100),(9,52,1,100),(10,53,1,100),(11,54,1,100),(12,55,1,111),(13,56,1,111),(14,57,1,111),(15,58,1,111);
 /*!40000 ALTER TABLE `product_store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -241,7 +242,6 @@ CREATE TABLE `review` (
 
 LOCK TABLES `review` WRITE;
 /*!40000 ALTER TABLE `review` DISABLE KEYS */;
-INSERT INTO `review` VALUES (7,'san pham dep','2023-10-13',3,27,44,NULL),(8,'san pham dep','2023-10-13',3,27,44,7),(9,'san pham dep','2023-10-13',3,27,44,7),(10,'san pham dep','2023-10-13',3,27,44,7);
 /*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,33 +331,6 @@ INSERT INTO `user` VALUES (25,'user','$2a$10$VwdOFxmmizbEr1i7eJ2k9.OwA85OOg.uB/h
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_voucher`
---
-
-DROP TABLE IF EXISTS `user_voucher`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_voucher` (
-  `user_id` int NOT NULL,
-  `voucher_id` int NOT NULL,
-  PRIMARY KEY (`user_id`,`voucher_id`),
-  KEY `fk_user_has_voucher_voucher1_idx` (`voucher_id`),
-  KEY `fk_user_has_voucher_user1_idx` (`user_id`),
-  CONSTRAINT `fk_user_has_voucher_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `fk_user_has_voucher_voucher1` FOREIGN KEY (`voucher_id`) REFERENCES `voucher` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_voucher`
---
-
-LOCK TABLES `user_voucher` WRITE;
-/*!40000 ALTER TABLE `user_voucher` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_voucher` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `voucher`
 --
 
@@ -398,4 +371,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-13  1:34:40
+-- Dump completed on 2023-10-23 22:51:21
