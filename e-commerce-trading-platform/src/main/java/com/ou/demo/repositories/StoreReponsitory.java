@@ -21,6 +21,5 @@ public interface StoreReponsitory extends JpaRepository<Store, Integer> {
     @Query("SELECT r FROM Store r WHERE r.userId = ?1")
     Store findStoreByUserID(User id);
 
-    @Query("SELECT r FROM Store r WHERE r.active = ?1")
-    Store findStoreByActive(Boolean bool);
+
 }

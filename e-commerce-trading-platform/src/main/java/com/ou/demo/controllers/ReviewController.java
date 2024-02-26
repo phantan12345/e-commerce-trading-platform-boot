@@ -4,13 +4,11 @@
  */
 package com.ou.demo.controllers;
 
-import com.ou.demo.dto.ReviewDto;
+import com.ou.demo.service.Reviews.DTO.ReviewDto;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Review;
 import com.ou.demo.pojos.User;
-import com.ou.demo.service.ProductService;
-import com.ou.demo.service.ReviewService;
-import com.ou.demo.service.UserService;
+import com.ou.demo.service.Reviews.ReviewService;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.ou.demo.service.Products.IProductService;
+import com.ou.demo.service.Users.DTO.CurrentUser;
+import com.ou.demo.service.Users.DTO.UsersDto;
+import com.ou.demo.service.Users.IUserService;
 
 /**
  *
@@ -40,38 +42,28 @@ public class ReviewController {
 
     private ReviewService ReviewService;
 
-    private UserService UserService;
+    private IUserService UserService;
 
-    private ProductService ProductService;
+    private IProductService ProductService;
 
     @PostMapping("/product/{id}/comment")
-    public ResponseEntity<?> createCommentToProduct(@RequestBody Review c, @PathVariable("id") int id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User currentUser = UserService.findByUsername(userDetails.getUsername());
-            Review Reriew = ReviewService.addComment(c, currentUser, id, 0);
+    public ResponseEntity<?> createCommentToProduct(@CurrentUser UsersDto currentUser, @RequestBody Review c, @PathVariable("id") int id) {
+        User user = UserService.findById(currentUser.getId());
+        Review Reriew = ReviewService.addComment(c, user, id, 0);
 
-            return new ResponseEntity<>(Reriew == null ? "orror find products"
-                    : new ResponseEntity(Reriew, HttpStatus.OK), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity<>(Reriew == null ? "orror find products"
+                : new ResponseEntity(Reriew, HttpStatus.OK), HttpStatus.BAD_REQUEST);
+
     }
 
     //reply comment
     @PostMapping("/product/{Proid}/comment/{id}/comments")
-    public ResponseEntity<?> replyToComent(@RequestBody Review c, @PathVariable("Proid") int proId, @PathVariable("id") int id) {
+    public ResponseEntity<?> replyToComent(@CurrentUser UsersDto currentUser, @RequestBody Review c, @PathVariable("Proid") int proId, @PathVariable("id") int id) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User currentUser = UserService.findByUsername(userDetails.getUsername());
-            Review Reriew = ReviewService.addComment(c, currentUser, proId, id);
-            return new ResponseEntity<>(Reriew == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.BAD_REQUEST) : Reriew, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        User user = UserService.findById(currentUser.getId());
+        Review Reriew = ReviewService.addComment(c, user, proId, id);
+        return new ResponseEntity<>(Reriew == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.BAD_REQUEST) : Reriew, HttpStatus.OK);
+
     }
 
     @GetMapping("/product/{id}/comment")
@@ -84,7 +76,7 @@ public class ReviewController {
         List<Review> dto = this.ReviewService.getAllByCommentId(ReviewService.findCommentById(id));
 
         if (dto != null) {
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

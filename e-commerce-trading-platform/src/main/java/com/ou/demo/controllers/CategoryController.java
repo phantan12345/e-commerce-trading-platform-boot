@@ -5,7 +5,7 @@
 package com.ou.demo.controllers;
 
 import com.ou.demo.pojos.Category;
-import com.ou.demo.service.CategoryService;
+import com.ou.demo.service.Categorys.DTO.CategoryDTO;
 import jakarta.validation.Valid;
 //import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.ou.demo.service.Categorys.ICategoryService;
 
 /**
  *
@@ -32,16 +33,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class CategoryController {
 
-    private CategoryService CategoryService;
+    private ICategoryService CategoryService;
 
     @GetMapping("/categorys")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(CategoryService.getAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/category/")
-    public ResponseEntity<?> create(@RequestBody @Valid Category c) {
-        Category cate = CategoryService.create(c, 0);
+    @PostMapping("/category")
+    public ResponseEntity<?> create(@RequestBody @Valid CategoryDTO c) {
+        Category cate = CategoryService.Create(c);
         if (cate == null) {
             return new ResponseEntity<>("error create", HttpStatus.BAD_REQUEST);
 
@@ -49,21 +50,22 @@ public class CategoryController {
         return new ResponseEntity<>(cate, HttpStatus.OK);
     }
 
-    @PostMapping("/category/{id}/")
-    public ResponseEntity<?> createCuren(@RequestBody Category c, @PathVariable("id") int id) {
-        Category cate = CategoryService.create(c, id);
+//    @PostMapping("/category/{id}/")
+//    public ResponseEntity<?> createCuren(@RequestBody Category c, @PathVariable("id") int id) {
+//        Category cate = CategoryService.create(c, id);
+//
+//        return ResponseEntity.ok(cate);
+//    }
+    
 
-        return ResponseEntity.ok(cate);
+    @PutMapping("/category/{id}")
+    public ResponseEntity<?> updateCate(@RequestBody CategoryDTO c, @PathVariable("id") int id) {
+        return ResponseEntity.ok(CategoryService.Update(c, id));
     }
 
-    @GetMapping("/category/{id}/")
-    public ResponseEntity<?> getByID(@PathVariable("id") int id) {
-        return ResponseEntity.ok(CategoryService.getCateByCateId(id));
-    }
-
-    @PutMapping("/category/{id}/")
-    public ResponseEntity<?> updateCate(@RequestBody Category c, @PathVariable("id") int id) {
-        return ResponseEntity.ok(CategoryService.update(c, id));
+    @DeleteMapping("/category/{id}")
+    public ResponseEntity<?> updateCate( @PathVariable("id") int id) {
+        return ResponseEntity.ok(CategoryService.Delete(id));
     }
 
 }

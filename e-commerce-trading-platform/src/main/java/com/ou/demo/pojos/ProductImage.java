@@ -5,9 +5,18 @@
 package com.ou.demo.pojos;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -19,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ProductImage.findAll", query = "SELECT p FROM ProductImage p"),
     @NamedQuery(name = "ProductImage.findById", query = "SELECT p FROM ProductImage p WHERE p.id = :id"),
-    @NamedQuery(name = "ProductImage.findByUrl", query = "SELECT p FROM ProductImage p WHERE p.url = :url")})
+    @NamedQuery(name = "ProductImage.findByUrl", query = "SELECT p FROM ProductImage p WHERE p.url = :url"),
+    @NamedQuery(name = "ProductImage.findByIsDelete", query = "SELECT p FROM ProductImage p WHERE p.isDelete = :isDelete")})
 public class ProductImage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,6 +40,8 @@ public class ProductImage implements Serializable {
     private Integer id;
     @Column(name = "url")
     private String url;
+    @Column(name = "is_delete")
+    private Short isDelete;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
@@ -55,6 +67,14 @@ public class ProductImage implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Short getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Short isDelete) {
+        this.isDelete = isDelete;
     }
 
     public Product getProductId() {

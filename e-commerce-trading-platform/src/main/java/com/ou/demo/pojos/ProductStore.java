@@ -4,13 +4,23 @@
  */
 package com.ou.demo.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -22,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "ProductStore.findAll", query = "SELECT p FROM ProductStore p"),
     @NamedQuery(name = "ProductStore.findById", query = "SELECT p FROM ProductStore p WHERE p.id = :id"),
-    @NamedQuery(name = "ProductStore.findByCount", query = "SELECT p FROM ProductStore p WHERE p.count = :count")})
+    @NamedQuery(name = "ProductStore.findByCount", query = "SELECT p FROM ProductStore p WHERE p.count = :count"),
+    @NamedQuery(name = "ProductStore.findByIsDelete", query = "SELECT p FROM ProductStore p WHERE p.isDelete = :isDelete")})
 public class ProductStore implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,14 +44,16 @@ public class ProductStore implements Serializable {
     private Integer id;
     @Column(name = "count")
     private Integer count;
+    @Column(name = "is_delete")
+    private Short isDelete;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
+    private Set<Wishlist> wishlistSet;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
     @JoinColumn(name = "store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Store storeId;
-        @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -65,6 +78,23 @@ public class ProductStore implements Serializable {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public Short getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Short isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    @XmlTransient
+    public Set<Wishlist> getWishlistSet() {
+        return wishlistSet;
+    }
+
+    public void setWishlistSet(Set<Wishlist> wishlistSet) {
+        this.wishlistSet = wishlistSet;
     }
 
     public Product getProductId() {

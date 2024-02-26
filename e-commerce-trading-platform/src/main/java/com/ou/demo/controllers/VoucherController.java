@@ -5,7 +5,7 @@
 package com.ou.demo.controllers;
 
 import com.ou.demo.pojos.Voucher;
-import com.ou.demo.service.VoucherService;
+import com.ou.demo.service.Vouchers.VoucherService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,7 @@ public class VoucherController {
 
     private VoucherService VoucherService;
 
-    @PostMapping("voucher/")
+    @PostMapping("/voucher")
     public ResponseEntity<?> createStore(@RequestBody Voucher vou) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,19 +48,15 @@ public class VoucherController {
 
     }
 
-    @GetMapping("voucher/{id}")
-    public ResponseEntity<?> getStore(@PathVariable("id") int id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+    @GetMapping("/voucher/{id}")
+    public ResponseEntity<?> getStore( @PathVariable("id") int id) {
             Voucher v = VoucherService.findByid(id);
             return new ResponseEntity<>(v == null ? "error find voucher"
                     : new ResponseEntity(v, HttpStatus.OK), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
-        }
+       
     }
 
-    @GetMapping("voucher/code/")
+    @GetMapping("/voucher/code")
     public ResponseEntity<?> getByCode(@RequestParam String code) {
         
          

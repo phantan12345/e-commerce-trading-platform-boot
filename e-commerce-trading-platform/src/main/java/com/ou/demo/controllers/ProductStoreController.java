@@ -4,20 +4,17 @@
  */
 package com.ou.demo.controllers;
 
-import com.ou.demo.dto.DateDto;
-import com.ou.demo.dto.ProdcutDto;
-import com.ou.demo.dto.ProductStoreDto;
-import com.ou.demo.dto.VoucherDto;
+import com.ou.demo.service.OrderDetails.DTO.DateDto;
+import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.ProductStores.DTO.ProductStoreDto;
+import com.ou.demo.service.Vouchers.DTO.VoucherDto;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
-import com.ou.demo.service.OrderService;
-import com.ou.demo.service.ProductService;
-import com.ou.demo.service.ProductStoreService;
-import com.ou.demo.service.StoreService;
-import com.ou.demo.service.UserService;
-import com.ou.demo.service.VoucherService;
+import com.ou.demo.service.ProductStores.ProductStoreService;
+import com.ou.demo.service.Stores.StoreService;
+import com.ou.demo.service.Vouchers.VoucherService;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -36,6 +33,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.ou.demo.service.Products.IProductService;
+import com.ou.demo.service.Orders.IOrderService;
+import com.ou.demo.service.Users.DTO.CurrentUser;
+import com.ou.demo.service.Users.DTO.UsersDto;
+import com.ou.demo.service.Users.IUserService;
 
 /**
  *
@@ -49,38 +51,32 @@ public class ProductStoreController {
 
     private ProductStoreService ProductStoreService;
 
-    private UserService UserService;
+    private IUserService UserService;
 
     private StoreService StoreService;
 
     private VoucherService VoucherService;
 
-    private OrderService OrderService;
+    private IOrderService OrderService;
 
-    private ProductService ProductService;
+    private IProductService ProductService;
 
-    @GetMapping("product-store/")
-    public ResponseEntity<?> getProduct() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User user = UserService.findByUsername(userDetails.getUsername());
-            Store s = StoreService.findStoreByUserID(user);
-            List<ProdcutDto> dto = ProductStoreService.findAllByStore(s);
-            if (dto == null) {
-                return new ResponseEntity<>("orror find products",
-                        HttpStatus.BAD_REQUEST);
-            } else {
-                return new ResponseEntity<>(
-                        dto, HttpStatus.OK);
-            }
-
+    @GetMapping("/product-store")
+    public ResponseEntity<?> getProduct(@CurrentUser UsersDto currentUser) {
+        User user = UserService.findById(currentUser.getId());
+        Store s = StoreService.findStoreByUserID(user);
+        List<ProdcutDto> dto = ProductStoreService.findAllByStore(s);
+        if (dto == null) {
+            return new ResponseEntity<>("orror find products",
+                    HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(
+                    dto, HttpStatus.OK);
         }
+
     }
 
-    @GetMapping("product-store/{id}")
+    @GetMapping("/product-store/{id}")
     public ResponseEntity<?> getProductById(@PathVariable int id) {
         ProductStoreDto dto = ProductStoreService.getDto(ProductService.findById(id));
         if (dto == null) {
@@ -92,32 +88,20 @@ public class ProductStoreController {
         }
     }
 
+    @GetMapping("/stat")
+    public ResponseEntity<?> getStat(@CurrentUser UsersDto currentUser, @RequestBody DateDto dto) {
+        User user = UserService.findById(currentUser.getId());
+        Store s = StoreService.findStoreByUserID(user);
+        return ResponseEntity.ok().body(OrderService.stat(s, dto));
 
-
-    @GetMapping("stat/")
-    public ResponseEntity<?> getStat(@RequestBody DateDto dto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User user = UserService.findByUsername(userDetails.getUsername());
-
-            Store s = StoreService.findStoreByUserID(user);
-            return ResponseEntity.ok().body(OrderService.stat(s, dto));
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
     }
 
-    @DeleteMapping("product-store/{id}")
+    @DeleteMapping("/product-store/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") int id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
 
-            ProductStore ps = ProductStoreService.findById(id);
-            return ResponseEntity.ok().body(ProductService.delete(ps.getProductId()));
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        ProductStore ps = ProductStoreService.findById(id);
+        return ResponseEntity.ok().body(ProductService.delete(ps.getProductId()));
+
     }
 
 }

@@ -4,18 +4,32 @@
  */
 package com.ou.demo.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author ADMIN
  */
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "store")
 @XmlRootElement
@@ -24,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Store.findById", query = "SELECT s FROM Store s WHERE s.id = :id"),
     @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName"),
     @NamedQuery(name = "Store.findByAdress", query = "SELECT s FROM Store s WHERE s.adress = :adress"),
-    @NamedQuery(name = "Store.findByActive", query = "SELECT s FROM Store s WHERE s.active = :active")})
+    @NamedQuery(name = "Store.findByIsDelete", query = "SELECT s FROM Store s WHERE s.isDelete = :isDelete")})
 public class Store implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,95 +51,21 @@ public class Store implements Serializable {
     private String storeName;
     @Column(name = "adress")
     private String adress;
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "is_delete")
+    private Boolean isDelete;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
-        @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
     private Set<ProductStore> productStoreSet;
 
-    public Store() {
-    }
-
-    public Store(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getStoreName() {
-        return storeName;
-    }
-
-    public void setStoreName(String storeName) {
+    public Store(String storeName, String adress,  User userId) {
         this.storeName = storeName;
-    }
-
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
         this.adress = adress;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
+        this.isDelete = false;
         this.userId = userId;
     }
 
-    @XmlTransient
-    public Set<ProductStore> getProductStoreSet() {
-        return productStoreSet;
-    }
-
-    public void setProductStoreSet(Set<ProductStore> productStoreSet) {
-        this.productStoreSet = productStoreSet;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Store)) {
-            return false;
-        }
-        Store other = (Store) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.ou.demo.pojos.Store[ id=" + id + " ]";
-    }
+    
     
 }

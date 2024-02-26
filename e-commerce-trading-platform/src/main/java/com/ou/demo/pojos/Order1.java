@@ -4,39 +4,31 @@
  */
 package com.ou.demo.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-import jakarta.persistence.*;
-import java.math.BigDecimal;
-;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import lombok.Data;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import lombok.Data;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author ADMIN
  */
-
-
-@Data
 @Entity
 @Table(name = "order1")
 @XmlRootElement
@@ -44,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o"),
     @NamedQuery(name = "Order1.findById", query = "SELECT o FROM Order1 o WHERE o.id = :id"),
     @NamedQuery(name = "Order1.findByOrderDate", query = "SELECT o FROM Order1 o WHERE o.orderDate = :orderDate"),
-    @NamedQuery(name = "Order1.findByActive", query = "SELECT o FROM Order1 o WHERE o.active = :active")})
+    @NamedQuery(name = "Order1.findByActive", query = "SELECT o FROM Order1 o WHERE o.active = :active"),
+    @NamedQuery(name = "Order1.findByIsDelete", query = "SELECT o FROM Order1 o WHERE o.isDelete = :isDelete")})
 public class Order1 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -58,16 +51,17 @@ public class Order1 implements Serializable {
     private Date orderDate;
     @Column(name = "active")
     private Boolean active;
-    @Column(name = "total")
-    private BigDecimal total;
+    @Column(name = "is_delete")
+    private boolean isDelete;
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     @ManyToOne
     private Payment paymentId;
+    @JoinColumn(name = "UserID", referencedColumnName = "id")
+    @ManyToOne
+    private User userID;
     @JoinColumn(name = "voucher_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Voucher voucherId;
-    @JsonIgnore
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -102,12 +96,22 @@ public class Order1 implements Serializable {
         this.active = active;
     }
 
+
+
     public Payment getPaymentId() {
         return paymentId;
     }
 
     public void setPaymentId(Payment paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public User getUserID() {
+        return userID;
+    }
+
+    public void setUserID(User userID) {
+        this.userID = userID;
     }
 
     public Voucher getVoucherId() {
@@ -151,5 +155,5 @@ public class Order1 implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Order1[ id=" + id + " ]";
     }
-
+    
 }

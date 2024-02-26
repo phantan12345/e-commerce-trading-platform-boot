@@ -5,10 +5,19 @@
 package com.ou.demo.pojos;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
-
-import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 
 /**
@@ -23,7 +32,8 @@ import lombok.Data;
     @NamedQuery(name = "Orderdetail.findAll", query = "SELECT o FROM Orderdetail o"),
     @NamedQuery(name = "Orderdetail.findById", query = "SELECT o FROM Orderdetail o WHERE o.id = :id"),
     @NamedQuery(name = "Orderdetail.findByQuatity", query = "SELECT o FROM Orderdetail o WHERE o.quatity = :quatity"),
-    @NamedQuery(name = "Orderdetail.findByTotal", query = "SELECT o FROM Orderdetail o WHERE o.total = :total")})
+    @NamedQuery(name = "Orderdetail.findByTotal", query = "SELECT o FROM Orderdetail o WHERE o.total = :total"),
+    @NamedQuery(name = "Orderdetail.findByIsDelete", query = "SELECT o FROM Orderdetail o WHERE o.isDelete = :isDelete")})
 public class Orderdetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,6 +46,8 @@ public class Orderdetail implements Serializable {
     private Integer quatity;
     @Column(name = "total")
     private BigDecimal total;
+    @Column(name = "is_delete")
+    private boolean isDelete;
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Order1 orderId;
@@ -65,6 +77,8 @@ public class Orderdetail implements Serializable {
     public void setQuatity(Integer quatity) {
         this.quatity = quatity;
     }
+
+ 
 
 
 

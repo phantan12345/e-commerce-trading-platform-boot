@@ -20,6 +20,31 @@
     <class>com.ou.demo.pojos.Order1</class>
     <class>com.ou.demo.pojos.Reriew</class>
     <class>com.ou.demo.pojos.Review</class>
+    <class>com.ou.demo.pojos.WorkFlow</class>
+    <class>com.ou.demo.pojos.CoppyWorkFlow</class>
+    <class>com.ou.demo.pojos.WorkFlowStep</class>
+    <class>com.ou.demo.pojos.Tokens</class>
+    <class>com.ou.demo.pojos.Shipment</class>
+    <class>com.ou.demo.pojos.Wishlist</class>
+    <class>com.ou.demo.util.Messages</class>
+    <class>com.ou.demo.util.WorkFlow</class>
+    <class>com.ou.demo.util.ProductImage</class>
+    <class>com.ou.demo.util.Voucher</class>
+    <class>com.ou.demo.util.Review</class>
+    <class>com.ou.demo.util.Product</class>
+    <class>com.ou.demo.util.WorkFlowStep</class>
+    <class>com.ou.demo.util.Orderdetail</class>
+    <class>com.ou.demo.util.Store</class>
+    <class>com.ou.demo.util.CoppyWorkFlow</class>
+    <class>com.ou.demo.util.Wishlist</class>
+    <class>com.ou.demo.util.Category</class>
+    <class>com.ou.demo.util.User</class>
+    <class>com.ou.demo.util.Payment</class>
+    <class>com.ou.demo.util.Role</class>
+    <class>com.ou.demo.util.Shipment</class>
+    <class>com.ou.demo.util.ProductStore</class>
+    <class>com.ou.demo.util.Order1</class>
+    <class>com.ou.demo.pojos.Messages</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/trading?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

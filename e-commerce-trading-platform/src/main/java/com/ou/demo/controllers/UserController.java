@@ -4,14 +4,16 @@
  */
 package com.ou.demo.controllers;
 
-import com.ou.demo.dto.Login;
+import com.ou.demo.service.Users.DTO.JwtResponse;
+import com.ou.demo.service.Users.DTO.Login;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
 import com.ou.demo.security.JwtUtils;
-import com.ou.demo.service.StoreService;
-import com.ou.demo.service.UserService;
-import com.ou.demo.service.VoucherService;
+import com.ou.demo.service.Stores.StoreService;
+import com.ou.demo.service.Users.DTO.CurrentUser;
+import com.ou.demo.service.Users.DTO.UsersDto;
+import com.ou.demo.service.Vouchers.VoucherService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import com.ou.demo.service.Users.IUserService;
 
 /**
  *
@@ -54,7 +57,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping("/api")
 public class UserController {
 
-    private UserService UserService;
+    private IUserService UserService;
 
     private JwtUtils jwtUtils;
 
@@ -64,20 +67,20 @@ public class UserController {
 
     private VoucherService VoucherService;
 
-    @PostMapping("/signup/")
+    @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
         boolean user = UserService.addUsers(params, file);
         return new ResponseEntity<>(user == false ? "error User registered successfully!" : new ResponseEntity<>(user, HttpStatus.OK),
                 HttpStatus.OK);
     }
 
-    @PostMapping(path = "/signin/")
+    @PostMapping(path = "/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login login, BindingResult bindingResult) throws Exception {
         final UserDetails userDetails = UserService.loadUserByUsername(login.getUsername());
 
         authenticate(login.getUsername(), login.getPassword());
 
-        String jwtResponse = jwtUtils.generateJwtToken(userDetails);
+        JwtResponse jwtResponse = jwtUtils.generateToken(userDetails);
 
         return ResponseEntity.ok().body(jwtResponse);
 
@@ -88,22 +91,33 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    @GetMapping("/current-user/")
-    @CrossOrigin
-    public ResponseEntity<?> details(Principal user) {
+    @GetMapping("/current-user")
+    public ResponseEntity<?> details(@CurrentUser UsersDto user) {
 
         if (user != null) {
-            User u = this.UserService.findByUsername(user.getName());
-            return new ResponseEntity<>(u, HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @GetMapping("users/")
+    @GetMapping("/users")
     public ResponseEntity<?> getUsers() {
         return new ResponseEntity<>(UserService.listUser(), HttpStatus.OK);
 
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<?> registerAdmin() {
+        User user = UserService.addAdmin();
+        return new ResponseEntity<>(user == null ? "error User registered successfully!" : new ResponseEntity<>(user, HttpStatus.OK),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(UserService.findById(id),
+                HttpStatus.OK);
     }
 
 }

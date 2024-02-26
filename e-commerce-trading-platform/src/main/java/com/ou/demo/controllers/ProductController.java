@@ -4,21 +4,17 @@
  */
 package com.ou.demo.controllers;
 
-import com.ou.demo.dto.CartDto;
-import com.ou.demo.dto.CartInput;
-import com.ou.demo.dto.ProdcutDto;
-import com.ou.demo.dto.ProductInput;
+import com.ou.demo.service.Receipts.DTO.CartDto;
+import com.ou.demo.service.Receipts.DTO.CartInput;
+import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.Products.DTO.ProductInput;
 import com.ou.demo.pojos.Payment;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
-import com.ou.demo.service.CategoryService;
-import com.ou.demo.service.ProductService;
-import com.ou.demo.service.ProductStoreService;
-import com.ou.demo.service.StoreService;
-import com.ou.demo.service.UserService;
-import com.ou.demo.service.receiptService;
+import com.ou.demo.service.ProductStores.ProductStoreService;
+import com.ou.demo.service.Stores.StoreService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -48,6 +44,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.ou.demo.service.Categorys.ICategoryService;
+import com.ou.demo.service.Products.IProductService;
+import com.ou.demo.service.Receipts.IReceiptService;
+import com.ou.demo.service.Users.DTO.CurrentUser;
+import com.ou.demo.service.Users.DTO.UsersDto;
+import com.ou.demo.service.Users.IUserService;
 
 /**
  *
@@ -61,69 +63,38 @@ public class ProductController {
 
     private ProductStoreService ProductStoreService;
 
-    private receiptService receiptService;
+    private IReceiptService receiptService;
 
-    private ProductService productService;
+    private IProductService productService;
 
-    private UserService UserService;
+    private IUserService UserService;
 
     private StoreService storeService;
 
-    private CategoryService CategoryService;
+    private ICategoryService CategoryService;
 
-    @PostMapping("/product/")
-    public ResponseEntity<?> addPRoduct(@Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User user = UserService.findByUsername(userDetails.getUsername());
+    @PostMapping("/product")
+    public ResponseEntity<?> addPRoduct(@CurrentUser UsersDto currentUser, @Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
+        User user = UserService.findById(currentUser.getId());
 
-            Store store = storeService.findStoreByUserID(user);
+        Store store = storeService.findStoreByUserID(user);
 
-            if (store.getActive() == Boolean.TRUE) {
-                ProdcutDto dto = productService.create(params, file, store);
-                if (dto == null) {
-                    return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
-                } else {
-                    return new ResponseEntity<>(dto, HttpStatus.OK);
-
-                }
+        if (store.getIsDelete() == Boolean.TRUE) {
+            ProdcutDto dto = productService.create(params, file, store);
+            if (dto == null) {
+                return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
             } else {
-                return new ResponseEntity<>("error add products", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(dto, HttpStatus.OK);
 
             }
-
         } else {
-            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("error add products", HttpStatus.FORBIDDEN);
+
         }
+
     }
 
-    @GetMapping("/cart/{productId}/")
-    @CrossOrigin
-    public ResponseEntity<?> cart(@PathVariable(value = "productId") Integer productId, HttpSession session) {
-        Map<Integer, CartDto> cart = (Map<Integer, CartDto>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new HashMap<>();
-        }
-        if (cart.containsKey(productId) == true) {
-            CartDto c = cart.get(productId);
-            c.setCount(c.getCount() + 1);
-        } else {
-            Product p = productService.findById(productId);
-            ProductStore ps = ProductStoreService.findByProduct(p);
-            CartDto c = new CartDto();
-            c.setId(p.getId());
-            c.setCount(1);
-           
-
-            cart.put(productId, c);
-        }
-
-        session.setAttribute("cart", cart);
-        return new ResponseEntity<>(cart, HttpStatus.OK);
-    }
-
-    @GetMapping("/products/")
+    @GetMapping("/products")
     public ResponseEntity<?> getProducts() {
         List<ProdcutDto> dto = productService.findAll();
         if (dto != null) {
@@ -135,46 +106,42 @@ public class ProductController {
 
     }
 
-    @GetMapping("/product/")
+    @GetMapping("/product")
     public ResponseEntity<?> getProducts(@RequestParam int page) {
         return new ResponseEntity<>(productService.page(page), HttpStatus.OK);
     }
 
-    @PostMapping("/pay/")
+    @PostMapping("/pay")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> add(@RequestBody CartInput carts) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User userCuren = UserService.findByUsername(userDetails.getUsername());
+    public ResponseEntity<?> add(@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) {
 
-            Object cart = this.receiptService.addReceipt(carts, userCuren);
-            if (cart == null) {
-                return new ResponseEntity<>("ERROR PAYMENT METHOD ",
-                        HttpStatus.BAD_REQUEST
-                );
-            } else {
+        User userCuren = UserService.findById(currentUser.getId());
 
-                return new ResponseEntity<>(
-                        cart, HttpStatus.OK);
-            }
+        Object cart = this.receiptService.addReceipt(carts, userCuren);
+        if (cart == null) {
+            return new ResponseEntity<>("ERROR PAYMENT METHOD ",
+                    HttpStatus.BAD_REQUEST
+            );
+        } else {
+
+            return new ResponseEntity<>(
+                    cart, HttpStatus.OK);
         }
-        return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
 
     }
 
-    @GetMapping("/product/dsc/")
+    @GetMapping("/product/dsc")
     public ResponseEntity<?> get() {
         return new ResponseEntity<>(productService.findAllByOrderByPriceDesc(), HttpStatus.OK);
 
     }
 
-    @GetMapping("/product/namedsc/")
+    @GetMapping("/product/namedsc")
     public ResponseEntity<?> getName() {
         return new ResponseEntity<>(productService.findAllByOrderByProductNameDesc(), HttpStatus.OK);
     }
 
-    @GetMapping("search/")
+    @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {

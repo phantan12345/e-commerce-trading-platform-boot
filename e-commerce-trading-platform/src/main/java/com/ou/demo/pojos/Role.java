@@ -7,10 +7,18 @@ package com.ou.demo.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -22,7 +30,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
     @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
-    @NamedQuery(name = "Role.findByRoleName", query = "SELECT r FROM Role r WHERE r.roleName = :roleName")})
+    @NamedQuery(name = "Role.findByRoleName", query = "SELECT r FROM Role r WHERE r.roleName = :roleName"),
+    @NamedQuery(name = "Role.findByIsDelete", query = "SELECT r FROM Role r WHERE r.isDelete = :isDelete")})
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,12 +42,17 @@ public class Role implements Serializable {
     private Integer id;
     @Column(name = "role_name")
     private String roleName;
-        @JsonIgnore
-
+    @Column(name = "is_delete")
+    private Short isDelete;
+    @JsonIgnore
     @OneToMany(mappedBy = "roleId")
     private Set<User> userSet;
 
     public Role() {
+    }
+
+    public Role(String name) {
+        this.roleName = name;
     }
 
     public Role(Integer id) {
@@ -59,6 +73,14 @@ public class Role implements Serializable {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public Short getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Short isDelete) {
+        this.isDelete = isDelete;
     }
 
     @XmlTransient
@@ -94,5 +116,5 @@ public class Role implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Role[ id=" + id + " ]";
     }
-    
+
 }

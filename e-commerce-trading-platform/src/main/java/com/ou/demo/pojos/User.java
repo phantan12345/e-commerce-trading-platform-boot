@@ -7,10 +7,21 @@ package com.ou.demo.pojos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -27,7 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findByActive", query = "SELECT u FROM User u WHERE u.active = :active"),
-    @NamedQuery(name = "User.findByPhone", query = "SELECT u FROM User u WHERE u.phone = :phone")})
+    @NamedQuery(name = "User.findByPhone", query = "SELECT u FROM User u WHERE u.phone = :phone"),
+    @NamedQuery(name = "User.findByIsDelete", query = "SELECT u FROM User u WHERE u.isDelete = :isDelete"),
+    @NamedQuery(name = "User.findByAcceptToken", query = "SELECT u FROM User u WHERE u.acceptToken = :acceptToken")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,14 +61,42 @@ public class User implements Serializable {
     private Boolean active;
     @Column(name = "Phone")
     private String phone;
-        @JsonIgnore
+    @Column(name = "is_delete")
+    private boolean isDelete;
+    @Column(name = "accept_token")
+    private String acceptToken;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<Shipment> shipmentSet;
+    @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Review> reviewSet;
-            @JsonIgnore
+    private Set<Wishlist> wishlistSet;
+    @JsonIgnore
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Store> storeSet;
+    @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<Review> reviewSet;
+    @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sentTo")
+    private Set<Messages> messagesSet;
+    @JsonIgnore
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sentBy")
+    private Set<Messages> messagesSet1;
+    @JsonIgnore
+
+    @OneToMany(mappedBy = "userID")
+    private Set<Order1> order1Set;
+    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    @JsonIgnore
+    @ManyToOne
+    private Payment paymentId;
+
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne
     private Role roleId;
@@ -123,6 +164,41 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
+    public String getAcceptToken() {
+        return acceptToken;
+    }
+
+    public void setAcceptToken(String acceptToken) {
+        this.acceptToken = acceptToken;
+    }
+
+    @XmlTransient
+    public Set<Shipment> getShipmentSet() {
+        return shipmentSet;
+    }
+
+    public void setShipmentSet(Set<Shipment> shipmentSet) {
+        this.shipmentSet = shipmentSet;
+    }
+
+    @XmlTransient
+    public Set<Wishlist> getWishlistSet() {
+        return wishlistSet;
+    }
+
+    public void setWishlistSet(Set<Wishlist> wishlistSet) {
+        this.wishlistSet = wishlistSet;
+    }
+
+    @XmlTransient
+    public Set<Store> getStoreSet() {
+        return storeSet;
+    }
+
+    public void setStoreSet(Set<Store> storeSet) {
+        this.storeSet = storeSet;
+    }
+
     @XmlTransient
     public Set<Review> getReviewSet() {
         return reviewSet;
@@ -133,12 +209,38 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public Set<Store> getStoreSet() {
-        return storeSet;
+    public Set<Messages> getMessagesSet() {
+        return messagesSet;
     }
 
-    public void setStoreSet(Set<Store> storeSet) {
-        this.storeSet = storeSet;
+    public void setMessagesSet(Set<Messages> messagesSet) {
+        this.messagesSet = messagesSet;
+    }
+
+    @XmlTransient
+    public Set<Messages> getMessagesSet1() {
+        return messagesSet1;
+    }
+
+    public void setMessagesSet1(Set<Messages> messagesSet1) {
+        this.messagesSet1 = messagesSet1;
+    }
+
+    @XmlTransient
+    public Set<Order1> getOrder1Set() {
+        return order1Set;
+    }
+
+    public void setOrder1Set(Set<Order1> order1Set) {
+        this.order1Set = order1Set;
+    }
+
+    public Payment getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(Payment paymentId) {
+        this.paymentId = paymentId;
     }
 
     public Role getRoleId() {
@@ -173,5 +275,5 @@ public class User implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.User[ id=" + id + " ]";
     }
-    
+
 }

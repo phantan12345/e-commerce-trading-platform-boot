@@ -4,14 +4,22 @@
  */
 package com.ou.demo.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Voucher.findAll", query = "SELECT v FROM Voucher v"),
     @NamedQuery(name = "Voucher.findById", query = "SELECT v FROM Voucher v WHERE v.id = :id"),
     @NamedQuery(name = "Voucher.findByDiscount", query = "SELECT v FROM Voucher v WHERE v.discount = :discount"),
-    @NamedQuery(name = "Voucher.findByCode", query = "SELECT v FROM Voucher v WHERE v.code = :code")})
+    @NamedQuery(name = "Voucher.findByCode", query = "SELECT v FROM Voucher v WHERE v.code = :code"),
+    @NamedQuery(name = "Voucher.findByIsDelete", query = "SELECT v FROM Voucher v WHERE v.isDelete = :isDelete")})
 public class Voucher implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,8 +47,8 @@ public class Voucher implements Serializable {
     private BigDecimal discount;
     @Column(name = "code")
     private String code;
-    @JsonIgnore
-
+    @Column(name = "is_delete")
+    private Short isDelete;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "voucherId")
     private Set<Order1> order1Set;
 
@@ -72,6 +81,14 @@ public class Voucher implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Short getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Short isDelete) {
+        this.isDelete = isDelete;
     }
 
     @XmlTransient
@@ -107,5 +124,5 @@ public class Voucher implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Voucher[ id=" + id + " ]";
     }
-
+    
 }

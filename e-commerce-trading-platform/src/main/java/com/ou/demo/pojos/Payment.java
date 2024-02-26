@@ -4,13 +4,23 @@
  */
 package com.ou.demo.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -22,7 +32,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
     @NamedQuery(name = "Payment.findById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
-    @NamedQuery(name = "Payment.findByPayment", query = "SELECT p FROM Payment p WHERE p.payment = :payment")})
+    @NamedQuery(name = "Payment.findByPayment", query = "SELECT p FROM Payment p WHERE p.payment = :payment"),
+    @NamedQuery(name = "Payment.findByPaymentDate", query = "SELECT p FROM Payment p WHERE p.paymentDate = :paymentDate"),
+    @NamedQuery(name = "Payment.findByAcount", query = "SELECT p FROM Payment p WHERE p.acount = :acount"),
+    @NamedQuery(name = "Payment.findByIsDelete", query = "SELECT p FROM Payment p WHERE p.isDelete = :isDelete")})
 public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,9 +46,17 @@ public class Payment implements Serializable {
     private Integer id;
     @Column(name = "payment")
     private String payment;
-    @JsonIgnore
+    @Column(name = "payment_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date paymentDate;
+    @Column(name = "acount")
+    private Long acount;
+    @Column(name = "is_delete")
+    private Short isDelete;
     @OneToMany(mappedBy = "paymentId")
     private Set<Order1> order1Set;
+    @OneToMany(mappedBy = "paymentId")
+    private Set<User> userSet;
 
     public Payment() {
     }
@@ -60,6 +81,30 @@ public class Payment implements Serializable {
         this.payment = payment;
     }
 
+    public Date getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public Long getAcount() {
+        return acount;
+    }
+
+    public void setAcount(Long acount) {
+        this.acount = acount;
+    }
+
+    public Short getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Short isDelete) {
+        this.isDelete = isDelete;
+    }
+
     @XmlTransient
     public Set<Order1> getOrder1Set() {
         return order1Set;
@@ -67,6 +112,15 @@ public class Payment implements Serializable {
 
     public void setOrder1Set(Set<Order1> order1Set) {
         this.order1Set = order1Set;
+    }
+
+    @XmlTransient
+    public Set<User> getUserSet() {
+        return userSet;
+    }
+
+    public void setUserSet(Set<User> userSet) {
+        this.userSet = userSet;
     }
 
     @Override

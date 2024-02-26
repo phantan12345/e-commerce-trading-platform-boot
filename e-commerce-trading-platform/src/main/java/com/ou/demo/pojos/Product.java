@@ -7,10 +7,21 @@ package com.ou.demo.pojos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
     @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
-    @NamedQuery(name = "Product.findByActive", query = "SELECT p FROM Product p WHERE p.active = :active")})
+    @NamedQuery(name = "Product.findByActive", query = "SELECT p FROM Product p WHERE p.active = :active"),
+    @NamedQuery(name = "Product.findByIsDelete", query = "SELECT p FROM Product p WHERE p.isDelete = :isDelete")})
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,15 +52,17 @@ public class Product implements Serializable {
     private BigDecimal price;
     @Column(name = "active")
     private Boolean active;
+    @Column(name = "is_delete")
+    private Short isDelete;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Set<Review> reviewSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductStore> productStoreSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    private Set<Review> reviewSet;
 
     public Product() {
     }
@@ -89,6 +103,14 @@ public class Product implements Serializable {
         this.active = active;
     }
 
+    public Short getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Short isDelete) {
+        this.isDelete = isDelete;
+    }
+
     public Category getCategoryId() {
         return categoryId;
     }
@@ -107,21 +129,21 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public Set<Review> getReviewSet() {
-        return reviewSet;
-    }
-
-    public void setReviewSet(Set<Review> reviewSet) {
-        this.reviewSet = reviewSet;
-    }
-
-    @XmlTransient
     public Set<ProductStore> getProductStoreSet() {
         return productStoreSet;
     }
 
     public void setProductStoreSet(Set<ProductStore> productStoreSet) {
         this.productStoreSet = productStoreSet;
+    }
+
+    @XmlTransient
+    public Set<Review> getReviewSet() {
+        return reviewSet;
+    }
+
+    public void setReviewSet(Set<Review> reviewSet) {
+        this.reviewSet = reviewSet;
     }
 
     @Override

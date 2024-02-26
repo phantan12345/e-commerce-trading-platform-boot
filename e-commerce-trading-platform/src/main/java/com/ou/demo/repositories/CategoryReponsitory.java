@@ -22,7 +22,5 @@ public interface CategoryReponsitory extends JpaRepository<Category, Integer> {
     @Query("SELECT c FROM Category c WHERE c.name = ?1")
     Category findCateByName(String name);
 
-    @Query("SELECT c FROM Category c WHERE c.categoryId = ?1")
-    List<Category> findCateByCateId(Category  id);
 
 }

@@ -4,14 +4,25 @@
  */
 package com.ou.demo.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -25,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Review.findById", query = "SELECT r FROM Review r WHERE r.id = :id"),
     @NamedQuery(name = "Review.findByComent", query = "SELECT r FROM Review r WHERE r.coment = :coment"),
     @NamedQuery(name = "Review.findByDateContent", query = "SELECT r FROM Review r WHERE r.dateContent = :dateContent"),
-    @NamedQuery(name = "Review.findByEvaluate", query = "SELECT r FROM Review r WHERE r.evaluate = :evaluate")})
+    @NamedQuery(name = "Review.findByEvaluate", query = "SELECT r FROM Review r WHERE r.evaluate = :evaluate"),
+    @NamedQuery(name = "Review.findByIsDelete", query = "SELECT r FROM Review r WHERE r.isDelete = :isDelete")})
 public class Review implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,11 +53,11 @@ public class Review implements Serializable {
     private Date dateContent;
     @Column(name = "evaluate")
     private Integer evaluate;
+    @Column(name = "is_delete")
+    private Short isDelete;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
-        @JsonIgnore
-
     @OneToMany(mappedBy = "reviewId")
     private Set<Review> reviewSet;
     @JoinColumn(name = "review_id", referencedColumnName = "id")
@@ -92,6 +104,14 @@ public class Review implements Serializable {
 
     public void setEvaluate(Integer evaluate) {
         this.evaluate = evaluate;
+    }
+
+    public Short getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Short isDelete) {
+        this.isDelete = isDelete;
     }
 
     public Product getProductId() {

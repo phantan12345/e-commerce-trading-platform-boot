@@ -4,13 +4,20 @@
  */
 package com.ou.demo.pojos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-import jakarta.persistence.*;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -22,7 +29,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
     @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"),
-    @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name")})
+    @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"),
+    @NamedQuery(name = "Category.findByIsDelete", query = "SELECT c FROM Category c WHERE c.isDelete = :isDelete")})
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,16 +42,10 @@ public class Category implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @JsonIgnore
+    @Column(name = "is_delete")
+    private boolean isDelete;
     @OneToMany(mappedBy = "categoryId")
     private Set<Product> productSet;
-        @JsonIgnore
-
-    @OneToMany(mappedBy = "categoryId")
-    private Set<Category> categorySet;
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne
-    private Category categoryId;
 
     public Category() {
     }
@@ -73,6 +75,8 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+
+
     @XmlTransient
     public Set<Product> getProductSet() {
         return productSet;
@@ -80,23 +84,6 @@ public class Category implements Serializable {
 
     public void setProductSet(Set<Product> productSet) {
         this.productSet = productSet;
-    }
-
-    @XmlTransient
-    public Set<Category> getCategorySet() {
-        return categorySet;
-    }
-
-    public void setCategorySet(Set<Category> categorySet) {
-        this.categorySet = categorySet;
-    }
-
-    public Category getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Category categoryId) {
-        this.categoryId = categoryId;
     }
 
     @Override
