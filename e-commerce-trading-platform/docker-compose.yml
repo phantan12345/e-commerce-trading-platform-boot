@@ -1,0 +1,30 @@
+version: "3"
+services:
+  springboot:
+    build:
+      context: .
+      dockerfile: Dockerfile2
+    restart: always
+    volumes:
+      - ./:/var/www/app
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: phantan0106
+      MYSQL_DB: trading
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - phantan0106-java-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: phantan0106
+      MYSQL_DATABASE: trading
+    ports:
+      - "3307:3306"
+volumes:
+  phantan0106-java-mysql-data:
