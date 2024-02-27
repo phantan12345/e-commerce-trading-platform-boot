@@ -1,3 +1,3 @@
-CREATE USER 'phantan0106'@'%' IDENTIFIED BY 'phantan0106';
-GRANT ALL PRIVILEGES ON trading.* TO 'phantan0106'@'%';
+CREATE USER 'root'@'%' IDENTIFIED BY 'phantan0106';
+GRANT ALL PRIVILEGES ON db_example.* TO 'root'@'%';
 FLUSH PRIVILEGES;
