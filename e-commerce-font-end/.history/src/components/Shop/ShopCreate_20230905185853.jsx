@@ -1,2 +1,0 @@
-storeName: shopname,
-          description: address,
