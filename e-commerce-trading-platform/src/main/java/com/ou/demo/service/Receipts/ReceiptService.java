@@ -67,7 +67,7 @@ public class ReceiptService implements IReceiptService {
                 Orderdetail d = new Orderdetail();
                 d.setQuatity(c.getCount());
                 Product p = ProductService.findById(c.getId());
-                if (p.getActive() == Boolean.TRUE) {
+                if (p.getIsDelete() == Boolean.FALSE) {
                     ProductStore ps = ProductStoreService.findByProduct(p);
                     if (ps == null) {
                         throw new NullPointerException("product-store is null");
@@ -83,8 +83,6 @@ public class ReceiptService implements IReceiptService {
                         d.setOrderId(o);
                         Orderdetail od = OrderdetailService.create(d);
 
-                        order.setPaymentId(carts.getPayment());
-                        o.setActive(Boolean.TRUE);
                         int count = ps.getCount() - od.getQuatity();
                         ps.setCount(count);
                         ProductStoreService.create(ps);

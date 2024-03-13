@@ -49,12 +49,12 @@ public class Shipment implements Serializable {
     @Column(name = "city")
     private String city;
     @Column(name = "is_delete")
-    private Short isDelete;
+    private Boolean isDelete;
     @Column(name = "country")
     private String country;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private User userId;
+    private Order1 orderId;
 
     public Shipment() {
     }
@@ -95,28 +95,12 @@ public class Shipment implements Serializable {
         this.city = city;
     }
 
-    public Short getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Short isDelete) {
-        this.isDelete = isDelete;
-    }
-
     public String getCountry() {
         return country;
     }
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
     }
 
     @Override
@@ -143,5 +127,5 @@ public class Shipment implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Shipment[ id=" + id + " ]";
     }
-    
+
 }

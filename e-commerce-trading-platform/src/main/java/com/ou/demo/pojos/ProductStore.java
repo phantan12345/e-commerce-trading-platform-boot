@@ -4,6 +4,7 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.Basic;
@@ -45,7 +46,8 @@ public class ProductStore implements Serializable {
     @Column(name = "count")
     private Integer count;
     @Column(name = "is_delete")
-    private Short isDelete;
+    private Boolean isDelete;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Wishlist> wishlistSet;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -54,6 +56,7 @@ public class ProductStore implements Serializable {
     @JoinColumn(name = "store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Store storeId;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -78,14 +81,6 @@ public class ProductStore implements Serializable {
 
     public void setCount(Integer count) {
         this.count = count;
-    }
-
-    public Short getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Short isDelete) {
-        this.isDelete = isDelete;
     }
 
     @XmlTransient
@@ -146,5 +141,5 @@ public class ProductStore implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.ProductStore[ id=" + id + " ]";
     }
-    
+
 }

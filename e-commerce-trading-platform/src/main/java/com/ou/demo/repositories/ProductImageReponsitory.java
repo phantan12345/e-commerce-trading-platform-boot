@@ -8,6 +8,7 @@ import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
 import com.ou.demo.pojos.ProductStore;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,5 +23,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ProductImageReponsitory extends JpaRepository<ProductImage, Integer> {
 
     @Query("SELECT p FROM ProductImage p WHERE p.productId = ?1")
-    List<ProductImage> findByProdcutId(Product id);
+    Set<ProductImage> findByProdcutId(Product id);
 }

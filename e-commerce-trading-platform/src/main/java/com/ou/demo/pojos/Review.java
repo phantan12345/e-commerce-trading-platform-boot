@@ -54,7 +54,7 @@ public class Review implements Serializable {
     @Column(name = "evaluate")
     private Integer evaluate;
     @Column(name = "is_delete")
-    private Short isDelete;
+    private Boolean isDelete;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
@@ -106,13 +106,7 @@ public class Review implements Serializable {
         this.evaluate = evaluate;
     }
 
-    public Short getIsDelete() {
-        return isDelete;
-    }
 
-    public void setIsDelete(Short isDelete) {
-        this.isDelete = isDelete;
-    }
 
     public Product getProductId() {
         return productId;

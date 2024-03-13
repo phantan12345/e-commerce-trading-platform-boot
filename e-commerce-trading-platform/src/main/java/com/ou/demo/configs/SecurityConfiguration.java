@@ -91,5 +91,7 @@ public class SecurityConfiguration implements AsyncConfigurer {
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+    
+    
 
 }

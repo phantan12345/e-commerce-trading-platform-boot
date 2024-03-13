@@ -10,10 +10,12 @@ import com.ou.demo.pojos.Store;
 import jakarta.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -23,18 +25,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProdcutDto {
+public class ProductDto {
 
-    private Integer id;
+    public Integer id;
     @NotBlank(message = "PRODUCT NAME IS NULL")
-    private String productName;
+    public String productName;
     @NotBlank(message = "PRICE  IS NULL")
-    private BigDecimal price;
-    private String voucher;
+    public BigDecimal price;
+    public int count;
+    public String voucher;
     @NotBlank(message = "IMAGE  IS NULL")
-    private List<String> productImage;
+    private Set<ProductImage> productImageSet;
     @NotBlank(message = "NOT CATEGORY")
-    private Category categoryId;
-    
-    
+    public Category categoryId;
+    public List<MultipartFile> file;
+
 }

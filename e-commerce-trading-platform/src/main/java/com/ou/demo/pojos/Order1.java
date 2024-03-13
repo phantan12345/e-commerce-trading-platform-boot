@@ -4,6 +4,7 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -24,6 +25,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
 /**
  *
@@ -36,7 +38,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o"),
     @NamedQuery(name = "Order1.findById", query = "SELECT o FROM Order1 o WHERE o.id = :id"),
     @NamedQuery(name = "Order1.findByOrderDate", query = "SELECT o FROM Order1 o WHERE o.orderDate = :orderDate"),
-    @NamedQuery(name = "Order1.findByActive", query = "SELECT o FROM Order1 o WHERE o.active = :active"),
     @NamedQuery(name = "Order1.findByIsDelete", query = "SELECT o FROM Order1 o WHERE o.isDelete = :isDelete")})
 public class Order1 implements Serializable {
 
@@ -49,13 +50,11 @@ public class Order1 implements Serializable {
     @Column(name = "order_date")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "total")
+    private double total;
     @Column(name = "is_delete")
     private boolean isDelete;
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
-    @ManyToOne
-    private Payment paymentId;
+
     @JoinColumn(name = "UserID", referencedColumnName = "id")
     @ManyToOne
     private User userID;
@@ -64,6 +63,10 @@ public class Order1 implements Serializable {
     private Voucher voucherId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
+    
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
+    private Set<Shipment> shipmentSet;
 
     public Order1() {
     }
@@ -86,24 +89,6 @@ public class Order1 implements Serializable {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-
-
-    public Payment getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(Payment paymentId) {
-        this.paymentId = paymentId;
     }
 
     public User getUserID() {
@@ -155,5 +140,5 @@ public class Order1 implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.Order1[ id=" + id + " ]";
     }
-    
+
 }

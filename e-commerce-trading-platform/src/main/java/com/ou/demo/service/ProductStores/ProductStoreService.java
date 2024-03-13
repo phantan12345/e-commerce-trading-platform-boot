@@ -4,7 +4,7 @@
  */
 package com.ou.demo.service.ProductStores;
 
-import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.ProductStores.DTO.ProductStoreDto;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
@@ -24,7 +24,7 @@ public interface ProductStoreService {
 
     ProductStoreDto getDto(Product id);
 
-    List<ProdcutDto> findAllByStore(Store s);
+    List<ProductDto> findAllByStore(Store s);
 
     ProductStore findById(int id);
 

@@ -4,27 +4,16 @@
  */
 package com.ou.demo.controllers;
 
-import com.ou.demo.service.Receipts.DTO.CartDto;
 import com.ou.demo.service.Receipts.DTO.CartInput;
-import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.Products.DTO.ProductInput;
-import com.ou.demo.pojos.Payment;
 import com.ou.demo.pojos.Product;
-import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.ProductStores.ProductStoreService;
-import com.ou.demo.service.Stores.StoreService;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -40,16 +29,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import com.ou.demo.service.Categorys.ICategoryService;
 import com.ou.demo.service.Products.IProductService;
 import com.ou.demo.service.Receipts.IReceiptService;
 import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
+import com.ou.demo.service.Stores.IStoreService;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -69,7 +60,7 @@ public class ProductController {
 
     private IUserService UserService;
 
-    private StoreService storeService;
+    private IStoreService storeService;
 
     private ICategoryService CategoryService;
 
@@ -79,8 +70,8 @@ public class ProductController {
 
         Store store = storeService.findStoreByUserID(user);
 
-        if (store.getIsDelete() == Boolean.TRUE) {
-            ProdcutDto dto = productService.create(params, file, store);
+        if (store.getIsDelete() == Boolean.FALSE) {
+            ProductDto dto = productService.create(params, file, store);
             if (dto == null) {
                 return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
             } else {
@@ -95,8 +86,9 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> getProducts() {
-        List<ProdcutDto> dto = productService.findAll();
+    public ResponseEntity<?> getProducts(@CurrentUser UsersDto currenUser) {
+        User user = UserService.findById(currenUser.getId());
+        List<ProductDto> dto = productService.findAll(user);
         if (dto != null) {
             return new ResponseEntity<>(
                     dto, HttpStatus.OK);
@@ -143,17 +135,13 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam Map<String, String> params) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
 
-            List<Product> list = productService.search(params);
-            if (list != null) {
-                return ResponseEntity.ok().body(list);
-            }
-            return new ResponseEntity<>("LIST NULL", HttpStatus.BAD_REQUEST);
-        } else {
-            return ResponseEntity.badRequest().build();
+        List<Product> list = productService.search(params);
+        if (list != null) {
+            return ResponseEntity.ok().body(list);
         }
+        return new ResponseEntity<>("LIST NULL", HttpStatus.BAD_REQUEST);
+
     }
 
     @DeleteMapping("/product/{id}")
@@ -190,7 +178,7 @@ public class ProductController {
                 return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
             } else {
                 p.setProductName(dto.getProductName());
-                p.setActive(dto.getActive());
+                p.setIsDelete(Boolean.FALSE);
                 p.setCategoryId(CategoryService.findCateById(dto.getCateId()));
                 p.setPrice(dto.getPrice());
                 return new ResponseEntity<>(productService.update(p), HttpStatus.OK);

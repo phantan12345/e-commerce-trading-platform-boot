@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class RoleControllers {
-    
+
     IRoleService roleService;
-    
+
     @GetMapping("/roles")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(roleService.getAll(), HttpStatus.OK);
@@ -38,7 +38,7 @@ public class RoleControllers {
 
     @PostMapping("/role")
     public ResponseEntity<?> create(RoleDto dto) {
-        Role role = roleService.create(dto);
+        Role role = roleService.Create(dto);
         if (role == null) {
             return new ResponseEntity<>("error create", HttpStatus.BAD_REQUEST);
 

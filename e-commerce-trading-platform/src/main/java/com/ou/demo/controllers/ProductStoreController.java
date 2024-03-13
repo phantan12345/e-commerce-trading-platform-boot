@@ -5,7 +5,7 @@
 package com.ou.demo.controllers;
 
 import com.ou.demo.service.OrderDetails.DTO.DateDto;
-import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.ProductStores.DTO.ProductStoreDto;
 import com.ou.demo.service.Vouchers.DTO.VoucherDto;
 import com.ou.demo.pojos.ProductStore;
@@ -13,7 +13,6 @@ import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
 import com.ou.demo.service.ProductStores.ProductStoreService;
-import com.ou.demo.service.Stores.StoreService;
 import com.ou.demo.service.Vouchers.VoucherService;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,7 @@ import com.ou.demo.service.Orders.IOrderService;
 import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
+import com.ou.demo.service.Stores.IStoreService;
 
 /**
  *
@@ -53,7 +53,7 @@ public class ProductStoreController {
 
     private IUserService UserService;
 
-    private StoreService StoreService;
+    private IStoreService StoreService;
 
     private VoucherService VoucherService;
 
@@ -65,7 +65,7 @@ public class ProductStoreController {
     public ResponseEntity<?> getProduct(@CurrentUser UsersDto currentUser) {
         User user = UserService.findById(currentUser.getId());
         Store s = StoreService.findStoreByUserID(user);
-        List<ProdcutDto> dto = ProductStoreService.findAllByStore(s);
+        List<ProductDto> dto = ProductStoreService.findAllByStore(s);
         if (dto == null) {
             return new ResponseEntity<>("orror find products",
                     HttpStatus.BAD_REQUEST);

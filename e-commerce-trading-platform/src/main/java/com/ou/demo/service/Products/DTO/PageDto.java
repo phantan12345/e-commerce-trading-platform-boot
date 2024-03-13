@@ -20,6 +20,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PageDto {
 
-    private List<ProdcutDto> listProduct;
+    private List<ProductDto> listProduct;
     private int totalPage;
 }

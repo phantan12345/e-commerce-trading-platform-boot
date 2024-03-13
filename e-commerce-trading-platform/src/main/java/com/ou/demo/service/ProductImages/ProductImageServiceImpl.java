@@ -10,6 +10,7 @@ import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.repositories.ProductImageReponsitory;
 import com.ou.demo.service.ProductImages.ProductImageService;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class ProductImageServiceImpl implements ProductImageService{
     }
 
     @Override
-    public List<ProductImage> findByProdctId(Product id) {
+    public Set<ProductImage> findByProdctId(Product id) {
         return ProductImageReponsitory.findByProdcutId(id);
     }
     

@@ -5,7 +5,7 @@
 package com.ou.demo.service.Products;
 
 import com.ou.demo.service.Products.DTO.PageDto;
-import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.Products.DTO.ProductInput;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
@@ -25,23 +25,22 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface IProductService {
 
-    ProdcutDto create(Map<String,String> params, List<MultipartFile> file, Store store);
+    ProductDto create(Map<String,String> params, List<MultipartFile> file, Store store);
 
     Product findById(int id);
 
-    List<ProdcutDto> findAll();
+    List<ProductDto> findAll(User users);
 
-    PageDto page(int  page);
+    PageDto page(int page);
 
-    List<Product> findAllByOrderByPriceDesc();
+    List<ProductDto> findAllByOrderByPriceDesc();
 
-    List<Product> findAllByOrderByProductNameDesc();
+    List<ProductDto> findAllByOrderByProductNameDesc();
 
     List<Product> search(Map<String, String> params);
 
     Product delete(Product ps);
 
-    Product update(Product p );
-    List<Product> Suggest(User user);
+    Product update(Product p);
 
 }

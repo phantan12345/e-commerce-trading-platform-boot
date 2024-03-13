@@ -16,7 +16,6 @@ import com.ou.demo.pojos.Voucher;
 import com.ou.demo.repositories.StoreReponsitory;
 import com.ou.demo.repositories.UserRepository;
 import com.ou.demo.service.Mails.MailService;
-import com.ou.demo.service.Stores.StoreService;
 import com.ou.demo.service.Vouchers.VoucherService;
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.demo.service.Roles.IRoleService;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import org.modelmapper.ModelMapper;
+import com.ou.demo.service.Stores.IStoreService;
 
 /**
  *
@@ -65,7 +65,7 @@ public class UserService implements IUserService {
     private ModelMapper mapper;
 
 //    @Autowired
-//    private StoreService StoreService;
+//    private IStoreService IStoreService;
     public User findByUsername(String user) {
         return UserRepository.findByUsername(user);
     }
@@ -80,7 +80,7 @@ public class UserService implements IUserService {
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         Optional<Role> role = roleService.getRoleById(users.getRoleId().getId());
-        String roleName = role.get().getRoleName();
+        String roleName = role.get().getName();
         authorities.add(new SimpleGrantedAuthority(roleName));
 
         return new org.springframework.security.core.userdetails.User(
@@ -97,9 +97,8 @@ public class UserService implements IUserService {
         u.setPhone(params.get("phone"));
         u.setRoleId(roleService.findRoleByRoleName("USER"));
 
-        u.setActive(Boolean.TRUE);
+        u.setActive(Boolean.FALSE);
         u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
-        User user1 = u;
         User user = UserRepository.save(u);
         if (user != null) {
             Mail mail = new Mail();
@@ -107,7 +106,7 @@ public class UserService implements IUserService {
             mail.setMailTo(user.getEmail());
             mail.setMailSubject("Spring Boot - Email Register");
             mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
-            MailService.sendEmail(user,mail);
+            MailService.sendEmail(user, mail);
             return true;
         }
 
@@ -120,7 +119,7 @@ public class UserService implements IUserService {
 
         User user = UserRepository.findById(id).get();
         try {
-            if (user.getRoleId().getRoleName().equals(roleService.findRoleByRoleName("USER").getRoleName())) {
+            if (user.getRoleId().getName().equals(roleService.findRoleByRoleName("USER").getName())) {
                 user.setRoleId(roleService.findRoleByRoleName("SALER"));
                 return UserRepository.save(user);
             }
@@ -161,7 +160,7 @@ public class UserService implements IUserService {
         u.setEmail("admin@gmail.com");
         u.setPhone("037274593");
         u.setRoleId(roleService.findRoleByRoleName("ADMIN"));
-
+        u.setAvatar("https://res.cloudinary.com/ddznsqfbo/image/upload/v1709851294/ubdmn5lmxddsbvqw0hsx.png");
         u.setActive(Boolean.TRUE);
 
         return UserRepository.save(u);
@@ -171,8 +170,13 @@ public class UserService implements IUserService {
     public UsersDto getUserDetails(String username) {
         UsersDto dto = mapper.map(UserRepository.findByUsername(username), UsersDto.class);
 
-        dto.setRoleId(UserRepository.findByUsername(username).getRoleId().getRoleName());
+        dto.setRoleId(UserRepository.findByUsername(username).getRoleId());
         return dto;
+    }
+
+    @Override
+    public List<User> getRequestment() {
+        return UserRepository.getRequestment();
     }
 
 }

@@ -8,6 +8,7 @@ import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
 import com.ou.demo.pojos.ProductStore;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -17,6 +18,6 @@ public interface ProductImageService {
 
     ProductImage create(ProductImage img);
 
-    List<ProductImage> findByProdctId(Product id);
+    Set<ProductImage> findByProdctId(Product id);
 
 }

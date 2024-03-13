@@ -10,7 +10,8 @@ import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
 import com.ou.demo.security.JwtUtils;
-import com.ou.demo.service.Stores.StoreService;
+import com.ou.demo.service.Mails.DTO.Mail;
+import com.ou.demo.service.Mails.MailService;
 import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Vouchers.VoucherService;
@@ -45,6 +46,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.ou.demo.service.Users.IUserService;
+import com.ou.demo.service.Stores.IStoreService;
+import com.ou.demo.service.Stores.StoreService;
 
 /**
  *
@@ -56,15 +59,15 @@ import com.ou.demo.service.Users.IUserService;
 @RequestMapping("/api")
 public class UserController {
 
+    private MailService MailService;
+
     private IUserService UserService;
 
     private JwtUtils jwtUtils;
 
     private AuthenticationManager authenticationManager;
 
-    private HttpServletResponse response;
-
-    private VoucherService VoucherService;
+    private StoreService StoreService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
@@ -93,11 +96,8 @@ public class UserController {
     @GetMapping("/current-user")
     public ResponseEntity<?> details(@CurrentUser UsersDto user) {
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
     }
 
     @GetMapping("/users")
@@ -117,6 +117,36 @@ public class UserController {
     public ResponseEntity<?> getById(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(UserService.findById(id),
                 HttpStatus.OK);
+    }
+
+    @GetMapping("/requestment")
+    public ResponseEntity<?> getRequestment() {
+        return new ResponseEntity<>(UserService.getRequestment(),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/requestment/{id}")
+    public ResponseEntity<?> requestment(@PathVariable(value = "id") int id) {
+
+        User user = UserService.findById(id);
+        user.setActive(Boolean.FALSE);
+        user = UserService.update(user);
+        if (user != null) {
+            if (user != null) {
+                Mail mail = new Mail();
+                mail.setMailFrom("2051050435tan@ou.edu.vn");
+                mail.setMailTo(user.getEmail());
+                mail.setMailSubject("Spring Boot - Email Register");
+                mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
+                
+                MailService.sendEmailStore(StoreService.findStoreByUserID(user), mail);
+            }
+            return new ResponseEntity<>(user == null ? "orror find products"
+                    : new ResponseEntity(user, HttpStatus.NOT_MODIFIED), HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>("no find store", HttpStatus.BAD_REQUEST);
+
     }
 
 }

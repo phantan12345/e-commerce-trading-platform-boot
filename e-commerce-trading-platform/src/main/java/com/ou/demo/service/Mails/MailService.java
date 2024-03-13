@@ -4,6 +4,7 @@
  */
 package com.ou.demo.service.Mails;
 
+import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.Mails.DTO.Mail;
 
@@ -11,7 +12,10 @@ import com.ou.demo.service.Mails.DTO.Mail;
  *
  * @author ADMIN
  */
-public interface MailService 
-{
-	public void sendEmail(User user,Mail mail);
+public interface MailService {
+
+    public void sendEmail(User user, Mail mail);
+
+    public void sendEmailStore(Store store, Mail mail);
+
 }

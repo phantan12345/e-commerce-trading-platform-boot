@@ -48,7 +48,7 @@ public class Voucher implements Serializable {
     @Column(name = "code")
     private String code;
     @Column(name = "is_delete")
-    private Short isDelete;
+    private Boolean isDelete;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "voucherId")
     private Set<Order1> order1Set;
 
@@ -83,13 +83,7 @@ public class Voucher implements Serializable {
         this.code = code;
     }
 
-    public Short getIsDelete() {
-        return isDelete;
-    }
 
-    public void setIsDelete(Short isDelete) {
-        this.isDelete = isDelete;
-    }
 
     @XmlTransient
     public Set<Order1> getOrder1Set() {

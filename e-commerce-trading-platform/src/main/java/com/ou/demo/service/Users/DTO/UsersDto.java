@@ -28,6 +28,6 @@ public class UsersDto {
     private String phone;
     private boolean isDelete;
     private String acceptToken;
-    private String roleId;
+    private Role roleId;
 
 }

@@ -5,6 +5,7 @@
 package com.ou.demo.repositories;
 
 import com.ou.demo.pojos.User;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,10 +21,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.username =?1")
     User findByUsername(String user);
-    
-//    @Modifying
-//    @Query("UPDATE User u SET u.active = 1 WHERE u.id =?1")
-//    User updateActice(int id);
-    
 
-} 
+    @Modifying
+    @Query("SELECT u FROM User u WHERE u.active = 1")
+    List<User> getRequestment();
+
+}

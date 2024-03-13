@@ -4,6 +4,7 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -41,7 +42,8 @@ public class ProductImage implements Serializable {
     @Column(name = "url")
     private String url;
     @Column(name = "is_delete")
-    private Short isDelete;
+    private Boolean isDelete;
+    @JsonIgnore
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
@@ -69,13 +71,7 @@ public class ProductImage implements Serializable {
         this.url = url;
     }
 
-    public Short getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Short isDelete) {
-        this.isDelete = isDelete;
-    }
+ 
 
     public Product getProductId() {
         return productId;
@@ -109,5 +105,5 @@ public class ProductImage implements Serializable {
     public String toString() {
         return "com.ou.demo.pojos.ProductImage[ id=" + id + " ]";
     }
-    
+
 }

@@ -65,11 +65,8 @@ public class User implements Serializable {
     private boolean isDelete;
     @Column(name = "accept_token")
     private String acceptToken;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Shipment> shipmentSet;
-    @JsonIgnore
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Wishlist> wishlistSet;
     @JsonIgnore
@@ -92,10 +89,6 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "userID")
     private Set<Order1> order1Set;
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
-    @JsonIgnore
-    @ManyToOne
-    private Payment paymentId;
 
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne
@@ -173,15 +166,6 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public Set<Shipment> getShipmentSet() {
-        return shipmentSet;
-    }
-
-    public void setShipmentSet(Set<Shipment> shipmentSet) {
-        this.shipmentSet = shipmentSet;
-    }
-
-    @XmlTransient
     public Set<Wishlist> getWishlistSet() {
         return wishlistSet;
     }
@@ -233,14 +217,6 @@ public class User implements Serializable {
 
     public void setOrder1Set(Set<Order1> order1Set) {
         this.order1Set = order1Set;
-    }
-
-    public Payment getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(Payment paymentId) {
-        this.paymentId = paymentId;
     }
 
     public Role getRoleId() {

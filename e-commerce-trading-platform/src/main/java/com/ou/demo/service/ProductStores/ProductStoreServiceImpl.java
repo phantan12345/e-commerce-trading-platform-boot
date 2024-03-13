@@ -4,7 +4,7 @@
  */
 package com.ou.demo.service.ProductStores;
 
-import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.ProductStores.DTO.ProductStoreDto;
 import com.ou.demo.pojos.Order1;
 import com.ou.demo.pojos.Orderdetail;
@@ -53,21 +53,19 @@ public class ProductStoreServiceImpl implements ProductStoreService {
     }
 
     @Override
-    public List<ProdcutDto> findAllByStore(Store id) {
+    public List<ProductDto> findAllByStore(Store id) {
         List<ProductStore> list = ProductStoreRepository.findByStore(id);
 
-        List<ProdcutDto> listDto = new ArrayList<>();
+        List<ProductDto> listDto = new ArrayList<>();
 
         for (ProductStore product : list) {
-            List<String> img = ProductImageService.findByProdctId(product.getProductId())
-                    .stream()
-                    .map(ProductImage::getUrl)
-                    .collect(Collectors.toList());
-            ProdcutDto dto = ProdcutDto.builder().id(product.getId())
+            Set<ProductImage> img = ProductImageService.findByProdctId(product.getProductId());
+            
+            ProductDto dto = ProductDto.builder().id(product.getId())
                     .productName(product.getProductId().getProductName())
                     .price(product.getProductId().getPrice())
                     .categoryId(product.getProductId().getCategoryId())
-                    .productImage(img).build();
+                    .productImageSet(img).build();
             listDto.add(dto);
 
         }

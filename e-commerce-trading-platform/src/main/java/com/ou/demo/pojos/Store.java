@@ -4,6 +4,7 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.Basic;
@@ -37,7 +38,6 @@ import lombok.NoArgsConstructor;
     @NamedQuery(name = "Store.findAll", query = "SELECT s FROM Store s"),
     @NamedQuery(name = "Store.findById", query = "SELECT s FROM Store s WHERE s.id = :id"),
     @NamedQuery(name = "Store.findByStoreName", query = "SELECT s FROM Store s WHERE s.storeName = :storeName"),
-    @NamedQuery(name = "Store.findByAdress", query = "SELECT s FROM Store s WHERE s.adress = :adress"),
     @NamedQuery(name = "Store.findByIsDelete", query = "SELECT s FROM Store s WHERE s.isDelete = :isDelete")})
 public class Store implements Serializable {
 
@@ -49,23 +49,23 @@ public class Store implements Serializable {
     private Integer id;
     @Column(name = "store_name")
     private String storeName;
-    @Column(name = "adress")
-    private String adress;
+    @Column(name = "address")
+    private String address;
     @Column(name = "is_delete")
     private Boolean isDelete;
+    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storeId")
     private Set<ProductStore> productStoreSet;
 
-    public Store(String storeName, String adress,  User userId) {
+    public Store(String storeName, String adress, User userId) {
         this.storeName = storeName;
-        this.adress = adress;
+        this.address = adress;
         this.isDelete = false;
         this.userId = userId;
     }
 
-    
-    
 }

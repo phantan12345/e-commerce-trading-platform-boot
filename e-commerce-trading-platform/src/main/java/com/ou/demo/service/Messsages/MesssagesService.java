@@ -99,8 +99,7 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
                 loggedInUser.getId()
         );
 
-        messagingTemplate.convertAndSendToUser(String.valueOf(savedMessagesDto.getSentTo()), "/reply", dto);
-
+        messagingTemplate.convertAndSendToUser(String.valueOf(savedMessagesDto.getSentTo().getId()), "/reply", dto);
         return savedMessagesDto;
     }
 

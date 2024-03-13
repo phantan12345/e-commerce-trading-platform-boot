@@ -6,12 +6,11 @@ package com.ou.demo.controllers;
 
 import com.ou.demo.service.OrderDetails.DTO.DateDto;
 import com.ou.demo.service.Mails.DTO.Mail;
-import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.Mails.MailService;
 import com.ou.demo.service.Stores.DTO.StoreDTO;
-import com.ou.demo.service.Stores.StoreService;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,7 @@ import com.ou.demo.service.Orders.IOrderService;
 import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
+import com.ou.demo.service.Stores.IStoreService;
 
 /**
  *
@@ -47,7 +47,7 @@ public class StoreController {
 
     private MailService MailService;
 
-    private StoreService storeService;
+    private IStoreService storeService;
 
     private IUserService UserService;
 
@@ -95,26 +95,7 @@ public class StoreController {
 
     }
 
-    @PostMapping("/requestment/{id}")
-    public ResponseEntity<?> requestment(@PathVariable(value = "id") int id) {
 
-        Store s = storeService.findStoreById(id);
-        if (s != null) {
-//            s.getUserId().setRoleId(roleId);
-//            Mail mail = new Mail();
-//            mail.setMailFrom("2051050435tan@ou.edu.vn");
-//            mail.setMailTo(s.getUserId().getEmail());
-//            mail.setMailSubject("Spring Boot - Email Register");
-//            mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
-//            MailService.sendEmail(,mail);
-            Store store = storeService.update(s);
-            return new ResponseEntity<>(store == null ? "orror find products"
-                    : new ResponseEntity(store, HttpStatus.NOT_MODIFIED), HttpStatus.OK);
-
-        }
-        return new ResponseEntity<>("no find store", HttpStatus.BAD_REQUEST);
-
-    }
 
 //    @GetMapping("/requestment")
 //    public ResponseEntity<?> getRequestment() {

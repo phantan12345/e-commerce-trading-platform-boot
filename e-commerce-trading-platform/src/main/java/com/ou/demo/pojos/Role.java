@@ -19,18 +19,19 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
 @Entity
 @Table(name = "role")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
     @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
-    @NamedQuery(name = "Role.findByRoleName", query = "SELECT r FROM Role r WHERE r.roleName = :roleName"),
     @NamedQuery(name = "Role.findByIsDelete", query = "SELECT r FROM Role r WHERE r.isDelete = :isDelete")})
 public class Role implements Serializable {
 
@@ -40,10 +41,10 @@ public class Role implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "role_name")
-    private String roleName;
+    @Column(name = "name")
+    private String name;
     @Column(name = "is_delete")
-    private Short isDelete;
+    private boolean isDelete;
     @JsonIgnore
     @OneToMany(mappedBy = "roleId")
     private Set<User> userSet;
@@ -52,7 +53,8 @@ public class Role implements Serializable {
     }
 
     public Role(String name) {
-        this.roleName = name;
+        this.name = name;
+        this.isDelete = false;
     }
 
     public Role(Integer id) {
@@ -65,22 +67,6 @@ public class Role implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public Short getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Short isDelete) {
-        this.isDelete = isDelete;
     }
 
     @XmlTransient

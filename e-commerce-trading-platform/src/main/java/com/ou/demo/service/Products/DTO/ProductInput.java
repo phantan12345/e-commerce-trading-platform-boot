@@ -23,7 +23,6 @@ public class ProductInput {
 
     private String productName;
     private BigDecimal price;
-    private Boolean active;
     private int cateId;
     private int count;
 

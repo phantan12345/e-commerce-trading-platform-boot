@@ -12,13 +12,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ou.demo.service.Roles.IRoleService;
+import com.ou.demo.util.Service.Crud;
 
 /**
  *
  * @author ADMIN
  */
 @Service
-public class RoleService implements IRoleService {
+public class RoleService extends Crud<Role, RoleDto> implements IRoleService {
 
     @Autowired
     private RoleReponsitory roleReponsitory;
@@ -26,12 +27,6 @@ public class RoleService implements IRoleService {
     @Override
     public Optional<Role> getRoleById(int id) {
         return roleReponsitory.findById(id);
-    }
-
-    @Override
-    public Role create(RoleDto r) {
-        Role role =new Role(r.getName());
-        return roleReponsitory.save(role);
     }
 
     @Override

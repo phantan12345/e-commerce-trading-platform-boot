@@ -4,34 +4,29 @@
  */
 package com.ou.demo.service.Products;
 
+import com.ou.demo.pojos.Order1;
+import com.ou.demo.pojos.Orderdetail;
 import com.ou.demo.service.Images.ImageServiceImpl;
 import com.ou.demo.service.Products.DTO.PageDto;
-import com.ou.demo.service.Products.DTO.ProdcutDto;
+import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.Products.DTO.ProductInput;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
+import com.ou.demo.repositories.OrderReponsitory;
+import com.ou.demo.repositories.OrderdetailRepository;
 import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.service.ProductImages.ProductImageService;
 import com.ou.demo.service.ProductStores.ProductStoreService;
 import com.ou.demo.util.GenericSpecifications;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +37,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import com.ou.demo.service.Categorys.ICategoryService;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -68,18 +69,21 @@ public class ProductService implements IProductService {
     @Autowired
     private ProductImageService ProductImageService;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private OrderReponsitory orderReponsitory;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
-    public ProdcutDto create(Map<String, String> params, List<MultipartFile> file, Store store) {
+    public ProductDto create(Map<String, String> params, List<MultipartFile> file, Store store) {
         Product p = new Product();
 
         p.setProductName(params.get("productName"));
-        BigDecimal price=new BigDecimal(params.get("price"));
+        BigDecimal price = new BigDecimal(params.get("price"));
         p.setPrice(price);
         p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("cateid"))));
-        p.setActive(Boolean.TRUE);
+        p.setIsDelete(Boolean.FALSE);
         ProductStore ps = new ProductStore();
         ps.setCount(Integer.parseInt(params.get("count")));
         ps.setStoreId(store);
@@ -94,7 +98,7 @@ public class ProductService implements IProductService {
             ProductImageService.create(img);
 
         }
-        return ModelMapper.map(p, ProdcutDto.class);
+        return ModelMapper.map(p, ProductDto.class);
     }
 
     @Override
@@ -104,46 +108,42 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProdcutDto> findAll() {
-        List<Product> list = productReponsitory.findAll();
+    public List<ProductDto> findAll(User users) {
+        List<Product> listAllProduct = productReponsitory.findAll();
+        List<Orderdetail> listOrder = new ArrayList<>();
+        List<Product> listHistoryProduct = new ArrayList<>();
 
-        List<ProdcutDto> listDto = new ArrayList<>();
-
-        for (Product product : list) {
-            if (product.getActive() != Boolean.FALSE) {
-                List<String> img = ProductImageService.findByProdctId(product)
-                        .stream()
-                        .map(ProductImage::getUrl)
-                        .collect(Collectors.toList());
-
-                ProdcutDto dto = ProdcutDto.builder().id(product.getId())
-                        .productName(product.getProductName())
-                        .price(product.getPrice())
-                        .categoryId(product.getCategoryId())
-                        .productImage(img).build();
-                listDto.add(dto);
-            }
+        orderReponsitory.findByUserId(users).forEach(or -> listOrder.addAll(or.getOrderdetailSet()));
+        for (Orderdetail od : listOrder) {
+            listHistoryProduct.add(productReponsitory.findById(od.getProductStoreId().getProductId().getId()).get());
         }
-        return listDto;
+
+        Map<Product, Boolean> purchasedProductMap = listHistoryProduct.stream()
+                .collect(Collectors.toMap(Function.identity(), id -> true));
+
+        List<Product> sortedProducts = listAllProduct.stream()
+                .sorted(Comparator.comparing(product -> purchasedProductMap.getOrDefault(product.getId(), false)))
+                .collect(Collectors.toList());
+
+        return sortedProducts.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public PageDto page(int p) {
         Pageable pageable = PageRequest.of(p, 8);
-        List<ProdcutDto> listDto = new ArrayList<>();
+        List<ProductDto> listDto = new ArrayList<>();
         Page<Product> page = productReponsitory.findAll(pageable);
         for (Product product : page.getContent()) {
-            if (product.getActive() != Boolean.FALSE) {
-                List<String> img = ProductImageService.findByProdctId(product)
-                        .stream()
-                        .map(ProductImage::getUrl)
-                        .collect(Collectors.toList());
+            if (product.getIsDelete() != Boolean.TRUE) {
+                Set<ProductImage> img = ProductImageService.findByProdctId(product);
 
-                ProdcutDto dto = ProdcutDto.builder().id(product.getId())
+                ProductDto dto = ProductDto.builder().id(product.getId())
                         .productName(product.getProductName())
                         .price(product.getPrice())
                         .categoryId(product.getCategoryId())
-                        .productImage(img).build();
+                        .productImageSet(img).build();
                 listDto.add(dto);
             }
         }
@@ -152,13 +152,18 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> findAllByOrderByPriceDesc() {
-        return productReponsitory.findAllByOrderByPriceDesc();
+    public List<ProductDto> findAllByOrderByPriceDesc() {
+
+        return productReponsitory.findAllByOrderByPriceDesc().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Product> findAllByOrderByProductNameDesc() {
-        return productReponsitory.findAllByOrderByProductNameDesc();
+    public List<ProductDto> findAllByOrderByProductNameDesc() {
+        return productReponsitory.findAllByOrderByProductNameDesc().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -199,21 +204,18 @@ public class ProductService implements IProductService {
 
     @Override
     public Product delete(Product product) {
-        product.setActive(Boolean.FALSE);
+        product.setIsDelete(Boolean.TRUE);
 
         return productReponsitory.save(product);
     }
 
     @Override
     public Product update(Product p) {
-      
-        
+
         return productReponsitory.save(p);
     }
 
-    @Override
-    public List<Product> Suggest(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private ProductDto convertToDto(Product product) {
+        return modelMapper.map(product, ProductDto.class);
     }
-
 }

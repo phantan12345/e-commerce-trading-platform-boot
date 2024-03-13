@@ -18,13 +18,15 @@ public interface IUserService extends UserDetailsService {
     User updateActice(int id);
 
     User findById(int id);
-    
+
     User update(User user);
-    
+
     List<User> listUser();
-    
+
     User addAdmin();
+
+    List<User> getRequestment();
+
     UsersDto getUserDetails(String username);
-    
 
 }
