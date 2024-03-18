@@ -24,5 +24,5 @@ public interface IOrderdetailService extends ICrud<Orderdetail, OrderdetailDTO>{
 
     Orderdetail findByProductStore(ProductStore ps);
 
-    List<Orderdetail> findByDate(int month, int year);
+    List<Object[]> findByDate(int month, int year);
 }

@@ -24,6 +24,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ou.demo.service.OrderDetails.IOrderdetailService;
+import java.math.BigDecimal;
 
 /**
  *
@@ -35,13 +36,8 @@ public class OrderService implements IOrderService {
     @Autowired
     private OrderReponsitory OrderReponsitory;
 
- 
-
     @Autowired
     private IOrderdetailService OrderdetailService;
-    
-    
-
 
     @Override
     public Order1 create(Order1 o) {
@@ -51,28 +47,18 @@ public class OrderService implements IOrderService {
 
     @Override
     public Object stat(Store store, DateDto monthAndYear) {
-        List<StatDto> listDto = new ArrayList<>();
 
-        List<Orderdetail> date = OrderdetailService.findByDate(monthAndYear.getMonth(), monthAndYear.getYear());
-        if (date != null) {
-            for (Orderdetail d : date) {
-                StatDto dto = StatDto.builder()
-                        .date(d.getOrderId().getOrderDate())
-                        .total(d.getTotal())
-                        .name(d.getProductStoreId().getProductId().getProductName()).build();
-                listDto.add(dto);
-            }
+        List<Object[]> date = OrderdetailService.findByDate(monthAndYear.getMonth(), monthAndYear.getYear());
+        System.out.println(date);
+        return date.stream().map(dto -> new StatDto(
+                Integer.valueOf(dto[0].toString()),
+                new BigDecimal(dto[0].toString()))).toList();
 
-        }
-
-        return listDto;
     }
 
     @Override
     public Set<Order1> GetByUserId(User user) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    
 
 }

@@ -59,8 +59,8 @@ public class StoreController {
 
 
             Store store = storeService.Create(s, user);
-            return new ResponseEntity<>(store == null ? "orror create store"
-                    : new ResponseEntity(store, HttpStatus.OK), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(
+                  store, HttpStatus.OK);
       
     }
 

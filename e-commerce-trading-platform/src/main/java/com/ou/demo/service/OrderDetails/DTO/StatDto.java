@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class StatDto {
-    private Date date;
+    private int day;
     private BigDecimal total;
-    private String name;
 }

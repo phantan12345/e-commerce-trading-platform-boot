@@ -167,7 +167,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> search(Map<String, String> params) {
+    public List<ProductDto> search(Map<String, String> params) {
         List<Specification<Product>> list = new ArrayList<>();
 
         String kw = params.get("kw");
@@ -198,7 +198,9 @@ public class ProductService implements IProductService {
 
         }
 
-        return productReponsitory.findAll(GenericSpecifications.createSpecification(list));
+        return productReponsitory.findAll(GenericSpecifications.createSpecification(list)).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
 
     }
 

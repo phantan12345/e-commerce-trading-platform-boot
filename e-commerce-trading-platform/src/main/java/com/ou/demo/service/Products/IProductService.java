@@ -37,7 +37,7 @@ public interface IProductService {
 
     List<ProductDto> findAllByOrderByProductNameDesc();
 
-    List<Product> search(Map<String, String> params);
+    List<ProductDto> search(Map<String, String> params);
 
     Product delete(Product ps);
 

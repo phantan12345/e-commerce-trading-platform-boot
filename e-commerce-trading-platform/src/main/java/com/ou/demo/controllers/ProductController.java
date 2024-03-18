@@ -136,7 +136,7 @@ public class ProductController {
     @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam Map<String, String> params) {
 
-        List<Product> list = productService.search(params);
+        List<ProductDto> list = productService.search(params);
         if (list != null) {
             return ResponseEntity.ok().body(list);
         }

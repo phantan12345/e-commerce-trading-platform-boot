@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -20,7 +21,13 @@ public interface OrderdetailRepository extends JpaRepository<Orderdetail, Intege
 
     Orderdetail findByproductStoreId(ProductStore ps);
 
-    @Query("SELECT o FROM Orderdetail o WHERE MONTH(o.orderId.orderDate) = ?1 AND YEAR(o.orderId.orderDate) = ?2")
-    List<Orderdetail> findByMonthAndYear(int month, int year);
+    @Query(value = "SELECT "
+            + "day(o.order_date) as day, "
+            + "sum(o.total) as total \n"
+            + "FROM orderdetail od\n"
+            + "JOIN order1 o ON od.order_id = o.id\n"
+            + "WHERE month(o.order_date) = ?1 AND year(o.order_date) = ?2 \n"
+            + "GROUP BY day(o.order_date)",nativeQuery = true)
+    List<Object[]> findByMonthAndYear(@Param("month") int month, @Param("year") int year);
 
 }

@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.service.Stores.IStoreService;
 import com.ou.demo.service.Stores.StoreService;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 /**
  *
@@ -102,7 +103,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<?> getUsers() {
-        return new ResponseEntity<>(UserService.listUser(), HttpStatus.OK);
+        return new ResponseEntity<>(UserService.getAll(), HttpStatus.OK);
 
     }
 
@@ -125,6 +126,12 @@ public class UserController {
                 HttpStatus.OK);
     }
 
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(UserService.Delete(id),
+                HttpStatus.OK);
+    }
+
     @PostMapping("/requestment/{id}")
     public ResponseEntity<?> requestment(@PathVariable(value = "id") int id) {
 
@@ -138,7 +145,7 @@ public class UserController {
                 mail.setMailTo(user.getEmail());
                 mail.setMailSubject("Spring Boot - Email Register");
                 mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
-                
+
                 MailService.sendEmailStore(StoreService.findStoreByUserID(user), mail);
             }
             return new ResponseEntity<>(user == null ? "orror find products"

@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -80,7 +81,6 @@ public class Crud<T extends Object, D extends Object> implements ICrud<T, D> {
         if (optionalEntity.isPresent()) {
             T existingEntity = optionalEntity.get();
 
-
             setDefaultValue(existingEntity, "isDelete", true);
 
             return jpaRepository.save(existingEntity);
@@ -91,7 +91,26 @@ public class Crud<T extends Object, D extends Object> implements ICrud<T, D> {
 
     @Override
     public List<T> getAll() {
-        return jpaRepository.findAll();
+        // Lấy tất cả các thực thể từ JpaRepository
+        List<T> allEntities = jpaRepository.findAll();
+
+        // Lọc ra các thực thể với trường isDelete là false
+        List<T> nonDeletedEntities = allEntities.stream()
+                .filter(entity -> !isDeleted(entity))
+                .collect(Collectors.toList());
+
+        return nonDeletedEntities;
+    }
+
+    // Phương thức kiểm tra xem thực thể có trạng thái bị xóa không
+    private boolean isDeleted(T entity) {
+        try {
+            Field field = entity.getClass().getDeclaredField("isDelete");
+            field.setAccessible(true);
+            return field.getBoolean(entity);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Không thể truy cập trường isDelete", e);
+        }
     }
 
 }

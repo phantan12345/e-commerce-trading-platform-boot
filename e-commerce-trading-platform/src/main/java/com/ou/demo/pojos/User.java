@@ -22,11 +22,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
+@Data
 @Entity
 @Table(name = "user")
 @XmlRootElement

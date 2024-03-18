@@ -38,6 +38,7 @@ import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.service.Stores.IStoreService;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  *
@@ -88,7 +89,7 @@ public class ProductStoreController {
         }
     }
 
-    @GetMapping("/stat")
+    @PostMapping("/stat")
     public ResponseEntity<?> getStat(@CurrentUser UsersDto currentUser, @RequestBody DateDto dto) {
         User user = UserService.findById(currentUser.getId());
         Store s = StoreService.findStoreByUserID(user);

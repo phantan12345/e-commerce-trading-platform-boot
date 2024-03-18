@@ -25,9 +25,6 @@ public class OrderdetailService extends com.ou.demo.util.Service.Crud<Orderdetai
     @Autowired
     private OrderdetailRepository OrderdetailRepository;
 
-
-    
-
     @Override
     public Orderdetail create(Orderdetail od) {
         return OrderdetailRepository.save(od);
@@ -39,8 +36,10 @@ public class OrderdetailService extends com.ou.demo.util.Service.Crud<Orderdetai
     }
 
     @Override
-    public List<Orderdetail> findByDate(int month, int year) {
+    public List<Object[]> findByDate(int month, int year) {
+        System.out.println(OrderdetailRepository.findByMonthAndYear(month, year));
         return OrderdetailRepository.findByMonthAndYear(month, year);
+
     }
 
 }

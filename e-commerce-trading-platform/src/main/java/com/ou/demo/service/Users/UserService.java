@@ -38,13 +38,14 @@ import com.ou.demo.service.Roles.IRoleService;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import org.modelmapper.ModelMapper;
 import com.ou.demo.service.Stores.IStoreService;
+import com.ou.demo.util.Service.Crud;
 
 /**
  *
  * @author ADMIN
  */
 @Service("userDetailsService")
-public class UserService implements IUserService {
+public class UserService extends Crud<User, UsersDto> implements IUserService  {
 
     @Autowired
     private MailService MailService;
@@ -147,10 +148,7 @@ public class UserService implements IUserService {
         return null;
     }
 
-    @Override
-    public List<User> listUser() {
-        return UserRepository.findAll();
-    }
+   
 
     @Override
     public User addAdmin() {
@@ -178,5 +176,7 @@ public class UserService implements IUserService {
     public List<User> getRequestment() {
         return UserRepository.getRequestment();
     }
+
+   
 
 }
