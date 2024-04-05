@@ -11,8 +11,7 @@ pipeline {
             steps {
          
                 echo 'Deploying and cleaning'
-                sh 'docker image pull mysql:8.0'
-                sh 'docker network create dev || echo "this network exists"'
+
                 sh 'docker volume create hello '
 
         }
