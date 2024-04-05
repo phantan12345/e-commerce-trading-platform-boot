@@ -1,28 +1,29 @@
 pipeline {
-
     agent any
-
-    tools { 
-        maven 'my-maven' 
-    }
-    environment {
-        MYSQL_ROOT_LOGIN = credentials('mysql-root')
+    options {
+        // This is required if you want to clean before build
+        skipDefaultCheckout(true)
     }
     stages {
-
- 
-
-        stage('Deploy Spring Boot to DEV') {
+        stage('Build') {
             steps {
-                sh 'echo "this container does not exist"'
+                // Clean before build
+                cleanWs()
+                // We need to explicitly checkout from SCM here
+                checkout scm
+                echo "Building ${env.JOB_NAME}..."
             }
         }
- 
     }
     post {
         // Clean after build
         always {
-            cleanWs()
+            cleanWs(cleanWhenNotBuilt: false,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                               [pattern: '.propsfile', type: 'EXCLUDE']])
         }
     }
 }
