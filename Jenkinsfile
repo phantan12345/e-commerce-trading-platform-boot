@@ -1,15 +1,20 @@
 pipeline {
     agent any
-    options {
-        // This is required if you want to clean before build
-        skipDefaultCheckout(true)
+     tools { 
+        maven 'my-maven' 
+    }
+    environment {
+        MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
     }
     stages {
         stage('Build') {
             steps {
          
-                echo "Building..."
-            }
+                echo 'Deploying and cleaning'
+                sh 'docker image pull mysql:8.0'
+                sh 'docker network create dev || echo "this network exists"'
+                sh 'docker volume create hello '
+
         }
     }
 
