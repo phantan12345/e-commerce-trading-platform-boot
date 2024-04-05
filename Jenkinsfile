@@ -7,7 +7,6 @@ pipeline {
          
                 echo 'Deploying and cleaning'
 
-                sh 'docker volume create hello '
 
         }
     }
