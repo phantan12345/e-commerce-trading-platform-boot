@@ -14,9 +14,7 @@ pipeline {
 
         stage('Deploy Spring Boot to DEV') {
             steps {
-             
-
-                sh 'docker-compose up -d'
+                sh 'echo "this container does not exist"'
             }
         }
  
