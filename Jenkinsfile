@@ -1,30 +1,13 @@
 pipeline {
-
-    agent any
-
-    tools { 
-        maven 'my-maven' 
-    }
-    environment {
-        MYSQL_ROOT_LOGIN = credentials('mysql-root')
-    }
+    agent any  
     stages {
-
- 
-
-        stage('Deploy Spring Boot to DEV') {
+        stage('Build') {
             steps {
-             
-
-                sh 'docker-compose up -d'
+         
+                echo "Building..."
+                sh "docker volume create hello"
             }
         }
- 
     }
-    post {
-        // Clean after build
-        always {
-            cleanWs()
-        }
-    }
+
 }
