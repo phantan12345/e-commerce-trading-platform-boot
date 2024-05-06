@@ -5,6 +5,8 @@
  */
 package com.ou.demo.security;
 
+import com.ou.demo.pojos.Store;
+import com.ou.demo.pojos.User;
 import com.ou.demo.service.Users.DTO.JwtResponse;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import java.io.IOException;
@@ -55,11 +57,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(token) && jwtUtils.validateToken(token)) {
                 // get username from token
                 String username = jwtUtils.getUsername(token);
+
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     String userId = getUserDetails(token);
 
                     UserDetails userDetails = this.UserService.loadUserByUsername(username);
                     UsersDto user = UserService.getUserDetails(userId);
+                  
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                             user, null, userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

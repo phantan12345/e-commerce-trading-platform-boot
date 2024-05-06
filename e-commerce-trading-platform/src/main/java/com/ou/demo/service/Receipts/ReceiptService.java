@@ -13,6 +13,7 @@ import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
 import com.ou.demo.pojos.Wishlist;
+import com.ou.demo.repositories.OrderReponsitory;
 import com.ou.demo.repositories.WishlistRepository;
 import com.ou.demo.service.ProductStores.ProductStoreService;
 import com.ou.demo.service.Vouchers.VoucherService;
@@ -27,6 +28,10 @@ import org.springframework.stereotype.Service;
 import com.ou.demo.service.OrderDetails.IOrderdetailService;
 import com.ou.demo.service.Products.IProductService;
 import com.ou.demo.service.Orders.IOrderService;
+import com.ou.demo.service.VNPlay.VNPayService;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -53,26 +58,26 @@ public class ReceiptService implements IReceiptService {
     @Autowired
     private WishlistRepository wishlistRepository;
 
+
+
+
+
     @Override
-    public Object addReceipt(CartInput carts, User user) {
+    public Order1 addReceipt(CartInput carts) {
         try {
             Voucher vou = VoucherService.findByid(carts.getVoucher());
-            Order1 order = new Order1();
-            order.setOrderDate(new Date());
-//            order.setTotal(carts.getTotal());
-            order.setVoucherId(vou);
+            Order1 order = new Order1(carts.getTotal(), carts.getUser(), vou);
             Order1 o = OrderService.create(order);
-
             for (CartDto c : carts.getCarts()) {
                 Orderdetail d = new Orderdetail();
                 d.setQuatity(c.getCount());
                 Product p = ProductService.findById(c.getId());
-                if (p.getIsDelete() == Boolean.FALSE) {
+                if (p.getDelte() == Boolean.FALSE) {
                     ProductStore ps = ProductStoreService.findByProduct(p);
                     if (ps == null) {
                         throw new NullPointerException("product-store is null");
                     }
-                    Wishlist wishlist = new Wishlist(ps, user);
+                    Wishlist wishlist = new Wishlist(ps, carts.getUser());
                     wishlistRepository.save(wishlist);
                     if (c.getCount() < ps.getCount()) {
                         d.setProductStoreId(ps);
@@ -86,22 +91,20 @@ public class ReceiptService implements IReceiptService {
                         int count = ps.getCount() - od.getQuatity();
                         ps.setCount(count);
                         ProductStoreService.create(ps);
-                        OrderService.create(o);
 
                     } else {
-                        return false;
+                        return null;
                     }
-                } else {
-                    return p.getProductName() + " đã dừng bán";
-
+                    return o;
                 }
 
             }
         } catch (Exception ex) {
-            return false;
+            return null;
         }
-        return false;
+        return null;
 
     }
 
+   
 }

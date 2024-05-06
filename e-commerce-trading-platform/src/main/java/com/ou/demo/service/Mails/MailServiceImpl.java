@@ -128,7 +128,7 @@ public class MailServiceImpl implements MailService {
                     + "            store name\n"
                     + "        </td>\n"
                     + "        <td style=\"border: 1px solid #EBEDF3;\">\n"
-                    + store.getStoreName()
+                    + store.getUser().getName()
                     + "        </td>\n"
                     + "    </tr>\n"
                     + "   \n"

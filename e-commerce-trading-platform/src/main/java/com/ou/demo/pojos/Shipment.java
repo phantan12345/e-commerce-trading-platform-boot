@@ -4,20 +4,13 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.*;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 
 /**
  *
@@ -25,15 +18,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "shipment")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Shipment.findAll", query = "SELECT s FROM Shipment s"),
-    @NamedQuery(name = "Shipment.findById", query = "SELECT s FROM Shipment s WHERE s.id = :id"),
-    @NamedQuery(name = "Shipment.findByShipmentDate", query = "SELECT s FROM Shipment s WHERE s.shipmentDate = :shipmentDate"),
-    @NamedQuery(name = "Shipment.findByAddress", query = "SELECT s FROM Shipment s WHERE s.address = :address"),
-    @NamedQuery(name = "Shipment.findByCity", query = "SELECT s FROM Shipment s WHERE s.city = :city"),
-    @NamedQuery(name = "Shipment.findByIsDelete", query = "SELECT s FROM Shipment s WHERE s.isDelete = :isDelete"),
-    @NamedQuery(name = "Shipment.findByCountry", query = "SELECT s FROM Shipment s WHERE s.country = :country")})
+@Data
 public class Shipment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,9 +34,13 @@ public class Shipment implements Serializable {
     @Column(name = "city")
     private String city;
     @Column(name = "is_delete")
-    private Boolean isDelete;
+    private boolean isDelete;
     @Column(name = "country")
     private String country;
+    @Column(name = "active")
+    private String active;
+    
+    @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Order1 orderId;
@@ -59,73 +48,5 @@ public class Shipment implements Serializable {
     public Shipment() {
     }
 
-    public Shipment(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getShipmentDate() {
-        return shipmentDate;
-    }
-
-    public void setShipmentDate(Date shipmentDate) {
-        this.shipmentDate = shipmentDate;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Shipment)) {
-            return false;
-        }
-        Shipment other = (Shipment) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.ou.demo.pojos.Shipment[ id=" + id + " ]";
-    }
-
+ 
 }

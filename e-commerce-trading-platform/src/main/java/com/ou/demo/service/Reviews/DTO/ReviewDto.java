@@ -33,5 +33,5 @@ public class ReviewDto {
     private Date dateContent;
     @NotBlank
     private double evaluate;
-    private Set<Review> listReply;
+    private Set<Review> reviewSet;
 }

@@ -4,36 +4,21 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
+
+import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 
 /**
  *
  * @author ADMIN
  */
-@Data
 @Entity
 @Table(name = "orderdetail")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Orderdetail.findAll", query = "SELECT o FROM Orderdetail o"),
-    @NamedQuery(name = "Orderdetail.findById", query = "SELECT o FROM Orderdetail o WHERE o.id = :id"),
-    @NamedQuery(name = "Orderdetail.findByQuatity", query = "SELECT o FROM Orderdetail o WHERE o.quatity = :quatity"),
-    @NamedQuery(name = "Orderdetail.findByTotal", query = "SELECT o FROM Orderdetail o WHERE o.total = :total"),
-    @NamedQuery(name = "Orderdetail.findByIsDelete", query = "SELECT o FROM Orderdetail o WHERE o.isDelete = :isDelete")})
+@Data
 public class Orderdetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,9 +33,13 @@ public class Orderdetail implements Serializable {
     private BigDecimal total;
     @Column(name = "is_delete")
     private boolean isDelete;
+    
+    @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Order1 orderId;
+    
+    @JsonIgnore
     @JoinColumn(name = "product_store_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private ProductStore productStoreId;
@@ -58,69 +47,6 @@ public class Orderdetail implements Serializable {
     public Orderdetail() {
     }
 
-    public Orderdetail(Integer id) {
-        this.id = id;
-    }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getQuatity() {
-        return quatity;
-    }
-
-    public void setQuatity(Integer quatity) {
-        this.quatity = quatity;
-    }
-
- 
-
-
-
-    public Order1 getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Order1 orderId) {
-        this.orderId = orderId;
-    }
-
-    public ProductStore getProductStoreId() {
-        return productStoreId;
-    }
-
-    public void setProductStoreId(ProductStore productStoreId) {
-        this.productStoreId = productStoreId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Orderdetail)) {
-            return false;
-        }
-        Orderdetail other = (Orderdetail) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.ou.demo.pojos.Orderdetail[ id=" + id + " ]";
-    }
     
 }

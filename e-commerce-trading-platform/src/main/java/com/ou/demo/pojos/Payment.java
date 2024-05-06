@@ -6,9 +6,12 @@ package com.ou.demo.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 import jakarta.persistence.*;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import lombok.Data;
 
 /**
@@ -16,35 +19,37 @@ import lombok.Data;
  * @author ADMIN
  */
 @Entity
-@Table(name = "wishlist")
+@Table(name = "payment")
 @Data
-public class Wishlist implements Serializable {
+public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Column(name = "payment")
+    private String payment;
+    @Column(name = "payment_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date paymentDate;
+    @Column(name = "acount")
+    private Long acount;
     @Column(name = "is_delete")
-    private Short isDelete;
+    private boolean isDelete;
     
     @JsonIgnore
-    @JoinColumn(name = "product_store_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private ProductStore productStoreId;
+    @OneToMany(mappedBy = "paymentId")
+    private Set<Order1> order1Set;
     
     @JsonIgnore
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private User userId;
+    @OneToMany(mappedBy = "paymentId")
+    private Set<User> userSet;
 
-    public Wishlist() {
-    }
-    
-    public Wishlist(ProductStore ps,User u){
-            this.productStoreId=ps;
-            this.userId=u;
+    public Payment() {
     }
 
+   
     
 }

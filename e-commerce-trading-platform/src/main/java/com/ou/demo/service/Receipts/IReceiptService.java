@@ -4,6 +4,7 @@
  */
 package com.ou.demo.service.Receipts;
 
+import com.ou.demo.pojos.Order1;
 import com.ou.demo.service.Receipts.DTO.CartDto;
 import com.ou.demo.service.Receipts.DTO.CartInput;
 import com.ou.demo.pojos.User;
@@ -16,6 +17,8 @@ import java.util.Map;
  */
 public interface IReceiptService {
 
-    Object addReceipt(CartInput carts, User user);
+    Order1 addReceipt(CartInput carts);
+    
+    
 
 }

@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.ou.demo.controllers;
 
 import com.ou.demo.service.Users.DTO.JwtResponse;
@@ -146,7 +143,7 @@ public class UserController {
                 mail.setMailSubject("Spring Boot - Email Register");
                 mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
 
-                MailService.sendEmailStore(StoreService.findStoreByUserID(user), mail);
+                MailService.sendEmailStore(StoreService.findStoreById(user.getId()), mail);
             }
             return new ResponseEntity<>(user == null ? "orror find products"
                     : new ResponseEntity(user, HttpStatus.NOT_MODIFIED), HttpStatus.OK);
