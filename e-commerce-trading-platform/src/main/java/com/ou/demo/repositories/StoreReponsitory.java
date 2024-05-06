@@ -18,8 +18,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StoreReponsitory extends JpaRepository<Store, Integer> {
 
-    @Query("SELECT r FROM Store r WHERE r.userId = ?1")
-    Store findStoreByUserID(User id);
+  
 
 
 }

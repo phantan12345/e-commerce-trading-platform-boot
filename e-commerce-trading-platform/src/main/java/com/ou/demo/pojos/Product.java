@@ -8,37 +8,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
-import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.*;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author ADMIN
  */
-@Data
 @Entity
 @Table(name = "product")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
-    @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
-    @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"),
-    @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
-    @NamedQuery(name = "Product.findByIsDelete", query = "SELECT p FROM Product p WHERE p.isDelete = :isDelete")})
+@Getter
+@Setter
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,111 +38,32 @@ public class Product implements Serializable {
     @Column(name = "price")
     private BigDecimal price;
     @Column(name = "is_delete")
-    private Boolean isDelete;
+    private boolean isDelete;
     
     @JsonIgnore
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;
+    
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
+    
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductStore> productStoreSet;
+    
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Review> reviewSet;
 
     public Product() {
     }
-
-    public Product(Integer id) {
-        this.id = id;
+    
+    
+    public boolean getDelte(){
+        return this.isDelete;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Category getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Category categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    @XmlTransient
-    public Set<ProductImage> getProductImageSet() {
-        return productImageSet;
-    }
-
-    public void setProductImageSet(Set<ProductImage> productImageSet) {
-        this.productImageSet = productImageSet;
-    }
-
-    @XmlTransient
-    public Set<ProductStore> getProductStoreSet() {
-        return productStoreSet;
-    }
-
-    public void setProductStoreSet(Set<ProductStore> productStoreSet) {
-        this.productStoreSet = productStoreSet;
-    }
-
-    @XmlTransient
-    public Set<Review> getReviewSet() {
-        return reviewSet;
-    }
-
-    public void setReviewSet(Set<Review> reviewSet) {
-        this.reviewSet = reviewSet;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Product)) {
-            return false;
-        }
-        Product other = (Product) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.ou.demo.pojos.Product[ id=" + id + " ]";
-    }
-
+  
+    
 }

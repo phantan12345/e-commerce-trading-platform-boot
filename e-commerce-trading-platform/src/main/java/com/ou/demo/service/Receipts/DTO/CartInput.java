@@ -4,6 +4,7 @@
  */
 package com.ou.demo.service.Receipts.DTO;
 
+import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,5 +24,7 @@ import lombok.NoArgsConstructor;
 public class CartInput {
     private List<CartDto> carts;
     private int voucher;
-    private BigDecimal total;
+    private float total;
+    private String provider;
+    private User user;
 }

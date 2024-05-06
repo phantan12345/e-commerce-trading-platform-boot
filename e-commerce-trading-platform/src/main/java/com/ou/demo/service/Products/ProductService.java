@@ -83,7 +83,7 @@ public class ProductService implements IProductService {
         BigDecimal price = new BigDecimal(params.get("price"));
         p.setPrice(price);
         p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("cateid"))));
-        p.setIsDelete(Boolean.FALSE);
+        p.setDelete(Boolean.FALSE);
         ProductStore ps = new ProductStore();
         ps.setCount(Integer.parseInt(params.get("count")));
         ps.setStoreId(store);
@@ -136,7 +136,7 @@ public class ProductService implements IProductService {
         List<ProductDto> listDto = new ArrayList<>();
         Page<Product> page = productReponsitory.findAll(pageable);
         for (Product product : page.getContent()) {
-            if (product.getIsDelete() != Boolean.TRUE) {
+            if (product.getDelte()!= Boolean.TRUE) {
                 Set<ProductImage> img = ProductImageService.findByProdctId(product);
 
                 ProductDto dto = ProductDto.builder().id(product.getId())
@@ -206,7 +206,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product delete(Product product) {
-        product.setIsDelete(Boolean.TRUE);
+        product.setDelete(Boolean.TRUE);
 
         return productReponsitory.save(product);
     }

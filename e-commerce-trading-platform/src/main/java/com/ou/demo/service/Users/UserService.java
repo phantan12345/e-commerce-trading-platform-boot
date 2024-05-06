@@ -35,42 +35,49 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.ou.demo.service.Roles.IRoleService;
+import com.ou.demo.service.Stores.DTO.StoreDTO;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import org.modelmapper.ModelMapper;
 import com.ou.demo.service.Stores.IStoreService;
 import com.ou.demo.util.Service.Crud;
+import java.util.ArrayList;
 
 /**
  *
  * @author ADMIN
  */
 @Service("userDetailsService")
-public class UserService extends Crud<User, UsersDto> implements IUserService  {
-
+public class UserService extends Crud<User, UsersDto> implements IUserService {
+    
     @Autowired
     private MailService MailService;
-
+    
     @Autowired
     private UserRepository UserRepository;
-
+    
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    
     @Autowired
     private IRoleService roleService;
-
+    
     @Autowired
     private ImageServiceImpl imageService;
-
+    
+    @Autowired
+    private StoreReponsitory StoreReponsitory;
+    
     @Autowired
     private ModelMapper mapper;
+    
 
 //    @Autowired
 //    private IStoreService IStoreService;
+
     public User findByUsername(String user) {
         return UserRepository.findByUsername(user);
     }
-
+    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User users = UserRepository.findByUsername(username);
@@ -87,19 +94,20 @@ public class UserService extends Crud<User, UsersDto> implements IUserService  {
         return new org.springframework.security.core.userdetails.User(
                 users.getUsername(), users.getPassword(), authorities);
     }
-
+    
     @Override
     public boolean addUsers(Map<String, String> params, MultipartFile file) {
-
+        
         User u = new User();
         u.setUsername(params.get("username"));
         u.setPassword(this.passwordEncoder.encode(params.get("password")));
         u.setEmail(params.get("email"));
         u.setPhone(params.get("phone"));
-        u.setRoleId(roleService.findRoleByRoleName("USER"));
-
+        
         u.setActive(Boolean.FALSE);
         u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
+        u.setRoleId(roleService.findRoleByRoleName("USER"));
+        u.setName(params.get("username"));
         User user = UserRepository.save(u);
         if (user != null) {
             Mail mail = new Mail();
@@ -110,32 +118,32 @@ public class UserService extends Crud<User, UsersDto> implements IUserService  {
             MailService.sendEmail(user, mail);
             return true;
         }
-
+        
         return false;
-
+        
     }
-
+    
     @Override
     public User updateActice(int id) {
-
+        
         User user = UserRepository.findById(id).get();
         try {
-            if (user.getRoleId().getName().equals(roleService.findRoleByRoleName("USER").getName())) {
-                user.setRoleId(roleService.findRoleByRoleName("SALER"));
-                return UserRepository.save(user);
-            }
+            user.setRoleId(roleService.findRoleByRoleName("USER"));
+            return UserRepository.save(user);
+            
         } catch (Exception e) {
-
+            
         }
         return null;
-
+        
     }
-
+    
     @Override
-    public User findById(int id) {
-        return UserRepository.findById(id).get();
+    public UsersDto findDtoById(int id) {
+        UsersDto user = mapper.map(UserRepository.findById(id).get(), UsersDto.class);
+        return user;
     }
-
+    
     @Override
     public User update(User user) {
         try {
@@ -147,9 +155,7 @@ public class UserService extends Crud<User, UsersDto> implements IUserService  {
         }
         return null;
     }
-
-   
-
+    
     @Override
     public User addAdmin() {
         User u = new User();
@@ -157,26 +163,39 @@ public class UserService extends Crud<User, UsersDto> implements IUserService  {
         u.setPassword(this.passwordEncoder.encode("admin"));
         u.setEmail("admin@gmail.com");
         u.setPhone("037274593");
-        u.setRoleId(roleService.findRoleByRoleName("ADMIN"));
+        
         u.setAvatar("https://res.cloudinary.com/ddznsqfbo/image/upload/v1709851294/ubdmn5lmxddsbvqw0hsx.png");
         u.setActive(Boolean.TRUE);
-
-        return UserRepository.save(u);
+        u.setDelete(false);
+        u.setRoleId(roleService.findRoleByRoleName("ADMIN"));
+        User user = UserRepository.save(u);
+        return user;
     }
-
+    
     @Override
     public UsersDto getUserDetails(String username) {
-        UsersDto dto = mapper.map(UserRepository.findByUsername(username), UsersDto.class);
-
-        dto.setRoleId(UserRepository.findByUsername(username).getRoleId());
+        User user = UserRepository.findByUsername(username);
+        UsersDto dto = UsersDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .avatar(user.getAvatar())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .roleId(user.getRoleId())
+                .build();
+        
+      
         return dto;
     }
-
+    
     @Override
     public List<User> getRequestment() {
         return UserRepository.getRequestment();
     }
-
-   
-
+    
+    @Override
+    public User findById(int id) {
+        return UserRepository.findById(id).get();
+    }
+    
 }

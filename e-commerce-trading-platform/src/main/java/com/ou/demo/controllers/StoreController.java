@@ -33,6 +33,8 @@ import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.service.Stores.IStoreService;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -66,9 +68,9 @@ public class StoreController {
 
     @GetMapping("/store")
     public ResponseEntity<?> getStore(@CurrentUser UsersDto currentUser) {
-                       User user = UserService.findById(currentUser.getId());
+             User user = UserService.findById(currentUser.getId());
 
-            Store store = storeService.findStoreByUserID(user);
+            Store store = storeService.findStoreById(user.getId());
 
             if (store.getIsDelete() == Boolean.TRUE) {
                 return new ResponseEntity<>("USER NOT ACCEPTED", HttpStatus.NOT_ACCEPTABLE);
@@ -104,16 +106,16 @@ public class StoreController {
 //
 //    }
 
-    @GetMapping("/stat/{id}")
-    public ResponseEntity<?> getStat(@PathVariable("id") int id, @RequestBody DateDto dto) {
-
-        Store s = storeService.findStoreById(id);
-        if (s != null) {
-            return ResponseEntity.ok().body(OrderService.stat(s, dto));
-        }
-        return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-
-    }
+//    @GetMapping("/stat/{id}")
+//    public ResponseEntity<?> getStat(@PathVariable("id") int id, @RequestBody DateDto dto) {
+//
+//        Store s = storeService.findStoreById(id);
+//        if (s != null) {
+//            return ResponseEntity.ok().body(OrderService.stat(s, dto));
+//        }
+//        return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
+//
+//    }
 
     @DeleteMapping("/store/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") int id) {

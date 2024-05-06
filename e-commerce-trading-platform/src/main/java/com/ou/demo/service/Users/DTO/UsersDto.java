@@ -5,7 +5,10 @@
 package com.ou.demo.service.Users.DTO;
 
 import com.ou.demo.pojos.Role;
+import com.ou.demo.pojos.Store;
 import jakarta.persistence.Column;
+import java.util.List;
+import java.util.Set;
 import lombok.*;
 
 /**
@@ -19,15 +22,16 @@ import lombok.*;
 @AllArgsConstructor
 public class UsersDto {
 
-    private Integer id;
-    private String username;
-    private String password;
-    private String avatar;
-    private String email;
-    private Boolean active;
-    private String phone;
-    private boolean isDelete;
-    private String acceptToken;
-    private Role roleId;
+    public Integer id;
+    public String username;
+    public String password;
+    public String avatar;
+    public String email;
+    public Boolean active;
+    public String phone;
+    public boolean isDelete;
+    public String acceptToken;
+    public Role roleId;
+    public String name;
 
 }

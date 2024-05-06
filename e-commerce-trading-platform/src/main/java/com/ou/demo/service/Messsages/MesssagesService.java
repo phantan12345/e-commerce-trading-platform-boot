@@ -5,15 +5,18 @@
 package com.ou.demo.service.Messsages;
 
 import com.ou.demo.pojos.Messages;
+import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.MessagesRepository;
 import com.ou.demo.repositories.UserRepository;
 import com.ou.demo.service.Messsages.DTO.MessageSummaryDto;
 import com.ou.demo.service.Messsages.DTO.MessagesDto;
 import com.ou.demo.service.Messsages.DTO.UpdateMessageStatusDto;
+import com.ou.demo.service.Stores.StoreService;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.util.Service.Crud;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -38,53 +41,57 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
     @Autowired
     private IUserService userService;
 
-    //    SELECT * FROM messages WHERE (sent_by = 4 AND sent_to = 6) OR (sent_by = 6 AND sent_to=4) ORDER BY message_id
-    public List<MessageSummaryDto> getUserMessages(int userId, Integer pageNumber, Integer pageSize) {
-        Pageable paginationObject = PageRequest.of(pageNumber, pageSize);
+    @Autowired
+    private StoreService storeService;
 
-        List<Object[]> messages = messagesRepository.getUserDistinctMessages(userId, paginationObject);
+    //    SELECT * FROM messages WHERE (sent_by = 4 AND sent_to = 6) OR (sent_by = 6 AND sent_to=4) ORDER BY message_id
+    public List<MessageSummaryDto> getUserMessages(UsersDto userId, Integer pageNumber, Integer pageSize) {
+
+        List<Object[]> messages = new ArrayList<>();
+
+        messages = messagesRepository.getUserDistinctMessages(userId.getId());
+
         return messages.stream()
                 .map(messageSummaryObject -> new MessageSummaryDto(
-                userId,
+                userId.getId(),
                 Integer.valueOf(messageSummaryObject[0].toString()),
                 Integer.valueOf(messageSummaryObject[1].toString()),
                 messageSummaryObject[2].toString(),
                 messageSummaryObject[3].toString(),
                 messageSummaryObject[4].toString(),
-                messageSummaryObject[5].toString(),
+                Integer.valueOf(messageSummaryObject[5].toString()),
                 Integer.valueOf(messageSummaryObject[6].toString())))
                 .toList();
     }
 
     @Override
-    public List<MessagesDto> getUserMessagesWithUser(Integer loggedInUserId, Integer chatRecipientId, Integer pageNumber, Integer pageSize) {
-        Pageable paginationObject = PageRequest.of(pageNumber, pageSize);
-        System.out.println(userService.findById(loggedInUserId));
-        List<Messages> messages = messagesRepository.getUserMessagesWithUser(userService.findById(loggedInUserId), userService.findById(chatRecipientId), paginationObject);
+    public List<MessagesDto> getUserMessagesWithUser(UsersDto loggedInUserId, Integer chatRecipientId) {
+        List<Messages> messages = messagesRepository.getUserMessagesWithUser(loggedInUserId.getId(), chatRecipientId);
 
         return messages.stream().map(message -> MessagesDto.builder()
-                .sentBy(message.getSentBy())
+                .sentBy(message.getSentBy().getId())
                 .message(message.getMessage())
                 .messageId(message.getId())
                 .status(message.getStatus())
-                .sentTo(message.getSentTo())
+                .sentTo(message.getSentTo().getId())
                 .build()).toList();
     }
 
     @Override
     public MessagesDto postMessage(UsersDto loggedInUser, MessagesDto messagesDto) {
+
         Messages savedMessage = messagesRepository.save(
                 Messages.builder()
                         .sentBy(new User(loggedInUser.getId()))
-                        .sentTo(new User(messagesDto.getSentTo().getId()))
+                        .sentTo(new User(messagesDto.getSentTo()))
                         .message(messagesDto.getMessage())
                         .status("U")
                         .build());
 
         MessagesDto savedMessagesDto = MessagesDto.builder()
                 .message(savedMessage.getMessage())
-                .sentTo(savedMessage.getSentTo())
-                .sentBy(savedMessage.getSentBy())
+                .sentTo(savedMessage.getSentTo().getId())
+                .sentBy(savedMessage.getSentBy().getId())
                 .messageId(savedMessage.getId())
                 .status(savedMessage.getStatus())
                 .build();
@@ -92,14 +99,13 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
         MessageSummaryDto dto = new MessageSummaryDto(savedMessage.getSentTo().getId(),
                 loggedInUser.getId(),
                 savedMessagesDto.getMessageId(),
-                loggedInUser.getUsername(),
+                loggedInUser.getName(),
                 loggedInUser.getAvatar(),
                 savedMessage.getMessage(),
-                savedMessagesDto.getStatus(),
+                1,
                 loggedInUser.getId()
         );
-
-        messagingTemplate.convertAndSendToUser(String.valueOf(savedMessagesDto.getSentTo().getId()), "/reply", dto);
+        messagingTemplate.convertAndSendToUser(String.valueOf(savedMessagesDto.getSentTo()), "/reply", dto);
         return savedMessagesDto;
     }
 

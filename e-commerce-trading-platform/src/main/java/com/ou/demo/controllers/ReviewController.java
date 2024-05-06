@@ -51,8 +51,7 @@ public class ReviewController {
         User user = UserService.findById(currentUser.getId());
         Review Reriew = ReviewService.addComment(c, user, id, 0);
 
-        return new ResponseEntity<>(Reriew == null ? "orror find products"
-                : new ResponseEntity(Reriew, HttpStatus.OK), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Reriew, HttpStatus.OK);
 
     }
 
@@ -62,12 +61,13 @@ public class ReviewController {
 
         User user = UserService.findById(currentUser.getId());
         Review Reriew = ReviewService.addComment(c, user, proId, id);
-        return new ResponseEntity<>(Reriew == null ? new ResponseEntity<>("You do not have permission to update this comment", HttpStatus.BAD_REQUEST) : Reriew, HttpStatus.OK);
+        return new ResponseEntity<>(Reriew, HttpStatus.OK);
 
     }
 
     @GetMapping("/product/{id}/comment")
     public ResponseEntity<List<?>> getAllCommentsByProduct(@PathVariable("id") int id) {
+
         return new ResponseEntity<>(ReviewService.findAllCommentsByProductId(ProductService.findById(id)), HttpStatus.OK);
     }
 
@@ -78,7 +78,7 @@ public class ReviewController {
         if (dto != null) {
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

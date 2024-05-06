@@ -42,11 +42,11 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
 
     @Override
     public Store Create(StoreDTO input, User u) {
-        Store store=new Store(input.getName(), input.getAddress(),  u);
-        Role role = RoleService.findRoleByRoleName("SELLER");
+        Store store=new Store( input.getAddress(),  u);
+        Role role = RoleService.findRoleByRoleName("SALER");
         if (role != null) {
             u.setRoleId(role);
-
+            u.setName(input.getName());
             userService.update(u);
             return this.storeReponsitory.save(store);
         }
@@ -55,10 +55,7 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
 
     }
 
-    @Override
-    public Store findStoreByUserID(User id) {
-        return storeReponsitory.findStoreByUserID(id);
-    }
+    
 
 
 

@@ -65,7 +65,7 @@ public class ProductStoreController {
     @GetMapping("/product-store")
     public ResponseEntity<?> getProduct(@CurrentUser UsersDto currentUser) {
         User user = UserService.findById(currentUser.getId());
-        Store s = StoreService.findStoreByUserID(user);
+        Store s = StoreService.findStoreById(user.getId());
         List<ProductDto> dto = ProductStoreService.findAllByStore(s);
         if (dto == null) {
             return new ResponseEntity<>("orror find products",
@@ -92,7 +92,7 @@ public class ProductStoreController {
     @PostMapping("/stat")
     public ResponseEntity<?> getStat(@CurrentUser UsersDto currentUser, @RequestBody DateDto dto) {
         User user = UserService.findById(currentUser.getId());
-        Store s = StoreService.findStoreByUserID(user);
+        Store s = StoreService.findStoreById(user.getId());
         return ResponseEntity.ok().body(OrderService.stat(s, dto));
 
     }

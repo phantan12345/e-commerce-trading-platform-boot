@@ -19,9 +19,9 @@ import java.util.List;
  */
 public interface IMessagesService extends ICrud<Messages, MessagesDto> {
 
-    List<MessageSummaryDto> getUserMessages(int userId, Integer pageNumber, Integer pageSize);
+    List<MessageSummaryDto> getUserMessages(UsersDto userId, Integer pageNumber, Integer pageSize);
 
-    List<MessagesDto> getUserMessagesWithUser(Integer loggedInUserId, Integer chatRecipientId, Integer pageNumber, Integer pageSize);
+    List<MessagesDto> getUserMessagesWithUser(UsersDto loggedInUserId, Integer chatRecipientId );
 
     MessagesDto postMessage(UsersDto loggedInUser, MessagesDto messagesDto);
 

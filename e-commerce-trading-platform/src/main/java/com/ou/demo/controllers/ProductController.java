@@ -68,7 +68,7 @@ public class ProductController {
     public ResponseEntity<?> addPRoduct(@CurrentUser UsersDto currentUser, @Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
         User user = UserService.findById(currentUser.getId());
 
-        Store store = storeService.findStoreByUserID(user);
+        Store store = storeService.findStoreById(user.getId());
 
         if (store.getIsDelete() == Boolean.FALSE) {
             ProductDto dto = productService.create(params, file, store);
@@ -108,8 +108,8 @@ public class ProductController {
     public ResponseEntity<?> add(@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) {
 
         User userCuren = UserService.findById(currentUser.getId());
-
-        Object cart = this.receiptService.addReceipt(carts, userCuren);
+        carts.setUser(userCuren);
+        Object cart = this.receiptService.addReceipt(carts);
         if (cart == null) {
             return new ResponseEntity<>("ERROR PAYMENT METHOD ",
                     HttpStatus.BAD_REQUEST
@@ -178,7 +178,7 @@ public class ProductController {
                 return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
             } else {
                 p.setProductName(dto.getProductName());
-                p.setIsDelete(Boolean.FALSE);
+                p.setDelete(Boolean.FALSE);
                 p.setCategoryId(CategoryService.findCateById(dto.getCateId()));
                 p.setPrice(dto.getPrice());
                 return new ResponseEntity<>(productService.update(p), HttpStatus.OK);
