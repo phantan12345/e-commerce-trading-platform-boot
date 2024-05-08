@@ -20,6 +20,7 @@ import com.ou.demo.service.Stores.DTO.StoreDTO;
 import com.ou.demo.util.Service.Crud;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.service.Stores.IStoreService;
+import org.modelmapper.ModelMapper;
 
 /**
  *
@@ -40,9 +41,12 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
     @Autowired
     private IRoleService RoleService;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
     public Store Create(StoreDTO input, User u) {
-        Store store=new Store( input.getAddress(),  u);
+        Store store = new Store(input.getAddress(), u);
         Role role = RoleService.findRoleByRoleName("SALER");
         if (role != null) {
             u.setRoleId(role);
@@ -55,21 +59,22 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
 
     }
 
-    
-
-
-
     @Override
     public Store findStoreById(int id) {
         return storeReponsitory.findById(id).get();
     }
 
-
-
- 
-
     @Override
     public List<Store> getStores() {
-        return  storeReponsitory.findAll();
+        return storeReponsitory.findAll();
+    }
+
+    @Override
+    public StoreDTO findStoreDTOById(int id) {
+        Store store= storeReponsitory.findById(id).get();
+        return StoreDTO.builder()
+                .address(store.getAddress())
+                .name(store.getUser().getName())
+                .build();
     }
 }

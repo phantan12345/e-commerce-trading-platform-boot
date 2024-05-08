@@ -46,6 +46,7 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
 
     //    SELECT * FROM messages WHERE (sent_by = 4 AND sent_to = 6) OR (sent_by = 6 AND sent_to=4) ORDER BY message_id
     public List<MessageSummaryDto> getUserMessages(UsersDto userId, Integer pageNumber, Integer pageSize) {
+        Pageable paginationObject = PageRequest.of(pageNumber, pageSize);
 
         List<Object[]> messages = new ArrayList<>();
 
@@ -65,15 +66,17 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
     }
 
     @Override
-    public List<MessagesDto> getUserMessagesWithUser(UsersDto loggedInUserId, Integer chatRecipientId) {
+    public List<MessagesDto> getUserMessagesWithUser(UsersDto loggedInUserId, Integer chatRecipientId, Integer pageNumber, Integer pageSize) {
+        Pageable paginationObject = PageRequest.of(pageNumber, pageSize);
+
         List<Messages> messages = messagesRepository.getUserMessagesWithUser(loggedInUserId.getId(), chatRecipientId);
 
         return messages.stream().map(message -> MessagesDto.builder()
-                .sentBy(message.getSentBy().getId())
+                .sentBy(message.getSentBy())
                 .message(message.getMessage())
                 .messageId(message.getId())
                 .status(message.getStatus())
-                .sentTo(message.getSentTo().getId())
+                .sentTo(message.getSentTo())
                 .build()).toList();
     }
 
@@ -83,15 +86,15 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
         Messages savedMessage = messagesRepository.save(
                 Messages.builder()
                         .sentBy(new User(loggedInUser.getId()))
-                        .sentTo(new User(messagesDto.getSentTo()))
+                        .sentTo(new User(messagesDto.getSentTo().getId()))
                         .message(messagesDto.getMessage())
                         .status("U")
                         .build());
 
         MessagesDto savedMessagesDto = MessagesDto.builder()
                 .message(savedMessage.getMessage())
-                .sentTo(savedMessage.getSentTo().getId())
-                .sentBy(savedMessage.getSentBy().getId())
+                .sentTo(savedMessage.getSentTo())
+                .sentBy(savedMessage.getSentBy())
                 .messageId(savedMessage.getId())
                 .status(savedMessage.getStatus())
                 .build();
@@ -105,7 +108,7 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
                 1,
                 loggedInUser.getId()
         );
-        messagingTemplate.convertAndSendToUser(String.valueOf(savedMessagesDto.getSentTo()), "/reply", dto);
+        messagingTemplate.convertAndSendToUser(String.valueOf(savedMessagesDto.getSentTo().getId()), "/reply", dto);
         return savedMessagesDto;
     }
 

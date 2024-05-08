@@ -14,6 +14,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class StoreDTO {
 
     public String name;

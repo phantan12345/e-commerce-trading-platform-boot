@@ -18,8 +18,9 @@ public interface IStoreService extends ICrud<Store, StoreDTO> {
 
     Store Create(StoreDTO store, User u);
 
-
     Store findStoreById(int id);
+
+    StoreDTO findStoreDTOById(int id);
 
     List<Store> getStores();
 

@@ -38,9 +38,9 @@ public class MessagesController {
         return ResponseEntity.ok().body(messagesService.getUserMessages(user, pageNumber, pageSize));
     }
 
-    @GetMapping("{chatRecipientId}")
-    public ResponseEntity<List<MessagesDto>> getUserMessagesWithUser(@CurrentUser UsersDto user, @PathVariable("chatRecipientId") int chatRecipientId) {
-        return ResponseEntity.ok().body(messagesService.getUserMessagesWithUser(user, chatRecipientId));
+    @GetMapping("{chatRecipientId}/{pageNumber}/{pageSize}")
+    public ResponseEntity<List<MessagesDto>> getUserMessagesWithUser(@CurrentUser UsersDto user, @PathVariable("chatRecipientId") int chatRecipientId,@PathVariable("pageNumber") int pageNumber,@PathVariable("pageSize") int pageSize) {
+        return ResponseEntity.ok().body(messagesService.getUserMessagesWithUser(user, chatRecipientId,pageNumber,pageSize));
     }
 
     @PostMapping("")

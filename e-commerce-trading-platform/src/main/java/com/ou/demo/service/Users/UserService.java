@@ -182,6 +182,7 @@ public class UserService extends Crud<User, UsersDto> implements IUserService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .roleId(user.getRoleId())
+                .name(user.getName())
                 .build();
         
       

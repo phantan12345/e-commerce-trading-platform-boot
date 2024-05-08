@@ -52,7 +52,7 @@ public interface MessagesRepository extends JpaRepository<Messages, Integer> {
             + "ORDER BY "
             + "    latest_message_id desc",
             nativeQuery = true)
-    List<Object[]> getUserDistinctMessages(@Param("userId") Integer userId);
+    List<Object[]> getUserDistinctMessages(@Param("userId") Integer userId );
 
     @Query("SELECT m  FROM Messages m WHERE (m.sentBy.id = :loggedInUserId AND m.sentTo.id = :chatRecipientId) OR (m.sentBy.id = :chatRecipientId AND m.sentTo.id = :loggedInUserId) ORDER BY m.id DESC")
     List<Messages> getUserMessagesWithUser(@Param("loggedInUserId") int loggedInUserId, @Param("chatRecipientId") int chatRecipientId);
