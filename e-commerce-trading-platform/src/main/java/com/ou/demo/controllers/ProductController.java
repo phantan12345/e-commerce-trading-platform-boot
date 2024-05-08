@@ -88,7 +88,14 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<?> getProducts(@CurrentUser UsersDto currenUser) {
         User user = UserService.findById(currenUser.getId());
-        List<ProductDto> dto = productService.findAll(user);
+        List<ProductDto> dto;
+        if (user != null) {
+            dto = productService.findAll(user);
+
+        }
+        else{
+            dto=productService.findAll();
+        }
         if (dto != null) {
             return new ResponseEntity<>(
                     dto, HttpStatus.OK);

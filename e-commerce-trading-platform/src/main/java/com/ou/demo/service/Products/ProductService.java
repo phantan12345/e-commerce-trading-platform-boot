@@ -220,4 +220,12 @@ public class ProductService implements IProductService {
     private ProductDto convertToDto(Product product) {
         return modelMapper.map(product, ProductDto.class);
     }
+
+    @Override
+    public List<ProductDto> findAll() {
+
+        return productReponsitory.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 }
