@@ -4,10 +4,13 @@
  */
 package com.ou.demo.service.Shipment;
 
+import com.ou.demo.pojos.Shipment;
+import java.util.List;
+
 /**
  *
  * @author ADMIN
  */
 public interface IShipmentService {
-    
+    List<Shipment> getListShipmentByCurrenUser(int id);
 }

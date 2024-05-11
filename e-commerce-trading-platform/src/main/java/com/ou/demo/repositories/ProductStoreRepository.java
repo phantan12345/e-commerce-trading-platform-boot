@@ -7,6 +7,7 @@ package com.ou.demo.repositories;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
+import com.ou.demo.service.Products.DTO.ProductSumary;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,6 +28,6 @@ public interface ProductStoreRepository extends JpaRepository<ProductStore, Inte
     @Query("SELECT p FROM ProductStore p WHERE p.storeId = ?1")
     List<ProductStore> findByStore(Store id);
 
-    ProductStore findByproductId(Store id);
-
+    @Query("SELECT p.productId,p.count FROM ProductStore p WHERE p.storeId = ?1")
+    List<Object[]> findListProductByStore(Store s);
 }
