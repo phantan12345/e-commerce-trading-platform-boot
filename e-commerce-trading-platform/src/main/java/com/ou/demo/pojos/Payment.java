@@ -31,11 +31,7 @@ public class Payment implements Serializable {
     private Integer id;
     @Column(name = "payment")
     private String payment;
-    @Column(name = "payment_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date paymentDate;
-    @Column(name = "acount")
-    private Long acount;
+
     @Column(name = "is_delete")
     private boolean isDelete;
     
@@ -43,9 +39,7 @@ public class Payment implements Serializable {
     @OneToMany(mappedBy = "paymentId")
     private Set<Order1> order1Set;
     
-    @JsonIgnore
-    @OneToMany(mappedBy = "paymentId")
-    private Set<User> userSet;
+
 
     public Payment() {
     }

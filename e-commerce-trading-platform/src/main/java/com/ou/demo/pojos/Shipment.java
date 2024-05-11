@@ -8,9 +8,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.Calendar;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -26,20 +29,13 @@ public class Shipment implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "shipment_date")
-    @Temporal(TemporalType.DATE)
-    private Date shipmentDate;
+
     @Column(name = "address")
     private String address;
-    @Column(name = "city")
-    private String city;
-    @Column(name = "is_delete")
-    private boolean isDelete;
-    @Column(name = "country")
-    private String country;
+
     @Column(name = "active")
     private String active;
-    
+
     @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
@@ -48,5 +44,11 @@ public class Shipment implements Serializable {
     public Shipment() {
     }
 
- 
+    public Shipment(String address, String active, Order1 orderId) {
+
+        this.address = address;
+        this.active = active;
+        this.orderId = orderId;
+    }
+
 }

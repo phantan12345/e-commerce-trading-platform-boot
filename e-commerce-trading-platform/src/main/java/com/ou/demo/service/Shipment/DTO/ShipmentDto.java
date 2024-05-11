@@ -2,28 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ou.demo.service.Wishlists.DTO;
+package com.ou.demo.service.Shipment.DTO;
 
-import com.ou.demo.pojos.ProductStore;
-import com.ou.demo.pojos.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ou.demo.pojos.Order1;
+import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  *
  * @author ADMIN
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class WishlistDTO {
+public class ShipmentDto {
 
-    private String isDelete;
-    private ProductStore productStoreId;
-    private User userId;
+    private Integer id;
+
+    private String address;
+
+    private String active;
+
+    private Order1 orderId;
 }

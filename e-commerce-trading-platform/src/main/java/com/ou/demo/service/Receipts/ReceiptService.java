@@ -10,11 +10,11 @@ import com.ou.demo.pojos.Order1;
 import com.ou.demo.pojos.Orderdetail;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
+import com.ou.demo.pojos.Shipment;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
-import com.ou.demo.pojos.Wishlist;
 import com.ou.demo.repositories.OrderReponsitory;
-import com.ou.demo.repositories.WishlistRepository;
+import com.ou.demo.repositories.ShipmentReponsitory;
 import com.ou.demo.service.ProductStores.ProductStoreService;
 import com.ou.demo.service.Vouchers.VoucherService;
 import jakarta.servlet.http.HttpSession;
@@ -56,11 +56,7 @@ public class ReceiptService implements IReceiptService {
     private VoucherService VoucherService;
 
     @Autowired
-    private WishlistRepository wishlistRepository;
-
-
-
-
+    private ShipmentReponsitory shipmentReponsitory;
 
     @Override
     public Order1 addReceipt(CartInput carts) {
@@ -68,6 +64,8 @@ public class ReceiptService implements IReceiptService {
             Voucher vou = VoucherService.findByid(carts.getVoucher());
             Order1 order = new Order1(carts.getTotal(), carts.getUser(), vou);
             Order1 o = OrderService.create(order);
+            Shipment shipment = new Shipment(carts.getAddress(), "noProcess", o);
+            shipmentReponsitory.save(shipment);
             for (CartDto c : carts.getCarts()) {
                 Orderdetail d = new Orderdetail();
                 d.setQuatity(c.getCount());
@@ -77,8 +75,6 @@ public class ReceiptService implements IReceiptService {
                     if (ps == null) {
                         throw new NullPointerException("product-store is null");
                     }
-                    Wishlist wishlist = new Wishlist(ps, carts.getUser());
-                    wishlistRepository.save(wishlist);
                     if (c.getCount() < ps.getCount()) {
                         d.setProductStoreId(ps);
                         BigDecimal total = c.getPrice();
@@ -106,5 +102,4 @@ public class ReceiptService implements IReceiptService {
 
     }
 
-   
 }
