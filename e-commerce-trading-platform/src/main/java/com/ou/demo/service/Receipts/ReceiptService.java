@@ -64,7 +64,7 @@ public class ReceiptService implements IReceiptService {
             Voucher vou = VoucherService.findByid(carts.getVoucher());
             Order1 order = new Order1(carts.getTotal(), carts.getUser(), vou);
             Order1 o = OrderService.create(order);
-            Shipment shipment = new Shipment(carts.getAddress(), "noProcess", o);
+            Shipment shipment = new Shipment(carts.getAddress(), "Wait for confirmation", o);
             shipmentReponsitory.save(shipment);
             for (CartDto c : carts.getCarts()) {
                 Orderdetail d = new Orderdetail();

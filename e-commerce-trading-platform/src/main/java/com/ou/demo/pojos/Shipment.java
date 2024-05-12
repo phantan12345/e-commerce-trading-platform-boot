@@ -43,6 +43,10 @@ public class Shipment implements Serializable {
 
     public Shipment() {
     }
+    
+    public Shipment(Integer id) {
+        this.id=id;
+    }
 
     public Shipment(String address, String active, Order1 orderId) {
 

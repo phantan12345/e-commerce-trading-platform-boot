@@ -27,4 +27,6 @@ public class ShipmentDto {
     private String active;
 
     private Order1 orderId;
+    private String provider;
+
 }

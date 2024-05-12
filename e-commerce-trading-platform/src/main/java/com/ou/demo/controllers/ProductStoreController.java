@@ -79,7 +79,7 @@ public class ProductStoreController {
     }
 
     @GetMapping("/product-store/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable int id) {
+    public ResponseEntity<?> getProductById(@PathVariable("id") int id) {
         Store s = StoreService.findStoreById(id);
 
         ProductStoreDto dto = ProductStoreService.findAllByStore(s);

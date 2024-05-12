@@ -6,6 +6,7 @@ package com.ou.demo.service.Shipment;
 
 import com.ou.demo.pojos.Shipment;
 import com.ou.demo.repositories.ShipmentReponsitory;
+import com.ou.demo.service.Shipment.DTO.ShipmentDto;
 import java.io.Serial;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,25 @@ public class ShipmentService implements IShipmentService {
     @Override
     public List<Shipment> getListShipmentByCurrenUser(int id) {
         return shipmentReponsitory.findShipmentByCurrntUser(id);
+    }
+
+    @Override
+    public Shipment doAction(ShipmentDto dto) {
+        Shipment shipment = new Shipment(dto.getId());
+
+        switch (dto.getProvider()) {
+            case "Accepted":
+                shipment.setActive("Accepted");
+                break;
+            case "Packed":
+                shipment.setActive("Packed");
+                break;
+            case "Completed":
+                shipment.setActive("Completed");
+                break;
+            default:
+                throw new AssertionError();
+        }
+        return shipmentReponsitory.save(shipment);
     }
 }

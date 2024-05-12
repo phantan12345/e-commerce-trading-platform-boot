@@ -5,6 +5,7 @@
 package com.ou.demo.service.Shipment;
 
 import com.ou.demo.pojos.Shipment;
+import com.ou.demo.service.Shipment.DTO.ShipmentDto;
 import java.util.List;
 
 /**
@@ -12,5 +13,9 @@ import java.util.List;
  * @author ADMIN
  */
 public interface IShipmentService {
+
     List<Shipment> getListShipmentByCurrenUser(int id);
+
+    Shipment doAction(ShipmentDto dto);
+
 }
