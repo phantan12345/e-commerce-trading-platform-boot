@@ -79,19 +79,19 @@ public class ProductStoreController {
 
     }
 
-    @GetMapping("/product-store/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable("id") int id) {
-        Store s = StoreService.findStoreById(id);
-
-        ProductStoreDto dto = ProductStoreService.findAllByStore(s);
-        if (dto == null) {
-            return new ResponseEntity<>("orror find products",
-                    HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(
-                    dto, HttpStatus.OK);
-        }
-    }
+//    @GetMapping("/product-store/{id}")
+//    public ResponseEntity<?> getProductById(@PathVariable("id") int id) {
+//        Store s = StoreService.findStoreById(id);
+//
+//        ProductStoreDto dto = ProductStoreService.findAllByStore(s);
+//        if (dto == null) {
+//            return new ResponseEntity<>("orror find products",
+//                    HttpStatus.BAD_REQUEST);
+//        } else {
+//            return new ResponseEntity<>(
+//                    dto, HttpStatus.OK);
+//        }
+//    }
 
     @GetMapping("/product-store/{prodId}")
     public ResponseEntity<?> getProduct(@PathVariable("prodId") int id) {

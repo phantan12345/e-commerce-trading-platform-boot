@@ -23,21 +23,31 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ProductDto {
 
     public Integer id;
-    @NotBlank(message = "PRODUCT NAME IS NULL")
     public String productName;
-    @NotBlank(message = "PRICE  IS NULL")
     public BigDecimal price;
     public int count;
     public String voucher;
-    @NotBlank(message = "IMAGE  IS NULL")
     private Set<ProductImage> productImageSet;
-    @NotBlank(message = "NOT CATEGORY")
     public Category categoryId;
-    public List<MultipartFile> file;
+
+    public ProductDto() {
+    }
+
+    public ProductDto(Integer id, String productName, BigDecimal price, int count, String voucher, Set<ProductImage> productImageSet, Category categoryId) {
+        this.id = id;
+        this.productName = productName;
+        this.price = price;
+        this.count = count;
+        this.voucher = voucher;
+        this.productImageSet = productImageSet;
+        this.categoryId = categoryId;
+    }
+    
+    
+
+ 
 
 }

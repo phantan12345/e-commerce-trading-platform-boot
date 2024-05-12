@@ -89,13 +89,12 @@ public class ProductStoreServiceImpl implements ProductStoreService {
     @Override
     public ProductStoreSumary getProduct(int prodId) {
         Product product=productReponsitory.findById(prodId).get();
-        
+        ProductDto dto=ModelMapper.map(product, ProductDto.class);
         
         ProductStore ps=ProductStoreRepository.findByProduct(product);
-        
         return  ProductStoreSumary.builder()
                 .store(ps.getStoreId())
-                .product(new ProductSumary(ps.getProductId(),ps.getCount()))
+                .product(dto)
                 .build();
     }
     

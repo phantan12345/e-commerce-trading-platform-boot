@@ -4,7 +4,9 @@
  */
 package com.ou.demo.service.ProductStores.DTO;
 
+import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.Store;
+import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.Products.DTO.ProductSumary;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +20,6 @@ import lombok.Data;
 public class ProductStoreSumary {
 
     private Store store;
-    private ProductSumary product;
+    private ProductDto product;
 
 }

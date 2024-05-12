@@ -39,31 +39,29 @@ public class Product implements Serializable {
     private BigDecimal price;
     @Column(name = "is_delete")
     private boolean isDelete;
-    
+
     @JsonIgnore
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductStore> productStoreSet;
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Review> reviewSet;
 
     public Product() {
     }
-    
-    
-    public boolean getDelte(){
+
+    public boolean getDelte() {
         return this.isDelete;
     }
-  
-    
+
 }
