@@ -4,7 +4,11 @@ pipeline {
 
  
     stages {
-
+    stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build with Maven') {
             steps {
                 sh 'mvn --version'
@@ -21,6 +25,7 @@ pipeline {
                 sh 'docker-compose up -d'
             }
         }
+        
  
     }
 
