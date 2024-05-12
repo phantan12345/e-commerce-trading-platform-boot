@@ -11,6 +11,10 @@ services:
       - "8082:8080"
     environment:
       SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/trading
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: phantan0106
+
       MYSQL_HOST: mysql
       MYSQL_USER: root
       MYSQL_PASSWORD: phantan0106
