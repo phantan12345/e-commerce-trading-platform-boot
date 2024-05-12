@@ -39,9 +39,7 @@ public class ProductStore implements Serializable {
     @Column(name = "is_delete")
     private boolean isDelete;
     
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productStoreId")
-    private Set<Wishlist> wishlistSet;
+
     
     
     @JoinColumn(name = "product_id", referencedColumnName = "id")

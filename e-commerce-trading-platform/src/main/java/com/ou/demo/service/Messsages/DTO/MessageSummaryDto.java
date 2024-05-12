@@ -16,9 +16,9 @@ public class MessageSummaryDto {
     private Integer userId;
     private Integer correspondUserId;
     private Integer messageId;
-    private String title;
+    private String chatRecipientName;
     private String avatar;
-    private String subtitle;
+    private String message;
     private int unread;
     private Integer latestMessageUserId;
 

@@ -21,7 +21,7 @@ public interface IMessagesService extends ICrud<Messages, MessagesDto> {
 
     List<MessageSummaryDto> getUserMessages(UsersDto userId, Integer pageNumber, Integer pageSize);
 
-    List<MessagesDto> getUserMessagesWithUser(UsersDto loggedInUserId, Integer chatRecipientId );
+    List<MessagesDto> getUserMessagesWithUser(UsersDto loggedInUserId, Integer chatRecipientId ,Integer pageNumber, Integer pageSize);
 
     MessagesDto postMessage(UsersDto loggedInUser, MessagesDto messagesDto);
 

@@ -87,8 +87,14 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<?> getProducts(@CurrentUser UsersDto currenUser) {
-        User user = UserService.findById(currenUser.getId());
-        List<ProductDto> dto = productService.findAll(user);
+        List<ProductDto> dto;
+        if (currenUser != null) {
+            User user = UserService.findById(currenUser.getId());
+            dto = productService.findAll(user);
+
+        } else {
+            dto = productService.findAll();
+        }
         if (dto != null) {
             return new ResponseEntity<>(
                     dto, HttpStatus.OK);
@@ -103,24 +109,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.page(page), HttpStatus.OK);
     }
 
-    @PostMapping("/pay")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> add(@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) {
 
-        User userCuren = UserService.findById(currentUser.getId());
-        carts.setUser(userCuren);
-        Object cart = this.receiptService.addReceipt(carts);
-        if (cart == null) {
-            return new ResponseEntity<>("ERROR PAYMENT METHOD ",
-                    HttpStatus.BAD_REQUEST
-            );
-        } else {
-
-            return new ResponseEntity<>(
-                    cart, HttpStatus.OK);
-        }
-
-    }
 
     @GetMapping("/product/dsc")
     public ResponseEntity<?> get() {

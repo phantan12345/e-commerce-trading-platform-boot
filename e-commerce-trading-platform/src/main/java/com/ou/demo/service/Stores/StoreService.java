@@ -10,6 +10,7 @@ import com.ou.demo.pojos.Role;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.StoreReponsitory;
+import com.ou.demo.service.GHN.GHNservice;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ import com.ou.demo.service.Stores.DTO.StoreDTO;
 import com.ou.demo.util.Service.Crud;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.service.Stores.IStoreService;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.modelmapper.ModelMapper;
 
 /**
  *
@@ -40,36 +45,51 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
     @Autowired
     private IRoleService RoleService;
 
+    @Autowired
+    private ModelMapper mapper;
+    
+    @Autowired
+    private GHNservice GHNservice;
+
     @Override
     public Store Create(StoreDTO input, User u) {
-        Store store=new Store( input.getAddress(),  u);
+        Store store = new Store(input.getAddress(), u);
         Role role = RoleService.findRoleByRoleName("SALER");
         if (role != null) {
-            u.setRoleId(role);
-            u.setName(input.getName());
-            userService.update(u);
-            return this.storeReponsitory.save(store);
+            try {
+                u.setRoleId(role);
+                u.setName(input.getName());
+                userService.update(u);
+                Store s =this.storeReponsitory.save(store);
+                Store st=storeReponsitory.findById(s .getUserId()).get();
+                st.setUser(u);
+                GHNservice.createStore(st, 1550, "420112");
+                return  st;
+            } catch (IOException ex) {
+                Logger.getLogger(StoreService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return null;
 
     }
 
-    
-
-
-
     @Override
     public Store findStoreById(int id) {
         return storeReponsitory.findById(id).get();
     }
 
-
-
- 
-
     @Override
     public List<Store> getStores() {
-        return  storeReponsitory.findAll();
+        return storeReponsitory.findAll();
+    }
+
+    @Override
+    public StoreDTO findStoreDTOById(int id) {
+        Store store= storeReponsitory.findById(id).get();
+        return StoreDTO.builder()
+                .address(store.getAddress())
+                .name(store.getUser().getName())
+                .build();
     }
 }

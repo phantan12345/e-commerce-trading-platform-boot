@@ -12,7 +12,6 @@ import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.OrderReponsitory;
-import com.ou.demo.repositories.WishlistRepository;
 import com.ou.demo.service.ProductStores.ProductStoreService;
 import java.time.LocalDate;
 import java.time.YearMonth;

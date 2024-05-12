@@ -23,8 +23,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "store")
 @Data
-@JsonIgnoreProperties({"user", "productStoreSet"})
-
 public class Store {
 
     @Id
@@ -37,9 +35,7 @@ public class Store {
     @Column(name = "is_delete")
     private Boolean isDelete;
 
-
-    @JsonIgnore
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = true, updatable = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @OneToOne(optional = false)
     private User user;
 
@@ -50,10 +46,11 @@ public class Store {
     public Store() {
     }
 
-    public Store( String address, User u) {
+    public Store(String address, User u) {
         this.address = address;
         this.isDelete = false;
         this.userId = u.getId();
+        
     }
 
 }

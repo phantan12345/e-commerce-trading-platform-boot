@@ -24,6 +24,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ou.demo.service.OrderDetails.IOrderdetailService;
+import com.ou.demo.service.Products.DTO.ProductSumary;
 import com.ou.demo.service.Products.IProductService;
 
 /**
@@ -32,77 +33,52 @@ import com.ou.demo.service.Products.IProductService;
  */
 @Service
 public class ProductStoreServiceImpl implements ProductStoreService {
-
+    
     @Autowired
     private ProductStoreRepository ProductStoreRepository;
-
+    
     @Autowired
     private ProductImageService ProductImageService;
-
+    
     @Autowired
     private ModelMapper ModelMapper;
-
+    
     @Override
     public ProductStore create(ProductStore ps) {
         return ProductStoreRepository.save(ps);
     }
-
+    
     @Override
     public ProductStore findByProduct(Product id) {
         return ProductStoreRepository.findByProduct(id);
     }
-
+    
     @Override
-    public List<ProductDto> findAllByStore(Store id) {
-        List<ProductStore> list = ProductStoreRepository.findByStore(id);
-
-        List<ProductDto> listDto = new ArrayList<>();
-
-        for (ProductStore product : list) {
-            Set<ProductImage> img = ProductImageService.findByProdctId(product.getProductId());
-            
-            ProductDto dto = ProductDto.builder().id(product.getId())
-                    .productName(product.getProductId().getProductName())
-                    .price(product.getProductId().getPrice())
-                    .categoryId(product.getProductId().getCategoryId())
-                    .productImageSet(img).build();
-            listDto.add(dto);
-
-        }
+    public ProductStoreDto findAllByStore(Store id) {
+        List<Object[]> list = ProductStoreRepository.findListProductByStore(id);
+        List<ProductSumary> listProduct = new ArrayList<>();
+        list.stream().map(mapper -> listProduct.add( new ProductSumary((Product) mapper[0], 
+                Integer.valueOf(mapper[1].toString())))).toArray();
+        
+        ProductStoreDto listDto = ProductStoreDto.builder()
+                .store(id)
+                .products(listProduct)
+                .build();
+        
         return listDto;
     }
-
+    
     @Override
     public ProductStore findById(int id) {
         return ProductStoreRepository.findById(id).get();
     }
-
+    
     @Override
     public Object stat() {
-
+        
         Order1 or = new Order1();
         Set<Orderdetail> orderDetails = or.getOrderdetailSet();
         return orderDetails;
     }
-
-    @Override
-    public ProductStore findlByStore(Store s) {
-        return ProductStoreRepository.findByproductId(s);
-    }
-
-    @Override
-    public ProductStoreDto getDto(Product id) {
-        ProductStore ps = ProductStoreRepository.findByProduct(id);
-        List<String> productImageUrls = new ArrayList<>();
-        ps.getProductId().getProductImageSet().forEach(p -> productImageUrls.add(p.getUrl()));
-        return ProductStoreDto.builder()
-                .price(ps.getProductId().getPrice())
-                .productName(ps.getProductId().getProductName())
-                .productImage(productImageUrls)
-                .categoryId(ps.getProductId().getCategoryId())
-                .store(ps.getStoreId())
-                .build();
-
-    }
-
+    
 }

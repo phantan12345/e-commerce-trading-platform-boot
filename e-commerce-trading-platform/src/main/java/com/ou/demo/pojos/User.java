@@ -48,10 +48,7 @@ public class User {
     @Column(name = "accept_token")
     private String acceptToken;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Wishlist> wishlistSet;
-
+  
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Store store;
@@ -72,10 +69,7 @@ public class User {
     @OneToMany(mappedBy = "userID")
     private Set<Order1> order1Set;
 
-    @JsonIgnore
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
-    @ManyToOne
-    private Payment paymentId;
+  
 
     @JsonIgnore
     @JoinColumn(name = "role_id", referencedColumnName = "id")

@@ -25,11 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface IProductService {
 
-    ProductDto create(Map<String,String> params, List<MultipartFile> file, Store store);
+    ProductDto create(Map<String, String> params, List<MultipartFile> file, Store store);
 
     Product findById(int id);
 
     List<ProductDto> findAll(User users);
+
+    List<ProductDto> findAll();
 
     PageDto page(int page);
 

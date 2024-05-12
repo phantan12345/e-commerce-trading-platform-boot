@@ -26,9 +26,9 @@ import lombok.Setter;
 @Builder
 public class MessagesDto {
 
-    private int sentBy;
+    private User sentBy;
 
-    private int sentTo;
+    private User sentTo;
 
     private String message;
     private Integer messageId;

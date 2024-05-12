@@ -22,13 +22,11 @@ public interface ProductStoreService {
 
     ProductStore findByProduct(Product id);
 
-    ProductStoreDto getDto(Product id);
 
-    List<ProductDto> findAllByStore(Store s);
+    ProductStoreDto findAllByStore(Store s);
 
     ProductStore findById(int id);
 
-    ProductStore findlByStore(Store s);
 
     Object stat();
 

@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ou.demo.service.Products.IProductService;
 import com.ou.demo.service.Orders.IOrderService;
+import com.ou.demo.service.Products.DTO.ProductSumary;
 import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
@@ -66,7 +67,7 @@ public class ProductStoreController {
     public ResponseEntity<?> getProduct(@CurrentUser UsersDto currentUser) {
         User user = UserService.findById(currentUser.getId());
         Store s = StoreService.findStoreById(user.getId());
-        List<ProductDto> dto = ProductStoreService.findAllByStore(s);
+        ProductStoreDto dto = ProductStoreService.findAllByStore(s);
         if (dto == null) {
             return new ResponseEntity<>("orror find products",
                     HttpStatus.BAD_REQUEST);
@@ -78,8 +79,10 @@ public class ProductStoreController {
     }
 
     @GetMapping("/product-store/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable int id) {
-        ProductStoreDto dto = ProductStoreService.getDto(ProductService.findById(id));
+    public ResponseEntity<?> getProductById(@PathVariable("id") int id) {
+        Store s = StoreService.findStoreById(id);
+
+        ProductStoreDto dto = ProductStoreService.findAllByStore(s);
         if (dto == null) {
             return new ResponseEntity<>("orror find products",
                     HttpStatus.BAD_REQUEST);
@@ -97,12 +100,5 @@ public class ProductStoreController {
 
     }
 
-    @DeleteMapping("/product-store/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") int id) {
-
-        ProductStore ps = ProductStoreService.findById(id);
-        return ResponseEntity.ok().body(ProductService.delete(ps.getProductId()));
-
-    }
 
 }
