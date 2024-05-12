@@ -12,6 +12,7 @@ import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
+import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.repositories.ProductStoreRepository;
 import com.ou.demo.service.ProductImages.ProductImageService;
 import com.ou.demo.service.ProductStores.ProductStoreService;
@@ -24,6 +25,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ou.demo.service.OrderDetails.IOrderdetailService;
+import com.ou.demo.service.ProductStores.DTO.ProductStoreSumary;
 import com.ou.demo.service.Products.DTO.ProductSumary;
 import com.ou.demo.service.Products.IProductService;
 
@@ -42,6 +44,9 @@ public class ProductStoreServiceImpl implements ProductStoreService {
     
     @Autowired
     private ModelMapper ModelMapper;
+    
+    @Autowired
+    private ProductReponsitory productReponsitory;
     
     @Override
     public ProductStore create(ProductStore ps) {
@@ -79,6 +84,19 @@ public class ProductStoreServiceImpl implements ProductStoreService {
         Order1 or = new Order1();
         Set<Orderdetail> orderDetails = or.getOrderdetailSet();
         return orderDetails;
+    }
+
+    @Override
+    public ProductStoreSumary getProduct(int prodId) {
+        Product product=productReponsitory.findById(prodId).get();
+        
+        
+        ProductStore ps=ProductStoreRepository.findByProduct(product);
+        
+        return  ProductStoreSumary.builder()
+                .store(ps.getStoreId())
+                .product(new ProductSumary(ps.getProductId(),ps.getCount()))
+                .build();
     }
     
 }

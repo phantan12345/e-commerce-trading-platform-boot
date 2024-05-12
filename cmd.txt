@@ -1,3 +1,8 @@
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolvconf/resolv.conf.d/base > /dev/null
+
+#runjenkins
+sudo systemctl status jenkins
+
 # Install Docker
 sudo apt-get install -y \
     ca-certificates \

@@ -1,5 +1,6 @@
 pipeline {
 
+    agent any
 
  
     stages {
@@ -8,7 +9,6 @@ pipeline {
             steps {
                 sh 'mvn --version'
                 sh 'java -version'
-                sh 'mvn clean package -Dmaven.test.failure.ignore=true'
             }
         }
 

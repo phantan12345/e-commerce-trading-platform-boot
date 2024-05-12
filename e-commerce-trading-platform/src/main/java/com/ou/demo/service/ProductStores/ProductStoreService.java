@@ -9,6 +9,7 @@ import com.ou.demo.service.ProductStores.DTO.ProductStoreDto;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
+import com.ou.demo.service.ProductStores.DTO.ProductStoreSumary;
 import java.util.List;
 import java.util.Map;
 
@@ -29,5 +30,7 @@ public interface ProductStoreService {
 
 
     Object stat();
+    
+    ProductStoreSumary getProduct(int prodId);
 
 }
