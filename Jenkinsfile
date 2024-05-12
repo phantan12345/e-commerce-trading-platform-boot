@@ -19,7 +19,7 @@ pipeline {
                 echo 'Deploying and cleaning'
                 sh 'cd e-commerce-trading-platform'
                 sh 'docker-compose down'
-                sh 'docker-compose up -d'
+                sh 'docker-compose up'
           
             }
         }
