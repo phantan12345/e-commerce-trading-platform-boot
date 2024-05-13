@@ -20,7 +20,7 @@ pipeline {
         stage('Deploy Spring Boot to DEV') {
             steps {
                 echo 'Deploying and cleaning'
-                sh 'cd e-commerce-trading-platform'
+                sh 'docker compose -f docker-compose.yml up -d'
                 sh 'docker-compose up -d'
             }
         }
