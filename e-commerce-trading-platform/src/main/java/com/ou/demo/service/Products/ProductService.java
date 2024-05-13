@@ -109,25 +109,34 @@ public class ProductService implements IProductService {
 
     @Override
     public List<ProductDto> findAll(User users) {
+
         List<Product> listAllProduct = productReponsitory.findAll();
         List<Orderdetail> listOrder = new ArrayList<>();
         List<Product> listHistoryProduct = new ArrayList<>();
 
-        orderReponsitory.findByUserId(users).forEach(or -> listOrder.addAll(or.getOrderdetailSet()));
-        for (Orderdetail od : listOrder) {
-            listHistoryProduct.add(productReponsitory.findById(od.getProductStoreId().getProductId().getId()).get());
+       List<Order1> o  = orderReponsitory.findByUserId(users);
+        if (o != null) {
+            o.forEach(or -> listOrder.addAll(or.getOrderdetailSet()));
+            for (Orderdetail od : listOrder) {
+                listHistoryProduct.add(productReponsitory.findById(od.getProductStoreId().getProductId().getId()).get());
+            }
+
+            Map<Product, Boolean> purchasedProductMap = listHistoryProduct.stream()
+                    .collect(Collectors.toMap(Function.identity(), id -> true));
+
+            List<Product> sortedProducts = listAllProduct.stream()
+                    .sorted(Comparator.comparing(product -> purchasedProductMap.getOrDefault(product.getId(), false)))
+                    .collect(Collectors.toList());
+            return sortedProducts.stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        }
+        else{
+        return productReponsitory.findAll().stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
         }
 
-        Map<Product, Boolean> purchasedProductMap = listHistoryProduct.stream()
-                .collect(Collectors.toMap(Function.identity(), id -> true));
-
-        List<Product> sortedProducts = listAllProduct.stream()
-                .sorted(Comparator.comparing(product -> purchasedProductMap.getOrDefault(product.getId(), false)))
-                .collect(Collectors.toList());
-
-        return sortedProducts.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -136,7 +145,7 @@ public class ProductService implements IProductService {
         List<ProductDto> listDto = new ArrayList<>();
         Page<Product> page = productReponsitory.findAll(pageable);
         for (Product product : page.getContent()) {
-            if (product.getDelte()!= Boolean.TRUE) {
+            if (product.getDelte() != Boolean.TRUE) {
                 Set<ProductImage> img = ProductImageService.findByProdctId(product);
 
                 ProductDto dto = ProductDto.builder().id(product.getId())
