@@ -21,7 +21,6 @@ pipeline {
             steps {
                 echo 'Deploying and cleaning'
                 sh 'docker compose -f docker-compose.yml up -d'
-                sh 'cd e-commerce-trading-platform'
                 sh 'docker-compose up -d'
             }
         }
