@@ -23,17 +23,18 @@ public class VNPayService {
 
     @Autowired
     private IReceiptService receiptService;
-    
+
     public String createOrder(CartInput cart) throws UnsupportedEncodingException {
-        
-        Order1 order= receiptService.addReceipt(cart);
+
+        Order1 order = receiptService.addReceipt(cart);
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
         float amount = cart.getTotal();
+        int amountInCents = (int) (amount * 100);
         String bankCode = "NCB";
 
-        String vnp_TxnRef = String.valueOf( order.getId());
+        String vnp_TxnRef = String.valueOf(order.getId());
         String vnp_IpAddr = "127.0.0.1";
 
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
@@ -42,11 +43,11 @@ public class VNPayService {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_Amount", String.valueOf(amountInCents));
         vnp_Params.put("vnp_CurrCode", "VND");
 
         vnp_Params.put("vnp_BankCode", bankCode);
-        vnp_Params.put("vnp_TxnRef",vnp_TxnRef );
+        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
 
