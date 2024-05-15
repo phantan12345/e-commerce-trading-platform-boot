@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -52,5 +53,7 @@ public class Store {
         this.userId = u.getId();
         
     }
+    
+    
 
 }

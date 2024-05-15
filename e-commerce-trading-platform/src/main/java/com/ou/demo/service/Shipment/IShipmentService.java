@@ -14,8 +14,9 @@ import java.util.List;
  */
 public interface IShipmentService {
 
-    List<Shipment> getListShipmentByCurrenUser(int id);
+    List<ShipmentDto> getListShipmentByCurrenUser(int id);
 
     Shipment doAction(ShipmentDto dto);
+    List<ShipmentDto> getListShipmentByCurrenStore(int id);
 
 }

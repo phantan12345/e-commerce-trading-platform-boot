@@ -18,10 +18,45 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShipmentReponsitory extends JpaRepository<Shipment, Integer> {
 
-    @Query(value = "SELECT s.* "
-            + "FROM shipment s "
-            + "JOIN orderdetail o ON s.order_id = o.order_id "
-            + "JOIN product_store ps ON o.product_store_id = ps.id"
-            + " WHERE ps.store_id = :userId", nativeQuery = true)
-    List<Shipment> findShipmentByCurrntUser(@Param("userId") int id);
+    @Query(value = "SELECT \n"
+            + "    s.*, \n"
+            + "    p.product_name,\n"
+            + "    od.quatity,\n"
+            + "    img.url\n"
+            + "FROM \n"
+            + "    shipment s\n"
+            + "JOIN \n"
+            + "    order1 o ON o.id = s.order_id\n"
+            + "JOIN \n"
+            + "    orderdetail od ON o.id = od.order_id\n"
+            + "JOIN \n"
+            + "    product_store ps ON ps.id = od.product_store_id\n"
+            + "JOIN \n"
+            + "    product p ON p.id = ps.product_id\n"
+            + "JOIN \n"
+            + "    product_image img ON img.product_id = p.id\n"
+            + "WHERE o.UserID=?1", nativeQuery = true)
+    List<Object[]> findShipmentByCurrntUser(@Param("userId") int id);
+    
+    
+    
+      @Query(value = "SELECT \n"
+            + "    s.*, \n"
+            + "    p.product_name,\n"
+            + "    od.quatity,\n"
+            + "    img.url\n"
+            + "FROM \n"
+            + "    shipment s\n"
+            + "JOIN \n"
+            + "    order1 o ON o.id = s.order_id\n"
+            + "JOIN \n"
+            + "    orderdetail od ON o.id = od.order_id\n"
+            + "JOIN \n"
+            + "    product_store ps ON ps.id = od.product_store_id\n"
+            + "JOIN \n"
+            + "    product p ON p.id = ps.product_id\n"
+            + "JOIN \n"
+            + "    product_image img ON img.product_id = p.id\n"
+            + "WHERE ps.store_id= ?1", nativeQuery = true)
+    List<Object[]> findShipmentByCurrntStore(@Param("userId") int id);
 }

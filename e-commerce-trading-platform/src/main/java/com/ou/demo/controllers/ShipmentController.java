@@ -30,9 +30,14 @@ public class ShipmentController {
 
     private IShipmentService shipmentService;
 
-    @GetMapping("/shipment")
+    @GetMapping("/shipment/user")
     public ResponseEntity<?> getAllByCurrentUser(@CurrentUser UsersDto user) {
         return new ResponseEntity<>(shipmentService.getListShipmentByCurrenUser(user.getId()), HttpStatus.OK);
+    }
+
+    @GetMapping("/shipment/store")
+    public ResponseEntity<?> getAllByCurrentStore(@CurrentUser UsersDto user) {
+        return new ResponseEntity<>(shipmentService.getListShipmentByCurrenStore(user.getId()), HttpStatus.OK);
     }
 
     @PostMapping("/shipment")

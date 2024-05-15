@@ -107,7 +107,7 @@ public class ProductStoreController {
     }
 
     @PostMapping("/stat")
-    public ResponseEntity<?> getStat(@CurrentUser UsersDto currentUser, @RequestBody DateDto dto) {
+        public ResponseEntity<?> getStat(@CurrentUser UsersDto currentUser, @RequestBody DateDto dto) {
         User user = UserService.findById(currentUser.getId());
         Store s = StoreService.findStoreById(user.getId());
         return ResponseEntity.ok().body(OrderService.stat(s, dto));

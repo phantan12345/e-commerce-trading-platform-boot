@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -39,8 +40,7 @@ public class Order1 implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total")
     private Float total;
-    
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Shipment> shipmentSet;
@@ -53,7 +53,7 @@ public class Order1 implements Serializable {
     @JoinColumn(name = "voucher_id", referencedColumnName = "id")
     @ManyToOne
     private Voucher voucherId;
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
@@ -61,16 +61,16 @@ public class Order1 implements Serializable {
     public Order1() {
     }
 
-    public Order1(   Float total, User userID, Voucher voucherId) {
+    public Order1(Float total, User userID, Voucher voucherId) {
         this.isDelete = false;
         this.orderDate = new Date();
         this.total = total;
         this.userID = userID;
         this.voucherId = voucherId;
     }
-    
-    
 
+    public Order1(int id) {
+        this.id=id;
+    }
 
-    
 }
