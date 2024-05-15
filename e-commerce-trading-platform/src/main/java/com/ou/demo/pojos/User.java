@@ -49,7 +49,6 @@ public class User implements Serializable {
     @Column(name = "accept_token")
     private String acceptToken;
 
-  
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Store store;
@@ -70,8 +69,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "userID")
     private Set<Order1> order1Set;
 
-  
-
     @JsonIgnore
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne
@@ -80,7 +77,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String name, String username, String password, String avatar, String email,  String phone, Role roleId) {
+    public User(String name, String username, String password, String avatar, String email, String phone, Role roleId) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -100,5 +97,4 @@ public class User implements Serializable {
         return id;
     }
 
-    
 }

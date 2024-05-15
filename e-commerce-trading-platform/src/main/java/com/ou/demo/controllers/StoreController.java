@@ -4,7 +4,6 @@
  */
 package com.ou.demo.controllers;
 
-
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.Mails.MailService;
@@ -22,18 +21,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ou.demo.service.Orders.IOrderService;
+import com.ou.demo.service.ProductStores.DTO.ProductStoreDto;
+import com.ou.demo.service.ProductStores.ProductStoreService;
 import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.service.Stores.IStoreService;
-    
 
 /**
  *
  * @author ADMIN
  */
 @CrossOrigin
-
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api")
@@ -47,6 +46,8 @@ public class StoreController {
 
     private IOrderService OrderService;
 
+    private ProductStoreService ProductStoreService;
+
     @PostMapping("/store")
     public ResponseEntity<?> createStore(@CurrentUser UsersDto currentUser, @RequestBody StoreDTO s) {
         User user = UserService.findById(currentUser.getId());
@@ -59,16 +60,30 @@ public class StoreController {
 
     @GetMapping("/store")
     public ResponseEntity<?> getStore(@CurrentUser UsersDto currentUser) {
-        User user = UserService.findById(currentUser.getId());
+        Store s = storeService.findStoreById(currentUser.getId());
 
-        return new ResponseEntity<>(storeService.findStoreDTOById(user.getId()), HttpStatus.OK);
+        ProductStoreDto dto = ProductStoreService.findAllByStore(s);
+        if (dto == null) {
+            return new ResponseEntity<>("orror find products",
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(
+                    dto, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/store/{id}")
     public ResponseEntity<?> getStore(@PathVariable("id") int id) {
-        User user = UserService.findById(id);
+        Store s = storeService.findStoreById(id);
 
-        return new ResponseEntity<>(storeService.findStoreDTOById(user.getId()), HttpStatus.OK);
+        ProductStoreDto dto = ProductStoreService.findAllByStore(s);
+        if (dto == null) {
+            return new ResponseEntity<>("orror find products",
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(
+                    dto, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/stores")

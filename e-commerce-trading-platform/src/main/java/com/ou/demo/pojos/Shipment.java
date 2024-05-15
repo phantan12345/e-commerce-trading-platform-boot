@@ -26,6 +26,7 @@ public class Shipment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -43,9 +44,9 @@ public class Shipment implements Serializable {
 
     public Shipment() {
     }
-    
+
     public Shipment(Integer id) {
-        this.id=id;
+        this.id = id;
     }
 
     public Shipment(String address, String active, Order1 orderId) {

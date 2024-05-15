@@ -36,6 +36,7 @@ public class Store {
     @Column(name = "is_delete")
     private Boolean isDelete;
 
+    
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @OneToOne(optional = false)
     private User user;
