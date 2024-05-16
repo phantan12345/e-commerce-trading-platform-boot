@@ -35,52 +35,57 @@ import com.ou.demo.service.Products.IProductService;
  */
 @Service
 public class ProductStoreServiceImpl implements ProductStoreService {
-    
+
     @Autowired
     private ProductStoreRepository ProductStoreRepository;
-    
+
     @Autowired
     private ProductImageService ProductImageService;
-    
+
     @Autowired
     private ModelMapper ModelMapper;
-    
+
     @Autowired
     private ProductReponsitory productReponsitory;
-    
+
     @Override
     public ProductStore create(ProductStore ps) {
         return ProductStoreRepository.save(ps);
     }
-    
+
     @Override
     public ProductStore findByProduct(Product id) {
         return ProductStoreRepository.findByProduct(id);
     }
-    
+
     @Override
     public ProductStoreDto findAllByStore(Store id) {
         List<Object[]> list = ProductStoreRepository.findListProductByStore(id);
         List<ProductSumary> listProduct = new ArrayList<>();
-        list.stream().map(mapper -> listProduct.add( new ProductSumary((Product) mapper[0], 
-                Integer.valueOf(mapper[1].toString())))).toArray();
-        
+
+        list.forEach(mapper -> {
+            Product product = (Product) mapper[0];
+            ProductDto productDto = ModelMapper.map(product, ProductDto.class);
+            Integer quantity = Integer.valueOf(mapper[1].toString());
+            listProduct.add(new ProductSumary(productDto, quantity));
+        });
+
         ProductStoreDto listDto = ProductStoreDto.builder()
                 .store(id)
                 .products(listProduct)
                 .build();
-        
+
         return listDto;
     }
-    
+
     @Override
     public ProductStore findById(int id) {
         return ProductStoreRepository.findById(id).get();
     }
-    
+
     @Override
     public Object stat() {
-        
+
         Order1 or = new Order1();
         Set<Orderdetail> orderDetails = or.getOrderdetailSet();
         return orderDetails;
@@ -88,14 +93,14 @@ public class ProductStoreServiceImpl implements ProductStoreService {
 
     @Override
     public ProductStoreSumary getProduct(int prodId) {
-        Product product=productReponsitory.findById(prodId).get();
-        ProductDto dto=ModelMapper.map(product, ProductDto.class);
-        
-        ProductStore ps=ProductStoreRepository.findByProduct(product);
-        return  ProductStoreSumary.builder()
+        Product product = productReponsitory.findById(prodId).get();
+        ProductDto dto = ModelMapper.map(product, ProductDto.class);
+
+        ProductStore ps = ProductStoreRepository.findByProduct(product);
+        return ProductStoreSumary.builder()
                 .store(ps.getStoreId())
                 .product(dto)
                 .build();
     }
-    
+
 }

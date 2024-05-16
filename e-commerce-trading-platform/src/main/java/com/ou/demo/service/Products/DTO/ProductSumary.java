@@ -21,11 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class ProductSumary {
 
-    public Product product;
+    public ProductDto product;
 
     public int count;
 
-    public ProductSumary(Product product, int count) {
+    public ProductSumary(ProductDto product, int count) {
         this.product = product;
         this.count = count;
     }

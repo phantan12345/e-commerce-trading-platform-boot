@@ -4,6 +4,7 @@
  */
 package com.ou.demo.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
@@ -29,6 +30,8 @@ public class ProductImage implements Serializable {
     private String url;
     @Column(name = "is_delete")
     private boolean isDelete;
+    
+    @JsonIgnore
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;

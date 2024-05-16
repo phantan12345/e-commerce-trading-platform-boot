@@ -41,7 +41,7 @@ public class ProductStore implements Serializable {
     
 
     
-    
+    @JsonIgnore
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;

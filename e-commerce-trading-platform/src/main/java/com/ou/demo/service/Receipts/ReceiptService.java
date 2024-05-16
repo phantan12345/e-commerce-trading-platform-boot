@@ -86,6 +86,7 @@ public class ReceiptService implements IReceiptService {
 
                         int count = ps.getCount() - od.getQuatity();
                         ps.setCount(count);
+
                         ProductStoreService.create(ps);
 
                     } else {

@@ -31,7 +31,7 @@ public class VNPayService {
         String vnp_Command = "pay";
         String orderType = "other";
         float amount = cart.getTotal();
-        int amountInCents = (int) (amount * 100);
+        long amountInCents = (long) (amount * 25000) * 10;
         String bankCode = "NCB";
 
         String vnp_TxnRef = String.valueOf(order.getId());
