@@ -28,13 +28,14 @@ import com.ou.demo.service.OrderDetails.IOrderdetailService;
 import com.ou.demo.service.ProductStores.DTO.ProductStoreSumary;
 import com.ou.demo.service.Products.DTO.ProductSumary;
 import com.ou.demo.service.Products.IProductService;
+import com.ou.demo.util.Service.Crud;
 
 /**
  *
  * @author ADMIN
  */
 @Service
-public class ProductStoreServiceImpl implements ProductStoreService {
+public class ProductStoreServiceImpl  implements ProductStoreService {
 
     @Autowired
     private ProductStoreRepository ProductStoreRepository;

@@ -47,7 +47,7 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
 
     @Autowired
     private ModelMapper mapper;
-    
+
     @Autowired
     private GHNservice GHNservice;
 
@@ -56,18 +56,15 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
         Store store = new Store(input.getAddress(), u);
         Role role = RoleService.findRoleByRoleName("SALER");
         if (role != null) {
-            try {
-                u.setRoleId(role);
-                u.setName(input.getName());
-                userService.update(u);
-                Store s =this.storeReponsitory.save(store);
-                Store st=storeReponsitory.findById(s .getUserId()).get();
-                st.setUser(u);
-                GHNservice.createStore(st, 1550, "420112");
-                return  st;
-            } catch (IOException ex) {
-                Logger.getLogger(StoreService.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            u.setRoleId(role);
+            u.setName(input.getName());
+            u.setActive(Boolean.TRUE);
+            userService.update(u);
+            Store s = this.storeReponsitory.save(store);
+            Store st = storeReponsitory.findById(s.getUserId()).get();
+            st.setUser(u);
+            return st;
+
         }
 
         return null;
@@ -86,7 +83,7 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
 
     @Override
     public StoreDTO findStoreDTOById(int id) {
-        Store store= storeReponsitory.findById(id).get();
+        Store store = storeReponsitory.findById(id).get();
         return StoreDTO.builder()
                 .address(store.getAddress())
                 .name(store.getUser().getName())

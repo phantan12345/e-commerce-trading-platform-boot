@@ -104,12 +104,10 @@ public class ProductController {
 
     }
 
-    @GetMapping("/product")
-    public ResponseEntity<?> getProducts(@RequestParam int page) {
-        return new ResponseEntity<>(productService.page(page), HttpStatus.OK);
+    @GetMapping("/product/{pageSize}/{pageNumber}")
+    public ResponseEntity<?> getProducts(@PathVariable("pageSize") int pageSize, @PathVariable("pageNumber") int pageNumber) {
+        return new ResponseEntity<>(productService.page(pageSize, pageNumber), HttpStatus.OK);
     }
-
-
 
     @GetMapping("/product/dsc")
     public ResponseEntity<?> get() {
@@ -135,30 +133,18 @@ public class ProductController {
 
     @DeleteMapping("/product/{id}")
     public ResponseEntity<?> deletePRoduct(@PathVariable int id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            Product p = productService.findById(id);
 
-            if (p != null) {
-                Product dto = productService.delete(p);
-                if (dto == null) {
-                    return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
-                } else {
-                    return new ResponseEntity<>(dto, HttpStatus.OK);
+        Product p = productService.findById(id);
 
-                }
-            } else {
-                return new ResponseEntity<>("error add products", HttpStatus.FORBIDDEN);
+        Product dto = productService.delete(p);
 
-            }
+        return new ResponseEntity<>(dto, HttpStatus.OK);
 
-        } else {
-            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
-        }
     }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<?> updateProduct(@RequestBody ProductInput dto, @PathVariable int id) {
+    public ResponseEntity<?> updateProduct(@RequestBody ProductInput dto, @PathVariable int id
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             Product p = productService.findById(id);

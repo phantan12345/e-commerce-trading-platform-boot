@@ -33,7 +33,7 @@ public interface IProductService {
 
     List<ProductDto> findAll();
 
-    PageDto page(int page);
+    Page<Product> page(int pageSize,int pageNumber);
 
     List<ProductDto> findAllByOrderByPriceDesc();
 

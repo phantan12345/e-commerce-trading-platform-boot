@@ -50,7 +50,7 @@ public class Store {
 
     public Store(String address, User u) {
         this.address = address;
-        this.isDelete = false;
+        this.isDelete = true;
         this.userId = u.getId();
         
     }

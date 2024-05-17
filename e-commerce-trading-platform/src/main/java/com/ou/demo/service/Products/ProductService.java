@@ -43,6 +43,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.PageImpl;
 
 /**
  *
@@ -120,24 +121,12 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public PageDto page(int p) {
-        Pageable pageable = PageRequest.of(p, 8);
-        List<ProductDto> listDto = new ArrayList<>();
-        Page<Product> page = productReponsitory.findAll(pageable);
-        for (Product product : page.getContent()) {
-            if (product.getDelte() != Boolean.TRUE) {
-                Set<ProductImage> img = ProductImageService.findByProdctId(product);
+    public Page<Product> page(int pageSize, int pageNumber) {
 
-                ProductDto dto = ProductDto.builder().id(product.getId())
-                        .productName(product.getProductName())
-                        .price(product.getPrice())
-                        .categoryId(product.getCategoryId())
-                        .productImageSet(img).build();
-                listDto.add(dto);
-            }
-        }
-
-        return PageDto.builder().listProduct(listDto).totalPage(page.getTotalPages()).build();
+        Pageable paging = PageRequest.of(pageNumber, pageSize);
+        
+        Page<Product> pageDto=productReponsitory.findAll(paging);
+        return pageDto;
     }
 
     @Override

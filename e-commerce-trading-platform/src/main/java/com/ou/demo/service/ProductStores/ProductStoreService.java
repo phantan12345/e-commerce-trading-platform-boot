@@ -10,6 +10,7 @@ import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.service.ProductStores.DTO.ProductStoreSumary;
+import com.ou.demo.util.Service.ICrud;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ import java.util.Map;
  *
  * @author ADMIN
  */
-public interface ProductStoreService {
+public interface ProductStoreService{
 
     ProductStore create(ProductStore ps);
 
