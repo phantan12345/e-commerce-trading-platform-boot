@@ -104,7 +104,6 @@ public class UserService extends Crud<User, UsersDto> implements IUserService {
         u.setEmail(params.get("email"));
         u.setPhone(params.get("phone"));
         
-        u.setActive(Boolean.FALSE);
         u.setAvatar(imageService.Cloudinary(file).get("secure_url").toString());
         u.setRoleId(roleService.findRoleByRoleName("USER"));
         u.setName(params.get("username"));
@@ -165,7 +164,6 @@ public class UserService extends Crud<User, UsersDto> implements IUserService {
         u.setPhone("037274593");
         
         u.setAvatar("https://res.cloudinary.com/ddznsqfbo/image/upload/v1709851294/ubdmn5lmxddsbvqw0hsx.png");
-        u.setActive(Boolean.TRUE);
         u.setDelete(false);
         u.setRoleId(roleService.findRoleByRoleName("ADMIN"));
         User user = UserRepository.save(u);
@@ -189,11 +187,7 @@ public class UserService extends Crud<User, UsersDto> implements IUserService {
         return dto;
     }
     
-    @Override
-    public List<User> getRequestment() {
-        return UserRepository.getRequestment();
-    }
-    
+
     @Override
     public User findById(int id) {
         return UserRepository.findById(id).get();

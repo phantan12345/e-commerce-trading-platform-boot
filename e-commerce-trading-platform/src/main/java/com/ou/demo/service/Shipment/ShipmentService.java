@@ -43,7 +43,7 @@ public class ShipmentService implements IShipmentService {
 
     @Override
     public Shipment doAction(ShipmentDto dto) {
-        Shipment shipment = new Shipment(dto.getId());
+        Shipment shipment = shipmentReponsitory.findById(dto.getId()).get();
 
         switch (dto.getProvider()) {
             case "Accepted":

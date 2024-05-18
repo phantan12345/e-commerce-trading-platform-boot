@@ -22,8 +22,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.username =?1")
     User findByUsername(String user);
 
-    @Modifying
-    @Query("SELECT u FROM User u WHERE u.active = 1")
-    List<User> getRequestment();
+ 
 
 }

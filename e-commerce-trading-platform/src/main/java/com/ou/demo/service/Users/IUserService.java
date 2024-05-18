@@ -26,7 +26,6 @@ public interface IUserService extends UserDetailsService, ICrud<User, UsersDto> 
 
     User addAdmin();
 
-    List<User> getRequestment();
 
     UsersDto getUserDetails(String username);
 

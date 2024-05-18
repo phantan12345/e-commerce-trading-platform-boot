@@ -35,8 +35,9 @@ public class Store {
     private String address;
     @Column(name = "is_delete")
     private Boolean isDelete;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
-    
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @OneToOne(optional = false)
     private User user;
@@ -50,11 +51,10 @@ public class Store {
 
     public Store(String address, User u) {
         this.address = address;
-        this.isDelete = true;
+        this.isDelete = false;
         this.userId = u.getId();
-        
+        this.isActive=false;
+
     }
-    
-    
 
 }

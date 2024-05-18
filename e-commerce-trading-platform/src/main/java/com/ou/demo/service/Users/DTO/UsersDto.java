@@ -27,7 +27,6 @@ public class UsersDto {
     public String password;
     public String avatar;
     public String email;
-    public Boolean active;
     public String phone;
     public boolean isDelete;
     public String acceptToken;

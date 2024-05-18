@@ -58,12 +58,8 @@ public class StoreService extends Crud<Store, StoreDTO> implements IStoreService
         if (role != null) {
             u.setRoleId(role);
             u.setName(input.getName());
-            u.setActive(Boolean.TRUE);
             userService.update(u);
-            Store s = this.storeReponsitory.save(store);
-            Store st = storeReponsitory.findById(s.getUserId()).get();
-            st.setUser(u);
-            return st;
+            return this.storeReponsitory.save(store);
 
         }
 
