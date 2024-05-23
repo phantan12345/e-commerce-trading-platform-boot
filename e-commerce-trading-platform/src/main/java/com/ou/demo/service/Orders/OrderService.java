@@ -48,7 +48,6 @@ public class OrderService implements IOrderService {
     public Object stat(Store store, DateDto monthAndYear) {
 
         List<Object[]> date = OrderdetailService.findByDate(monthAndYear.getMonth(), monthAndYear.getYear());
-        System.out.println(date);
         return date.stream().map(dto -> new StatDto(
                 Integer.valueOf(dto[0].toString()),
                 new BigDecimal(dto[0].toString()))).toList();
