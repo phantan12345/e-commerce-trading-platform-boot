@@ -5,7 +5,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Clone the Git repository
-                git url: 'https://your-git-repo-url/e-commerce-trading-platform-boot.git', branch: 'main'
+                git url: 'https://github.com/phantan12345/e-commerce-trading-platform-boot.git', branch: 'main'
             }
         }
         
