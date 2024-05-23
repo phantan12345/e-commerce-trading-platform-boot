@@ -20,8 +20,13 @@ pipeline {
         stage('Deploy Spring Boot to DEV') {
             steps {
                 echo 'Deploying and cleaning'
-                sh 'docker compose -f docker-compose.yml up -d'
-                sh 'docker-compose up -d'
+                   script {
+                    // Change directory to the cloned repository
+                    dir('e-commerce-trading-platform') {
+                        // Run Docker Compose
+                    sh 'docker-compose up -d'
+                    }
+                
             }
         }
         
