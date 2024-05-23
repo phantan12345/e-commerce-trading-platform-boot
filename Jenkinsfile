@@ -1,25 +1,29 @@
 pipeline {
-    agent any
-    
 
-        
-        stage('Run Docker Compose') {
+    agent any
+
+ 
+    stages {
+
+        stage('Build with Maven') {
             steps {
-                script {
-                    // Change directory to the cloned repository
-                    dir('e-commerce-trading-platform') {
-                        // Run Docker Compose
-                        sh 'docker-compose -f docker-compose.yml up -d'
-                    }
-                }
+                sh 'mvn --version'
+                sh 'java -version'
             }
         }
-    }
-    
-    post {
-        always {
-            // Cleanup
-            cleanWs()
+
+
+
+        stage('Deploy Spring Boot to DEV') {
+            steps {
+                echo 'Deploying and cleaning'
+                dir('e-commerce-trading-platform') {
+                       sh 'docker-compose up'
+                    }                
+                
+            }
         }
+ 
     }
+
 }
