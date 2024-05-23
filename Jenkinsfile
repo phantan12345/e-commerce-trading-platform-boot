@@ -1,28 +1,34 @@
 pipeline {
-
     agent any
-
- 
+    
     stages {
-
-        stage('Build with Maven') {
+        stage('Clone Repository') {
             steps {
-                sh 'java -version'
+                // Clone the Git repository
+                git url: 'https://your-git-repo-url/e-commerce-trading-platform-boot.git', branch: 'main'
             }
         }
-
-
-
-        stage('Deploy Spring Boot to DEV') {
+        
+        stage('Run Docker Compose') {
             steps {
-                echo 'Deploying and cleaning'
-                dir('e-commerce-trading-platform') {
-                       sh 'docker-compose -f docker-compose.yml up -d'
-                    }                
-                
+                script {
+                    // Change directory to the correct path where docker-compose.yml is located
+                    dir('e-commerce-trading-platform') {
+                        // Check if docker-compose is installed
+                        sh 'docker-compose --version'
+                        
+                        // Run Docker Compose
+                        sh 'docker-compose -f docker-compose.yml up -d'
+                    }
+                }
             }
         }
- 
     }
-
+    
+    post {
+        always {
+            // Cleanup
+            cleanWs()
+        }
+    }
 }
