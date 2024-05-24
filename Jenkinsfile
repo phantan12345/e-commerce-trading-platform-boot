@@ -16,8 +16,10 @@ pipeline {
         stage('Deploy Spring Boot to DEV') {
             steps {
                 echo 'Deploying and cleaning'
-                sh 'cd e-commerce-trading-platform && docker-compose up'
-                // sh 'docker-compose up'
+         dir("$WORKSPACE/e-commerce-trading-platform") {
+                    // Chạy docker-compose từ thư mục đã chọn
+                    sh 'docker-compose up -d'
+                }
             }
         }
  
