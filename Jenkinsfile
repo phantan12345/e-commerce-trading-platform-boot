@@ -6,7 +6,7 @@ pipeline {
             steps {
                 // Di chuyển đến thư mục chứa file docker-compose.yml
                 dir("$WORKSPACE/e-commerce-trading-platform") {
-                    // Chạy lệnh docker-compose up -d
+                    sh 'echo $PATH'
                     sh "docker-compose up -d"
                 }
             }
