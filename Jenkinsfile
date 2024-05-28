@@ -1,16 +1,25 @@
 pipeline {
+
     agent any
-    
+
+ 
     stages {
-        stage('Build and Deploy') {
+
+        stage('Build with Maven') {
             steps {
-                // Di chuyển đến thư mục chứa file docker-compose.yml
-                dir("$WORKSPACE/e-commerce-trading-platform") {
-                    sh 'echo $PATH'
-                    sh 'docker-compose -v'
-                    sh "docker-compose up -d"
-                }
+                sh 'java -version'
             }
         }
+
+
+
+        stage('Deploy Spring Boot to DEV') {
+            steps {
+                echo 'Deploying and cleaning'
+                sh 'docker-compose -f /path/to/docker-compose.yml up'
+            }
+        }
+ 
     }
+
 }
