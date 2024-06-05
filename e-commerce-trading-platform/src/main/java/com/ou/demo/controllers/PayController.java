@@ -6,11 +6,9 @@ package com.ou.demo.controllers;
 
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.Categorys.ICategoryService;
-import com.ou.demo.service.ProductStores.ProductStoreService;
 import com.ou.demo.service.Products.IProductService;
 import com.ou.demo.service.Receipts.DTO.CartInput;
 import com.ou.demo.service.Receipts.IReceiptService;
-import com.ou.demo.service.Stores.IStoreService;
 import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
@@ -35,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/pay")
 public class PayController {
 
-    private ProductStoreService ProductStoreService;
 
     private IReceiptService receiptService;
 

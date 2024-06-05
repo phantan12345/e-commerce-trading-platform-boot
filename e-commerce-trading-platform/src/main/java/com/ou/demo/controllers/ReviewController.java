@@ -5,7 +5,6 @@
 package com.ou.demo.controllers;
 
 import com.ou.demo.service.Reviews.DTO.ReviewDto;
-import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.pojos.Review;
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.Reviews.ReviewService;

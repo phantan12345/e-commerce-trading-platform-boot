@@ -5,7 +5,6 @@
  */
 package com.ou.demo.security;
 
-import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.service.Users.DTO.JwtResponse;
 import com.ou.demo.service.Users.DTO.UsersDto;

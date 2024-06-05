@@ -5,7 +5,6 @@
 package com.ou.demo.service.OrderDetails;
 
 import com.ou.demo.pojos.Orderdetail;
-import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.service.OrderDetails.DTO.OrderdetailDTO;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +21,6 @@ public interface IOrderdetailService extends ICrud<Orderdetail, OrderdetailDTO>{
 
     Orderdetail create(Orderdetail od);
 
-    Orderdetail findByProductStore(ProductStore ps);
 
     List<Object[]> findByDate(int month, int year);
 }

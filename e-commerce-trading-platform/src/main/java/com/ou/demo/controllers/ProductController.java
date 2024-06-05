@@ -8,9 +8,7 @@ import com.ou.demo.service.Receipts.DTO.CartInput;
 import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.Products.DTO.ProductInput;
 import com.ou.demo.pojos.Product;
-import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
-import com.ou.demo.service.ProductStores.ProductStoreService;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -37,7 +35,6 @@ import com.ou.demo.service.Receipts.IReceiptService;
 import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
-import com.ou.demo.service.Stores.IStoreService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,15 +49,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api")
 public class ProductController {
 
-    private ProductStoreService ProductStoreService;
-
     private IReceiptService receiptService;
 
     private IProductService productService;
 
     private IUserService UserService;
-
-    private IStoreService storeService;
 
     private ICategoryService CategoryService;
 
@@ -68,39 +61,22 @@ public class ProductController {
     public ResponseEntity<?> addPRoduct(@CurrentUser UsersDto currentUser, @Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
         User user = UserService.findById(currentUser.getId());
 
-        Store store = storeService.findStoreById(user.getId());
-
-        if (store.getIsDelete() == Boolean.FALSE) {
-            ProductDto dto = productService.create(params, file, store);
-            if (dto == null) {
-                return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
-            } else {
-                return new ResponseEntity<>(dto, HttpStatus.OK);
-
-            }
+        ProductDto dto = productService.create(params, file, user);
+        if (dto == null) {
+            return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>("error add products", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
 
         }
-
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> getProducts(@CurrentUser UsersDto currenUser) {
+    public ResponseEntity<?> getProducts() {
         List<ProductDto> dto;
-        if (currenUser != null) {
-            User user = UserService.findById(currenUser.getId());
-            dto = productService.findAll(user);
 
-        } else {
-            dto = productService.findAll();
-        }
-        if (dto != null) {
-            return new ResponseEntity<>(
-                    dto, HttpStatus.OK);
-        }
+        dto = productService.findAll();
         return new ResponseEntity<>(
-                "orror find products", HttpStatus.BAD_REQUEST);
+                dto, HttpStatus.OK);
 
     }
 

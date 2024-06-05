@@ -4,21 +4,22 @@
  */
 package com.ou.demo.repositories;
 
-import com.ou.demo.pojos.Role;
-import com.ou.demo.pojos.Store;
+import com.ou.demo.pojos.Address;
 import com.ou.demo.pojos.User;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author ADMIN
  */
 @Repository
-public interface StoreReponsitory extends JpaRepository<Store, Integer> {
-
-  
-
-
+@Transactional
+public interface AddressRepository  extends JpaRepository<Address, Integer>{
+    
+    @Query("SELECT o FROM Address o WHERE o.userId = ?1")
+    List<Address> findAddressesCurentUser(User user);
 }

@@ -1,7 +1,6 @@
 package com.ou.demo.service.Users;
 
 import com.ou.demo.pojos.User;
-import com.ou.demo.service.Stores.DTO.StoreDTO;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.util.Service.ICrud;
 import java.util.List;

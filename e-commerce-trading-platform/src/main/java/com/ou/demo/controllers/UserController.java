@@ -2,10 +2,8 @@ package com.ou.demo.controllers;
 
 import com.ou.demo.service.Users.DTO.JwtResponse;
 import com.ou.demo.service.Users.DTO.Login;
-import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
-import com.ou.demo.repositories.StoreReponsitory;
 import com.ou.demo.security.JwtUtils;
 import com.ou.demo.service.Mails.DTO.Mail;
 import com.ou.demo.service.Mails.MailService;
@@ -43,8 +41,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.ou.demo.service.Users.IUserService;
-import com.ou.demo.service.Stores.IStoreService;
-import com.ou.demo.service.Stores.StoreService;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 /**
@@ -64,10 +62,6 @@ public class UserController {
     private JwtUtils jwtUtils;
 
     private AuthenticationManager authenticationManager;
-
-    private StoreService StoreService;
-
-    private StoreReponsitory StoreReponsitory;
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
@@ -100,6 +94,8 @@ public class UserController {
 
     }
 
+ 
+
     @GetMapping("/users")
     public ResponseEntity<?> getUsers() {
         return new ResponseEntity<>(UserService.getAll(), HttpStatus.OK);
@@ -119,8 +115,6 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-
-
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(UserService.Delete(id),
@@ -131,9 +125,6 @@ public class UserController {
     public ResponseEntity<?> requestment(@PathVariable(value = "id") int id) {
 
         User user = UserService.findById(id);
-        Store store = StoreService.findStoreById(id);
-        store.setIsActive(Boolean.TRUE);
-        StoreReponsitory.save(store);
         if (user != null) {
             if (user != null) {
                 Mail mail = new Mail();
@@ -142,7 +133,6 @@ public class UserController {
                 mail.setMailSubject("Spring Boot - Email Register");
                 mail.setMailContent("BẠN ĐÃ ĐĂNG KÍ THÀNH CÔNG");
 
-                MailService.sendEmailStore(StoreService.findStoreById(user.getId()), mail);
             }
             return new ResponseEntity<>(user == null ? "orror find products"
                     : new ResponseEntity(user, HttpStatus.NOT_MODIFIED), HttpStatus.OK);

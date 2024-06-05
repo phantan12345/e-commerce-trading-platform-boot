@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
@@ -33,20 +34,23 @@ public class Orderdetail implements Serializable {
     private BigDecimal total;
     @Column(name = "is_delete")
     private boolean isDelete;
-    
+
     @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Order1 orderId;
+
+    @JsonIgnore
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Product productId;
+    
     
     @JsonIgnore
-    @JoinColumn(name = "product_store_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private ProductStore productStoreId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderdetailId")
+    private Set<Shipment> shipmentSet;
 
     public Orderdetail() {
     }
 
-
-    
 }

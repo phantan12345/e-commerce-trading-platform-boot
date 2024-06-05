@@ -6,7 +6,6 @@ package com.ou.demo.service.ProductImages;
 
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
-import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.repositories.ProductImageReponsitory;
 import com.ou.demo.service.ProductImages.ProductImageService;
 import java.util.List;

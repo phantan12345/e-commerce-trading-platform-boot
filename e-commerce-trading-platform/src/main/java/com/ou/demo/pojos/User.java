@@ -40,17 +40,14 @@ public class User implements Serializable {
     private String avatar;
     @Column(name = "email")
     private String email;
- 
+    @Column(name = "address", length = 99999)
+    private String[] address;
     @Column(name = "Phone")
     private String phone;
     @Column(name = "is_delete")
     private boolean isDelete;
-    @Column(name = "accept_token")
-    private String acceptToken;
-
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private Store store;
+    @Column(name = "refech_token")
+    private String refechToken;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
@@ -59,6 +56,9 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sentBy")
     private Set<Messages> messagesSet;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<Address> addressSet;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sentTo")
@@ -72,6 +72,10 @@ public class User implements Serializable {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne
     private Role roleId;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<Product> productSet;
 
     public User() {
     }

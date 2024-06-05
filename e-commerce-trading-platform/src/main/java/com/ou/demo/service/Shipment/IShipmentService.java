@@ -17,6 +17,6 @@ public interface IShipmentService {
     List<ShipmentDto> getListShipmentByCurrenUser(int id);
 
     Shipment doAction(ShipmentDto dto);
-    List<ShipmentDto> getListShipmentByCurrenStore(int id);
 
+    List<ShipmentDto> getListShipmentByCurrenStore();
 }

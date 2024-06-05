@@ -8,8 +8,7 @@ import com.ou.demo.service.Products.DTO.PageDto;
 import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.Products.DTO.ProductInput;
 import com.ou.demo.pojos.Product;
-import com.ou.demo.pojos.ProductStore;
-import com.ou.demo.pojos.Store;
+
 import com.ou.demo.pojos.User;
 import java.util.Date;
 import java.util.List;
@@ -25,15 +24,14 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface IProductService {
 
-    ProductDto create(Map<String, String> params, List<MultipartFile> file, Store store);
+    ProductDto create(Map<String, String> params, List<MultipartFile> file, User store);
 
     Product findById(int id);
 
-    List<ProductDto> findAll(User users);
-
     List<ProductDto> findAll();
 
-    Page<Product> page(int pageSize,int pageNumber);
+
+    PageDto page(int pageSize,int pageNumber);
 
     List<ProductDto> findAllByOrderByPriceDesc();
 

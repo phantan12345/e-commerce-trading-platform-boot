@@ -36,10 +36,7 @@ public class Voucher implements Serializable {
     private String code;
     @Column(name = "is_delete")
     private boolean isDelete;
-    
-    @JsonIgnore
-    @OneToMany(mappedBy = "voucherId")
-    private Set<Order1> order1Set;
+
 
     public Voucher() {
     }

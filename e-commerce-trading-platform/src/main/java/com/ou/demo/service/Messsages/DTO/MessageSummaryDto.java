@@ -19,7 +19,7 @@ public class MessageSummaryDto {
     private String chatRecipientName;
     private String avatar;
     private String message;
-    private int unread;
+    private String Status;
     private Integer latestMessageUserId;
 
 }

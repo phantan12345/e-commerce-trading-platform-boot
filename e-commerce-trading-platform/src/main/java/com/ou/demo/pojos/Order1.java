@@ -41,18 +41,14 @@ public class Order1 implements Serializable {
     @Column(name = "total")
     private Float total;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
-    private Set<Shipment> shipmentSet;
+   
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     @ManyToOne
     private Payment paymentId;
     @JoinColumn(name = "UserID", referencedColumnName = "id")
     @ManyToOne
     private User userID;
-    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
-    @ManyToOne
-    private Voucher voucherId;
+   
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
@@ -61,12 +57,11 @@ public class Order1 implements Serializable {
     public Order1() {
     }
 
-    public Order1(Float total, User userID, Voucher voucherId) {
+    public Order1(Float total, User userID) {
         this.isDelete = false;
         this.orderDate = new Date();
         this.total = total;
         this.userID = userID;
-        this.voucherId = voucherId;
     }
 
     public Order1(int id) {

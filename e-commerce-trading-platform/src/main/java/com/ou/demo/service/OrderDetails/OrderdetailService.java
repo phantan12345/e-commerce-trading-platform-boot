@@ -5,7 +5,6 @@
 package com.ou.demo.service.OrderDetails;
 
 import com.ou.demo.pojos.Orderdetail;
-import com.ou.demo.pojos.ProductStore;
 import com.ou.demo.repositories.OrderdetailRepository;
 import com.ou.demo.service.OrderDetails.DTO.OrderdetailDTO;
 import java.util.Date;
@@ -29,10 +28,7 @@ public class OrderdetailService extends com.ou.demo.util.Service.Crud<Orderdetai
         return OrderdetailRepository.save(od);
     }
 
-    @Override
-    public Orderdetail findByProductStore(ProductStore ps) {
-        return OrderdetailRepository.findByproductStoreId(ps);
-    }
+
 
     @Override
     public List<Object[]> findByDate(int month, int year) {

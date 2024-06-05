@@ -62,8 +62,8 @@ public class ShipmentService implements IShipmentService {
     }
 
     @Override
-    public List<ShipmentDto> getListShipmentByCurrenStore(int id) {
-        List<Object[]> dto = shipmentReponsitory.findShipmentByCurrntUser(id);
+    public List<ShipmentDto> getListShipmentByCurrenStore() {
+        List<Object[]> dto = shipmentReponsitory.findShipmentByAdmin();
 
         return dto.stream()
                 .map(shipmentDtoObject -> new ShipmentDto(

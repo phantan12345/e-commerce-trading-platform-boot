@@ -29,7 +29,16 @@ public class GenericSpecifications {
         return (root, query, builder) -> builder.lessThanOrEqualTo(root.get(fieldName), value);
     }
 
-   
+    public static <T> Specification<T> sort(String fieldName, String direction) {
+        return (root, query, builder) -> {
+            if ("asc".equalsIgnoreCase(direction)) {
+                query.orderBy(builder.asc(root.get(fieldName)));
+            } else if ("desc".equalsIgnoreCase(direction)) {
+                query.orderBy(builder.desc(root.get(fieldName)));
+            }
+            return null; // return null because we're only modifying the query, not adding predicates
+        };
+    }
 
     public static <T> Specification<T> createSpecification(List<Specification<T>> Specifications) {
         Specification<T> combinedSpec = null;

@@ -5,7 +5,6 @@
 package com.ou.demo.service.Users.DTO;
 
 import com.ou.demo.pojos.Role;
-import com.ou.demo.pojos.Store;
 import jakarta.persistence.Column;
 import java.util.List;
 import java.util.Set;

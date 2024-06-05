@@ -4,7 +4,6 @@
  */
 package com.ou.demo.service.Messsages.DTO;
 
-import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

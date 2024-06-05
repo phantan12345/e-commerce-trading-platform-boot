@@ -6,7 +6,6 @@ package com.ou.demo.repositories;
 
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
-import com.ou.demo.pojos.ProductStore;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;

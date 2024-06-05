@@ -38,9 +38,9 @@ public class Shipment implements Serializable {
     private String active;
 
     @JsonIgnore
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JoinColumn(name = "orderdetail_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Order1 orderId;
+    private Orderdetail orderdetailId;
 
     public Shipment() {
     }
@@ -49,11 +49,11 @@ public class Shipment implements Serializable {
         this.id = id;
     }
 
-    public Shipment(String address, String active, Order1 orderId) {
+    public Shipment(String address, String active, Orderdetail Orderdetail) {
 
         this.address = address;
         this.active = active;
-        this.orderId = orderId;
+        this.orderdetailId = Orderdetail;
     }
 
 }

@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class CartInput {
 
     private List<CartDto> carts;
-    private int voucher;
+    private int payment;
     private float total;
     private String address;
     private User user;

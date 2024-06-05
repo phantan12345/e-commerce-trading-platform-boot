@@ -39,7 +39,10 @@ public class Product implements Serializable {
     private BigDecimal price;
     @Column(name = "is_delete")
     private boolean isDelete;
-
+    @Column(name = "description")
+    private String description;
+    @Column(name = "count")
+    private int count;
     @JsonIgnore
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
@@ -49,10 +52,12 @@ public class Product implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
 
+   
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Set<ProductStore> productStoreSet;
-
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    private User userId;
+    
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Review> reviewSet;

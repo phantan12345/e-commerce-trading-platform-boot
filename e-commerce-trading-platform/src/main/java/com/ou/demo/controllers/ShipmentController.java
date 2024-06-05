@@ -36,8 +36,8 @@ public class ShipmentController {
     }
 
     @GetMapping("/shipment/store")
-    public ResponseEntity<?> getAllByCurrentStore(@CurrentUser UsersDto user) {
-        return new ResponseEntity<>(shipmentService.getListShipmentByCurrenStore(user.getId()), HttpStatus.OK);
+    public ResponseEntity<?> getAllByCurrentStore() {
+        return new ResponseEntity<>(shipmentService.getListShipmentByCurrenStore(), HttpStatus.OK);
     }
 
     @PostMapping("/shipment")

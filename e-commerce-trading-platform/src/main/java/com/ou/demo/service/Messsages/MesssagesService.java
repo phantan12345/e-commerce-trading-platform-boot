@@ -5,14 +5,12 @@
 package com.ou.demo.service.Messsages;
 
 import com.ou.demo.pojos.Messages;
-import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.MessagesRepository;
 import com.ou.demo.repositories.UserRepository;
 import com.ou.demo.service.Messsages.DTO.MessageSummaryDto;
 import com.ou.demo.service.Messsages.DTO.MessagesDto;
 import com.ou.demo.service.Messsages.DTO.UpdateMessageStatusDto;
-import com.ou.demo.service.Stores.StoreService;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.util.Service.Crud;
@@ -41,8 +39,6 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private StoreService storeService;
 
     //    SELECT * FROM messages WHERE (sent_by = 4 AND sent_to = 6) OR (sent_by = 6 AND sent_to=4) ORDER BY message_id
     public List<MessageSummaryDto> getUserMessages(UsersDto userId, Integer pageNumber, Integer pageSize) {
@@ -60,7 +56,7 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
                 messageSummaryObject[2].toString(),
                 messageSummaryObject[3].toString(),
                 messageSummaryObject[4].toString(),
-                Integer.valueOf(messageSummaryObject[5].toString()),
+                messageSummaryObject[5].toString(),
                 Integer.valueOf(messageSummaryObject[6].toString())))
                 .toList();
     }
@@ -105,7 +101,7 @@ public class MesssagesService extends Crud<Messages, MessagesDto> implements IMe
                 loggedInUser.getName(),
                 loggedInUser.getAvatar(),
                 savedMessage.getMessage(),
-                1,
+                savedMessage.getStatus(),
                 loggedInUser.getId()
         );
         messagingTemplate.convertAndSendToUser(String.valueOf(savedMessagesDto.getSentTo().getId()), "/reply", dto);

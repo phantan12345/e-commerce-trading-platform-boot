@@ -12,14 +12,12 @@ import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.Products.DTO.ProductInput;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.ProductImage;
-import com.ou.demo.pojos.ProductStore;
-import com.ou.demo.pojos.Store;
+
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.OrderReponsitory;
 import com.ou.demo.repositories.OrderdetailRepository;
 import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.service.ProductImages.ProductImageService;
-import com.ou.demo.service.ProductStores.ProductStoreService;
 import com.ou.demo.util.GenericSpecifications;
 
 import java.util.List;
@@ -65,9 +63,6 @@ public class ProductService implements IProductService {
     private ImageServiceImpl ImageService;
 
     @Autowired
-    private ProductStoreService ProductStoreService;
-
-    @Autowired
     private ProductImageService ProductImageService;
 
     @Autowired
@@ -77,7 +72,7 @@ public class ProductService implements IProductService {
     private ModelMapper modelMapper;
 
     @Override
-    public ProductDto create(Map<String, String> params, List<MultipartFile> file, Store store) {
+    public ProductDto create(Map<String, String> params, List<MultipartFile> file, User store) {
         Product p = new Product();
 
         p.setProductName(params.get("productName"));
@@ -85,12 +80,9 @@ public class ProductService implements IProductService {
         p.setPrice(price);
         p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("cateid"))));
         p.setDelete(Boolean.FALSE);
-        ProductStore ps = new ProductStore();
-        ps.setCount(Integer.parseInt(params.get("count")));
-        ps.setStoreId(store);
-        ps.setProductId(p);
+        p.setUserId(store);
+        p.setDescription(params.get("description"));
         productReponsitory.save(p);
-        ProductStoreService.create(ps);
 
         for (MultipartFile f : file) {
             ProductImage img = new ProductImage();
@@ -109,11 +101,9 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProductDto> findAll(User users) {
+    public List<ProductDto> findAll() {
 
-        List<Product> listAllProduct = productReponsitory.findAll();
-        List<Product> listHistoryProduct = productReponsitory.findHistoryProduct(users.getId());
-        listAllProduct.addAll(listHistoryProduct);
+        List<Product> listAllProduct = productReponsitory.findAllProducts();
         return listAllProduct.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -121,12 +111,17 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<Product> page(int pageSize, int pageNumber) {
+    public PageDto page(int pageSize, int pageNumber) {
 
         Pageable paging = PageRequest.of(pageNumber, pageSize);
-        
-        Page<Product> pageDto=productReponsitory.findAll(paging);
-        return pageDto;
+
+        Page<Product> pageDto = productReponsitory.findAll(paging);
+        PageDto dto = new PageDto();
+        dto.setListProduct(pageDto.getContent().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList()));
+        dto.setTotalPage(pageDto.getTotalPages());
+        return dto;
     }
 
     @Override
@@ -148,6 +143,9 @@ public class ProductService implements IProductService {
     public List<ProductDto> search(Map<String, String> params) {
         List<Specification<Product>> list = new ArrayList<>();
 
+        Specification<Product> isNotDeletedSpec = GenericSpecifications.fieldEquals("isDelete", false);
+        list.add(isNotDeletedSpec);
+
         String kw = params.get("kw");
         if (kw != null && !kw.isEmpty()) {
             Specification<Product> spec = GenericSpecifications.fieldContains("productName", kw);
@@ -161,17 +159,9 @@ public class ProductService implements IProductService {
             list.add(spec);
 
         }
-
-        String from = params.get("from");
-        if (from != null && !from.isEmpty()) {
-            Specification<Product> spec = GenericSpecifications.hasThan("price", from);
-
-            list.add(spec);
-
-        }
-        String to = params.get("to");
-        if (to != null && !to.isEmpty()) {
-            Specification<Product> spec = GenericSpecifications.hasLess("price", to);
+        String sort = params.get("sort");
+        if (cate != null && !cate.isEmpty()) {
+            Specification<Product> spec = GenericSpecifications.sort("productName", sort);
             list.add(spec);
 
         }
@@ -199,11 +189,4 @@ public class ProductService implements IProductService {
         return modelMapper.map(product, ProductDto.class);
     }
 
-    @Override
-    public List<ProductDto> findAll() {
-
-        return productReponsitory.findAll().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
 }
