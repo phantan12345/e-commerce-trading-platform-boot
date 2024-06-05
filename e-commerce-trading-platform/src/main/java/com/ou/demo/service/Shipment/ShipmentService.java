@@ -4,12 +4,14 @@
  */
 package com.ou.demo.service.Shipment;
 
+import com.ou.demo.exceptions.ShipmentException;
 import com.ou.demo.pojos.Order1;
 import com.ou.demo.pojos.Shipment;
 import com.ou.demo.repositories.ShipmentReponsitory;
 import com.ou.demo.service.Messsages.DTO.MessageSummaryDto;
 import com.ou.demo.service.Shipment.DTO.ShipmentDto;
 import java.io.Serial;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,11 +35,11 @@ public class ShipmentService implements IShipmentService {
                 Integer.valueOf(shipmentDtoObject[0].toString()),
                 shipmentDtoObject[1].toString(),
                 shipmentDtoObject[2].toString(),
-                new Order1(Integer.valueOf(shipmentDtoObject[3].toString())),
                 shipmentDtoObject[2].toString(),
                 shipmentDtoObject[4].toString(),
                 Integer.valueOf(shipmentDtoObject[5].toString()),
-                shipmentDtoObject[6].toString()))
+                shipmentDtoObject[6].toString(),
+                new BigDecimal(shipmentDtoObject[7].toString())))
                 .toList();
     }
 
@@ -47,10 +49,14 @@ public class ShipmentService implements IShipmentService {
 
         switch (dto.getProvider()) {
             case "Accepted":
+                if (shipment.getActive().equals("Canceled")) {
+                    throw new ShipmentException("Cannot accept a canceled shipment");
+                }
                 shipment.setActive("Accepted");
                 break;
-            case "Packed":
-                shipment.setActive("Packed");
+
+            case "Canceled":
+                shipment.setActive("Canceled");
                 break;
             case "Completed":
                 shipment.setActive("Completed");
@@ -70,11 +76,11 @@ public class ShipmentService implements IShipmentService {
                 Integer.valueOf(shipmentDtoObject[0].toString()),
                 shipmentDtoObject[1].toString(),
                 shipmentDtoObject[2].toString(),
-                new Order1(Integer.valueOf(shipmentDtoObject[3].toString())),
                 shipmentDtoObject[2].toString(),
                 shipmentDtoObject[4].toString(),
                 Integer.valueOf(shipmentDtoObject[5].toString()),
-                shipmentDtoObject[6].toString()))
+                shipmentDtoObject[6].toString(),
+                new BigDecimal(shipmentDtoObject[7].toString())))
                 .toList();
     }
 }

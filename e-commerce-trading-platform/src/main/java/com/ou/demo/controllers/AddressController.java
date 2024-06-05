@@ -17,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,12 +51,27 @@ public class AddressController {
                 addressService.getAddresses(userCuren), HttpStatus.OK);
     }
 
-    @PostMapping("/addresses")
-    public ResponseEntity<?> addlAddressCurentuser(@CurrentUser UsersDto currentUser,AddressDto input) {
+    @PostMapping("/address")
+    public ResponseEntity<?> addlAddressCurentuser(@CurrentUser UsersDto currentUser, AddressDto input) {
 
         User userCuren = UserService.findById(currentUser.getId());
 
         return new ResponseEntity<>(
-                addressService.addAddress(userCuren,input), HttpStatus.OK);
+                addressService.addAddress(userCuren, input), HttpStatus.OK);
     }
+
+    @PutMapping("/address")
+    public ResponseEntity<?> updatelAddressCurentuser( AddressDto input) {
+
+
+        return new ResponseEntity<>(
+                addressService.updateAddress(input), HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/address/{id}")
+    public ResponseEntity<?> updatelAddressCurentuser( @PathVariable("id")int  id) {
+        return new ResponseEntity<>(
+                addressService.deleteAddress(id), HttpStatus.OK);
+    }
+
 }

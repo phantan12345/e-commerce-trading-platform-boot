@@ -78,7 +78,7 @@ public class ProductService implements IProductService {
         p.setProductName(params.get("productName"));
         BigDecimal price = new BigDecimal(params.get("price"));
         p.setPrice(price);
-        p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("cateid"))));
+        p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("categoryId"))));
         p.setDelete(Boolean.FALSE);
         p.setUserId(store);
         p.setDescription(params.get("description"));

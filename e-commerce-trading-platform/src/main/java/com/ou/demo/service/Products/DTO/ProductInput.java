@@ -21,9 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class ProductInput {
 
-    private String productName;
-    private BigDecimal price;
-    private int cateId;
-    private int count;
+    public int id;
+    public String productName;
+    public BigDecimal price;
+    public Category categoryId;
+    public int count;
 
 }

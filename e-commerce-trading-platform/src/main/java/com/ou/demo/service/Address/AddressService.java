@@ -17,32 +17,42 @@ import org.springframework.stereotype.Service;
  * @author ADMIN
  */
 @Service
-public class AddressService implements IAddressService{
+public class AddressService implements IAddressService {
 
     @Autowired
     private AddressRepository AddressRepository;
-    
+
     @Override
-    public Address addAddress(User user,AddressDto input) {
-        Address a=new Address();
+    public Address addAddress(User user, AddressDto input) {
+        Address a = new Address();
         a.setName(input.getName());
         a.setUserId(user);
         return AddressRepository.save(a);
     }
 
     @Override
-    public Address deleteAddress(AddressDto input) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean deleteAddress(int id) {
+        try {
+            Address address = AddressRepository.findById(id).get();
+            AddressRepository.delete(address);
+            return true;
+        } catch (Exception e) {
+            return false;
+
+        }
+
     }
 
     @Override
     public Address updateAddress(AddressDto input) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Address address = AddressRepository.findById(input.getId()).get();
+        address.setName(input.getName());
+        return AddressRepository.save(address);
     }
 
     @Override
     public List<Address> getAddresses(User user) {
         return AddressRepository.findAddressesCurentUser(user);
     }
-    
+
 }

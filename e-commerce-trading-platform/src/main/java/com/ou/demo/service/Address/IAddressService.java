@@ -16,7 +16,7 @@ import java.util.List;
 public interface IAddressService {
     Address addAddress(User user,AddressDto input);
     
-    Address deleteAddress(AddressDto input);
+    Boolean deleteAddress(int id);
     Address updateAddress(AddressDto input);
     List<Address> getAddresses(User input);
 

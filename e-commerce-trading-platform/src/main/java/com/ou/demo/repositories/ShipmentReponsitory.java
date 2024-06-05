@@ -18,42 +18,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShipmentReponsitory extends JpaRepository<Shipment, Integer> {
 
-    @Query(value = "SELECT \n"
-            + "              s.*, \n"
-            + "                p.product_name,\n"
-            + "           od.quatity,\n"
-            + "              img.url\n"
-            + "            FROM \n"
-            + "            shipment s\n"
-            + "         \n"
-            + "           JOIN \n"
-            + "            orderdetail od ON s.orderdetail_id = od.id\n"
-            + "               	 JOIN \n"
-            + "          order1 o ON o.id = od.order_id\n"
-            + "            JOIN \n"
-            + "          product p ON p.id = od.product_id\n"
-            + "	\n"
-            + "          JOIN \n"
-            + "            product_image img ON img.product_id = p.id\n"
-            + "            WHERE o.UserID=?1", nativeQuery = true)
+    @Query(value = "SELECT s.*,p.product_name, od.quatity,img.url, od.total "
+            + "     FROM shipment s"
+            + "     JOIN orderdetail od ON s.orderdetail_id = od.id "
+            + "     JOIN order1 o ON o.id = od.order_id "
+            + "     JOIN product p ON p.id = od.product_id "
+            + "     JOIN product_image img ON img.product_id = p.id "
+            + "      WHERE o.UserID=?1", nativeQuery = true)
     List<Object[]> findShipmentByCurrntUser(@Param("userId") int id);
 
-    @Query(value = "SELECT \n"
-            + "              s.*, \n"
-            + "                p.product_name,\n"
-            + "           od.quatity,\n"
-            + "              img.url\n"
-            + "            FROM \n"
-            + "            shipment s\n"
-            + "         \n"
-            + "           JOIN \n"
-            + "            orderdetail od ON s.orderdetail_id = od.id\n"
-            + "               	 JOIN \n"
-            + "          order1 o ON o.id = od.order_id\n"
-            + "            JOIN \n"
-            + "          product p ON p.id = od.product_id\n"
-            + "	\n"
-            + "          JOIN \n"
-            + "            product_image img ON img.product_id = p.id\n", nativeQuery = true)
+        @Query(value = "SELECT s.*,p.product_name, od.quatity,img.url , od.total "
+            + "     FROM shipment s"
+            + "     JOIN orderdetail od ON s.orderdetail_id = od.id "
+            + "     JOIN order1 o ON o.id = od.order_id "
+            + "     JOIN product p ON p.id = od.product_id "
+            + "     JOIN product_image img ON img.product_id = p.id ", nativeQuery = true)
     List<Object[]> findShipmentByAdmin();
 }

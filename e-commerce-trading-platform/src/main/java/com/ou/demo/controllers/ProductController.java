@@ -85,17 +85,6 @@ public class ProductController {
         return new ResponseEntity<>(productService.page(pageSize, pageNumber), HttpStatus.OK);
     }
 
-    @GetMapping("/product/dsc")
-    public ResponseEntity<?> get() {
-        return new ResponseEntity<>(productService.findAllByOrderByPriceDesc(), HttpStatus.OK);
-
-    }
-
-    @GetMapping("/product/namedsc")
-    public ResponseEntity<?> getName() {
-        return new ResponseEntity<>(productService.findAllByOrderByProductNameDesc(), HttpStatus.OK);
-    }
-
     @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam Map<String, String> params) {
 
@@ -118,28 +107,29 @@ public class ProductController {
 
     }
 
-    @PutMapping("/product/{id}")
-    public ResponseEntity<?> updateProduct(@RequestBody ProductInput dto, @PathVariable int id
-    ) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            Product p = productService.findById(id);
-            if (p == null) {
+    @PutMapping("/product")
+    public ResponseEntity<?> updateProduct(@RequestBody ProductInput dto) {
 
-                return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
-            } else {
-                p.setProductName(dto.getProductName());
-                p.setDelete(Boolean.FALSE);
-                p.setCategoryId(CategoryService.findCateById(dto.getCateId()));
-                p.setPrice(dto.getPrice());
-                return new ResponseEntity<>(productService.update(p), HttpStatus.OK);
+        Product p = productService.findById(dto.getId());
 
-            }
+        p.setProductName(dto.getProductName());
+        p.setCategoryId(CategoryService.findCateById(dto.getCategoryId().getId()));
+        p.setPrice(dto.getPrice());
+        p.setCount(dto.getCount());
+        return new ResponseEntity<>(productService.update(p), HttpStatus.OK);
+
+    }
+
+    @PostMapping("/product/stat")
+    public ResponseEntity<?> stat() {
+
+        ProductDto dto = null;
+        if (dto == null) {
+            return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>("error add products", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
 
         }
-
     }
 
 }

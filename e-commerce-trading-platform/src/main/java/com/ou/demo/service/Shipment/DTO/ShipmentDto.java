@@ -9,6 +9,7 @@ import com.ou.demo.pojos.Order1;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,24 +32,24 @@ public class ShipmentDto {
 
     private String active;
 
-    private Order1 orderId;
     private String provider;
     private String productName;
     private int quatity;
     private String url;
+    private BigDecimal total;
 
     public ShipmentDto() {
     }
 
-    public ShipmentDto(Integer id, String address, String active, Order1 orderId, String provider, String productName, int quatity, String url) {
+    public ShipmentDto(Integer id, String address, String active, String provider, String productName, int quatity, String url, BigDecimal total) {
         this.id = id;
         this.address = address;
         this.active = active;
-        this.orderId = orderId;
         this.provider = provider;
         this.productName = productName;
         this.quatity = quatity;
         this.url = url;
+        this.total=total;
     }
 
 }
