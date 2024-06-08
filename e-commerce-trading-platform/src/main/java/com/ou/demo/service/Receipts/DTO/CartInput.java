@@ -23,10 +23,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CartInput {
 
-    private List<CartDto> carts;
-    private int payment;
-    private float total;
-    private String address;
-    private User user;
+    public List<CartDto> carts;
+    public int payment;
+    public float total;
+    public String address;
+    public User user;
 
 }

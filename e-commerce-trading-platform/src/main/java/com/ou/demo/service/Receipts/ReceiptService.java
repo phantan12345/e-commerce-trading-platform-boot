@@ -70,13 +70,13 @@ public class ReceiptService implements IReceiptService {
                 d.setDelete(false);
                 Product p = ProductService.findById(c.getId());
                 d.setProductId(p);
-                d.setOrderId(order);
+                d.setOrderId(o);
                 Orderdetail od = OrderdetailService.create(d);
                 Shipment shipment = new Shipment(carts.getAddress(), "Wait for confirmation", od);
                 shipmentReponsitory.save(shipment);
 
             }
-            return order;
+            return o;
         } catch (Exception ex) {
             return null;
         }
