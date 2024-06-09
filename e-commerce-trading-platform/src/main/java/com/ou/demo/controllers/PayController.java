@@ -33,14 +33,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/pay")
 public class PayController {
 
-
     private IReceiptService receiptService;
-
 
     private IUserService UserService;
 
     private VNPayService VNPayService;
-
 
     @PostMapping("/delivery")
     public ResponseEntity<?> delivery(@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) {
@@ -59,8 +56,8 @@ public class PayController {
         }
 
     }
-    
-     @PostMapping("/VNPay")
+
+    @PostMapping("/VNPay")
     public ResponseEntity<?> VNPay(@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) throws UnsupportedEncodingException {
 
         User userCuren = UserService.findById(currentUser.getId());
@@ -77,8 +74,13 @@ public class PayController {
         }
 
     }
-    
-    
 
+    @PostMapping("/refund")
+    public ResponseEntity<?> refund() throws UnsupportedEncodingException {
+
+        return new ResponseEntity<>(
+                VNPayService.refundMoney(), HttpStatus.OK);
+
+    }
 
 }

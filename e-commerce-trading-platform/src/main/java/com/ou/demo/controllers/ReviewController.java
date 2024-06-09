@@ -7,6 +7,7 @@ package com.ou.demo.controllers;
 import com.ou.demo.service.Reviews.DTO.ReviewDto;
 import com.ou.demo.pojos.Review;
 import com.ou.demo.pojos.User;
+import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.service.Reviews.ReviewService;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -43,7 +44,7 @@ public class ReviewController {
 
     private IUserService UserService;
 
-    private IProductService ProductService;
+    private ProductReponsitory ProductService;
 
     @PostMapping("/product/{id}/comment")
     public ResponseEntity<?> createCommentToProduct(@CurrentUser UsersDto currentUser, @RequestBody Review c, @PathVariable("id") int id) {
@@ -67,7 +68,7 @@ public class ReviewController {
     @GetMapping("/product/{id}/comment")
     public ResponseEntity<List<?>> getAllCommentsByProduct(@PathVariable("id") int id) {
 
-        return new ResponseEntity<>(ReviewService.findAllCommentsByProductId(ProductService.findById(id)), HttpStatus.OK);
+        return new ResponseEntity<>(ReviewService.findAllCommentsByProductId(ProductService.findById(id).get()), HttpStatus.OK);
     }
 
     @GetMapping("/comment/{id}")

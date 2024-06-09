@@ -95,9 +95,9 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product findById(int id) {
+    public ProductDto findById(int id) {
 
-        return productReponsitory.findById(id).get();
+        return modelMapper.map(productReponsitory.findById(id).get(), ProductDto.class);
     }
 
     @Override
@@ -108,35 +108,6 @@ public class ProductService implements IProductService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
 
-    }
-
-    @Override
-    public PageDto page(int pageSize, int pageNumber) {
-
-        Pageable paging = PageRequest.of(pageNumber, pageSize);
-
-        Page<Product> pageDto = productReponsitory.findAll(paging);
-        PageDto dto = new PageDto();
-        dto.setListProduct(pageDto.getContent().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList()));
-        dto.setTotalPage(pageDto.getTotalPages());
-        return dto;
-    }
-
-    @Override
-    public List<ProductDto> findAllByOrderByPriceDesc() {
-
-        return productReponsitory.findAllByOrderByPriceDesc().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ProductDto> findAllByOrderByProductNameDesc() {
-        return productReponsitory.findAllByOrderByProductNameDesc().stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
     }
 
     @Override

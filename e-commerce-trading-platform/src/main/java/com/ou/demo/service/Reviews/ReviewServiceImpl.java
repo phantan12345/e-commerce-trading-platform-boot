@@ -7,6 +7,7 @@ package com.ou.demo.service.Reviews;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.Review;
 import com.ou.demo.pojos.User;
+import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.repositories.ReviewRepository;
 import com.ou.demo.service.Reviews.ReviewService;
 import java.util.Date;
@@ -24,14 +25,14 @@ import com.ou.demo.service.Products.IProductService;
 public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
-    private IProductService ProductService;
+    private ProductReponsitory ProductService;
 
     @Autowired
     private ReviewRepository ReviewRepository;
 
     @Override
     public Review addComment(Review r, User userId, int proId, int reply) {
-        Product p = ProductService.findById(proId);
+        Product p = ProductService.findById(proId).get();
 
         Review replyComment = null;
 

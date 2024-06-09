@@ -26,16 +26,12 @@ public interface IProductService {
 
     ProductDto create(Map<String, String> params, List<MultipartFile> file, User store);
 
-    Product findById(int id);
+    ProductDto findById(int id);
 
     List<ProductDto> findAll();
 
 
-    PageDto page(int pageSize,int pageNumber);
 
-    List<ProductDto> findAllByOrderByPriceDesc();
-
-    List<ProductDto> findAllByOrderByProductNameDesc();
 
     List<ProductDto> search(Map<String, String> params);
 

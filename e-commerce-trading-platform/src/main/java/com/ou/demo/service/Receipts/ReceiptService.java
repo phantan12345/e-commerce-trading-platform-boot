@@ -14,6 +14,7 @@ import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
 import com.ou.demo.repositories.OrderReponsitory;
 import com.ou.demo.repositories.PaymentReponsitory;
+import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.repositories.ShipmentReponsitory;
 import com.ou.demo.service.Vouchers.VoucherService;
 import jakarta.servlet.http.HttpSession;
@@ -45,7 +46,7 @@ public class ReceiptService implements IReceiptService {
     private IOrderdetailService OrderdetailService;
 
     @Autowired
-    private IProductService ProductService;
+    private ProductReponsitory ProductService;
 
     @Autowired
     private VoucherService VoucherService;
@@ -68,7 +69,7 @@ public class ReceiptService implements IReceiptService {
                 d.setQuatity(c.getCount());
                 d.setTotal(c.getPrice());
                 d.setDelete(false);
-                Product p = ProductService.findById(c.getId());
+                Product p = ProductService.findById(c.getId()).get();
                 d.setProductId(p);
                 d.setOrderId(o);
                 Orderdetail od = OrderdetailService.create(d);

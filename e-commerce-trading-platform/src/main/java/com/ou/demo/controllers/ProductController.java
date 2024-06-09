@@ -9,6 +9,7 @@ import com.ou.demo.service.Products.DTO.ProductDto;
 import com.ou.demo.service.Products.DTO.ProductInput;
 import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.User;
+import com.ou.demo.repositories.ProductReponsitory;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -56,6 +57,7 @@ public class ProductController {
     private IUserService UserService;
 
     private ICategoryService CategoryService;
+    private ProductReponsitory ProductReponsitory;
 
     @PostMapping("/product")
     public ResponseEntity<?> addPRoduct(@CurrentUser UsersDto currentUser, @Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
@@ -80,26 +82,20 @@ public class ProductController {
 
     }
 
-    @GetMapping("/product/{pageSize}/{pageNumber}")
-    public ResponseEntity<?> getProducts(@PathVariable("pageSize") int pageSize, @PathVariable("pageNumber") int pageNumber) {
-        return new ResponseEntity<>(productService.page(pageSize, pageNumber), HttpStatus.OK);
-    }
+    @GetMapping("/product/{id}")
+    public ResponseEntity<?> getProductDetail(@PathVariable("id") int id) {
+        List<ProductDto> dto;
 
-    @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam Map<String, String> params) {
-
-        List<ProductDto> list = productService.search(params);
-        if (list != null) {
-            return ResponseEntity.ok().body(list);
-        }
-        return new ResponseEntity<>("LIST NULL", HttpStatus.BAD_REQUEST);
+        dto = productService.findAll();
+        return new ResponseEntity<>(
+                dto, HttpStatus.OK);
 
     }
 
     @DeleteMapping("/product/{id}")
     public ResponseEntity<?> deletePRoduct(@PathVariable int id) {
 
-        Product p = productService.findById(id);
+        Product p = ProductReponsitory.findById(id).get();
 
         Product dto = productService.delete(p);
 
@@ -110,7 +106,7 @@ public class ProductController {
     @PutMapping("/product")
     public ResponseEntity<?> updateProduct(@RequestBody ProductInput dto) {
 
-        Product p = productService.findById(dto.getId());
+        Product p = ProductReponsitory.findById(dto.getId()).get();
 
         p.setProductName(dto.getProductName());
         p.setCategoryId(CategoryService.findCateById(dto.getCategoryId().getId()));
