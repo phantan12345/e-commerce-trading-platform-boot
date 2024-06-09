@@ -5,7 +5,6 @@
 package com.ou.demo.repositories;
 
 import com.ou.demo.pojos.Messages;
-import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -34,7 +33,7 @@ public interface MessagesRepository extends JpaRepository<Messages, Integer> {
             + "    u.name AS name, "
             + "     u.avatar as avatar, "
             + "    (SELECT message FROM messages WHERE id = MAX(m.id) LIMIT 1) AS message, "
-            + "     (SELECT count(status) FROM messages WHERE id = MAX(m.id) LIMIT 1) AS status, "
+            + "     (SELECT status FROM messages WHERE id = MAX(m.id) LIMIT 1) AS status, "
             + "    (SELECT sent_by FROM messages WHERE id = MAX(m.id) LIMIT 1) AS sent_by "
             + "FROM "
             + "    messages m "

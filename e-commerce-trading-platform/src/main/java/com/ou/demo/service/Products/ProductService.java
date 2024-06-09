@@ -82,7 +82,9 @@ public class ProductService implements IProductService {
         p.setProductName(params.get("productName"));
         BigDecimal price = new BigDecimal(params.get("price"));
         p.setPrice(price);
-        p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("cateid"))));
+        p.setDescription(params.get("description"));
+
+        p.setCategoryId(CategoryService.findCateById(Integer.parseInt(params.get("categoryId"))));
         p.setDelete(Boolean.FALSE);
         ProductStore ps = new ProductStore();
         ps.setCount(Integer.parseInt(params.get("count")));
@@ -114,7 +116,7 @@ public class ProductService implements IProductService {
         List<Orderdetail> listOrder = new ArrayList<>();
         List<Product> listHistoryProduct = new ArrayList<>();
 
-       List<Order1> o  = orderReponsitory.findByUserId(users);
+        List<Order1> o = orderReponsitory.findByUserId(users);
         if (o != null) {
             o.forEach(or -> listOrder.addAll(or.getOrderdetailSet()));
             for (Orderdetail od : listOrder) {
@@ -130,9 +132,8 @@ public class ProductService implements IProductService {
             return sortedProducts.stream()
                     .map(this::convertToDto)
                     .collect(Collectors.toList());
-        }
-        else{
-        return productReponsitory.findAll().stream()
+        } else {
+            return productReponsitory.findAll().stream()
                     .map(this::convertToDto)
                     .collect(Collectors.toList());
         }

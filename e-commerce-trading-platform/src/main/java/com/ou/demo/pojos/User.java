@@ -39,8 +39,7 @@ public class User {
     private String avatar;
     @Column(name = "email")
     private String email;
-    @Column(name = "active")
-    private Boolean active;
+
     @Column(name = "Phone")
     private String phone;
     @Column(name = "is_delete")
@@ -85,7 +84,6 @@ public class User {
         this.password = password;
         this.avatar = avatar;
         this.email = email;
-        this.active = true;
         this.phone = phone;
         this.isDelete = false;
         this.roleId = roleId;

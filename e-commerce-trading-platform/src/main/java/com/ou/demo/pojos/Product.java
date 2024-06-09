@@ -39,7 +39,8 @@ public class Product implements Serializable {
     private BigDecimal price;
     @Column(name = "is_delete")
     private boolean isDelete;
-
+    @Column(name = "description")
+    private String description;
     @JsonIgnore
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne

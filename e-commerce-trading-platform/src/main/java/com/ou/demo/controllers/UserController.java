@@ -1,4 +1,3 @@
-
 package com.ou.demo.controllers;
 
 import com.ou.demo.service.Users.DTO.JwtResponse;
@@ -6,6 +5,7 @@ import com.ou.demo.service.Users.DTO.Login;
 import com.ou.demo.pojos.Store;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
+import com.ou.demo.repositories.StoreReponsitory;
 import com.ou.demo.security.JwtUtils;
 import com.ou.demo.service.Mails.DTO.Mail;
 import com.ou.demo.service.Mails.MailService;
@@ -66,6 +66,8 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     private StoreService StoreService;
+    
+    private StoreReponsitory StoreReponsitory;
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile file) {
@@ -132,9 +134,11 @@ public class UserController {
     @PostMapping("/requestment/{id}")
     public ResponseEntity<?> requestment(@PathVariable(value = "id") int id) {
 
+        Store store = StoreService.findStoreById(id);
         User user = UserService.findById(id);
-        user.setActive(Boolean.FALSE);
-        user = UserService.update(user);
+
+        store.setActive(Boolean.TRUE);
+        store = StoreReponsitory.save(store);
         if (user != null) {
             if (user != null) {
                 Mail mail = new Mail();
