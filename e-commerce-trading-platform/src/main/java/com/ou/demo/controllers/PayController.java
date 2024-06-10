@@ -13,15 +13,21 @@ import com.ou.demo.service.Users.DTO.CurrentUser;
 import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.service.VNPlay.VNPayService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -75,12 +81,25 @@ public class PayController {
 
     }
 
-    @PostMapping("/refund")
-    public ResponseEntity<?> refund() throws UnsupportedEncodingException {
+    @PostMapping("/return")
+    public ResponseEntity<?> VNPayReturn(HttpServletRequest request) {
 
+        Map<String, String> params = new HashMap<>();
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String paramName = parameterNames.nextElement();
+            String paramValue = request.getParameter(paramName);
+            params.put(paramName, paramValue);
+        }
         return new ResponseEntity<>(
-                VNPayService.refundMoney(), HttpStatus.OK);
-
+                params, HttpStatus.OK);
     }
 
+    @GetMapping("/refund")
+    public ResponseEntity<?> refund(@RequestParam Map<String, String> params) throws Exception {
+
+        return new ResponseEntity<>(
+                VNPayService.refund(params), HttpStatus.OK);
+
+    }
 }

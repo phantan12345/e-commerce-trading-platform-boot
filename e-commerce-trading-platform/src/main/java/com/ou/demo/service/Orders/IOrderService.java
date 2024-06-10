@@ -17,7 +17,7 @@ public interface IOrderService {
 
     Order1 create(Order1 o);
 
-//    Object stat(Store store,  int month,int year);
+    Object stat( int month,int year);
     
     Set<Order1> GetByUserId(User user);
 }

@@ -4,15 +4,25 @@
  */
 package com.ou.demo.service.VNPlay;
 
+import com.nimbusds.jose.shaded.gson.JsonObject;
 import com.ou.demo.configs.VNPayConfig;
 import com.ou.demo.pojos.Order1;
 import com.ou.demo.repositories.OrderReponsitory;
 import com.ou.demo.service.Receipts.DTO.CartInput;
 import com.ou.demo.service.Receipts.IReceiptService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -99,69 +109,77 @@ public class VNPayService {
         return paymentUrl;
     }
 
-    public String refundMoney() throws UnsupportedEncodingException {
+    public String refund(Map<String, String> params) throws Exception {
         String vnp_RequestId = VNPayConfig.getRandomNumber(8);
         String vnp_Version = "2.1.0";
         String vnp_Command = "refund";
-        String vnp_TransactionType = "03";
-        int vnp_Amount = 160000;
-        String vnp_OrderInfo = "16";
-
-        String vnp_TxnRef = String.valueOf(OrderReponsitory.findById(137).get().getId());
         String vnp_IpAddr = "127.0.0.1";
 
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
-
-        Map<String, String> vnp_Params = new HashMap<>();
-        vnp_Params.put("vnp_RequestId ", vnp_RequestId);
-        vnp_Params.put("vnp_TransactionType ", vnp_TransactionType);
-        vnp_Params.put("vnp_OrderInfo ", vnp_OrderInfo);
-        vnp_Params.put("vnp_Amount ", String.valueOf(vnp_Amount));
-
-        vnp_Params.put("vnp_Version", vnp_Version);
-        vnp_Params.put("vnp_Command", vnp_Command);
-        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-
-        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-
-        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
+        String vnp_TransactionType = "02";
+        String vnp_TxnRef = params.get("order_id");
+        long amount = Integer.parseInt(params.get("vnp_Amount"));
+        String vnp_Amount = String.valueOf(amount);
+        String vnp_OrderInfo = "Hoan tien GD OrderId:" + vnp_TxnRef;
+        String vnp_TransactionNo = ""; //Assuming value of the parameter "vnp_TransactionNo" does not exist on your system.
+        String vnp_TransactionDate = params.get("vnp_PayDate");
+        String vnp_CreateBy = "user";
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
-        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-        String vnp_TransactionDate = formatter.format(OrderReponsitory.findById(137).get().getOrderDate());
-        vnp_Params.put("vnp_TransactionDate", vnp_TransactionDate);
 
-        List fieldNames = new ArrayList(vnp_Params.keySet());
-        Collections.sort(fieldNames);
-        StringBuilder hashData = new StringBuilder();
-        StringBuilder query = new StringBuilder();
-        Iterator itr = fieldNames.iterator();
-        while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = (String) vnp_Params.get(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                //Build hash data
-                hashData.append(fieldName);
-                hashData.append('=');
-                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                //Build query
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
-                query.append('=');
-                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                if (itr.hasNext()) {
-                    query.append('&');
-                    hashData.append('&');
-                }
-            }
+        JsonObject vnp_Params = new JsonObject();
+
+        vnp_Params.addProperty("vnp_RequestId", vnp_RequestId);
+        vnp_Params.addProperty("vnp_Version", vnp_Version);
+        vnp_Params.addProperty("vnp_Command", vnp_Command);
+        vnp_Params.addProperty("vnp_TmnCode", vnp_TmnCode);
+        vnp_Params.addProperty("vnp_TransactionType", vnp_TransactionType);
+        vnp_Params.addProperty("vnp_TxnRef", vnp_TxnRef);
+        vnp_Params.addProperty("vnp_Amount", vnp_Amount);
+        vnp_Params.addProperty("vnp_OrderInfo", vnp_OrderInfo);
+
+        if (vnp_TransactionNo != null && !vnp_TransactionNo.isEmpty()) {
+            vnp_Params.addProperty("vnp_TransactionNo", "{get value of vnp_TransactionNo}");
         }
-        String queryUrl = query.toString();
-        String vnp_SecureHash = VNPayConfig.hmacSHA512(VNPayConfig.secretKey, hashData.toString());
-        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
-        String paymentUrl = VNPayConfig.vnp_RefundUrl + "?" + queryUrl;
 
-        return paymentUrl;
+        vnp_Params.addProperty("vnp_TransactionDate", vnp_TransactionDate);
+        vnp_Params.addProperty("vnp_CreateBy", vnp_CreateBy);
+        vnp_Params.addProperty("vnp_CreateDate", vnp_CreateDate);
+        vnp_Params.addProperty("vnp_IpAddr", vnp_IpAddr);
+
+        String hash_Data = String.join("|", vnp_RequestId, vnp_Version, vnp_Command, vnp_TmnCode,
+                vnp_TransactionType, vnp_TxnRef, vnp_Amount, vnp_TransactionNo, vnp_TransactionDate,
+                vnp_CreateBy, vnp_CreateDate, vnp_IpAddr, vnp_OrderInfo);
+
+        String vnp_SecureHash = VNPayConfig.hmacSHA512(VNPayConfig.secretKey, hash_Data.toString());
+
+        vnp_Params.addProperty("vnp_SecureHash", vnp_SecureHash);
+
+        URL url = new URL(VNPayConfig.vnp_ApiUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.writeBytes(vnp_Params.toString());
+        wr.flush();
+        wr.close();
+        int responseCode = con.getResponseCode();
+        System.out.println("nSending 'POST' request to URL : " + url);
+        System.out.println("Post Data : " + vnp_Params);
+        System.out.println("Response Code : " + responseCode);
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String output;
+        StringBuffer response = new StringBuffer();
+        while ((output = in.readLine()) != null) {
+            response.append(output);
+        }
+        in.close();
+        System.out.println(response.toString());
+        return response.toString();
     }
 
 }

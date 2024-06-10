@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.ou.demo.service.Categorys.ICategoryService;
+import com.ou.demo.service.Orders.IOrderService;
 import com.ou.demo.service.Products.IProductService;
 import com.ou.demo.service.Receipts.IReceiptService;
 import com.ou.demo.service.Users.DTO.CurrentUser;
@@ -57,7 +58,10 @@ public class ProductController {
     private IUserService UserService;
 
     private ICategoryService CategoryService;
+
     private ProductReponsitory ProductReponsitory;
+
+    private IOrderService orderService;
 
     @PostMapping("/product")
     public ResponseEntity<?> addPRoduct(@CurrentUser UsersDto currentUser, @Valid @RequestParam Map<String, String> params, @RequestPart List<MultipartFile> file) {
@@ -84,11 +88,9 @@ public class ProductController {
 
     @GetMapping("/product/{id}")
     public ResponseEntity<?> getProductDetail(@PathVariable("id") int id) {
-        List<ProductDto> dto;
 
-        dto = productService.findAll();
         return new ResponseEntity<>(
-                dto, HttpStatus.OK);
+                productService.findById(id), HttpStatus.OK);
 
     }
 
@@ -109,6 +111,7 @@ public class ProductController {
         Product p = ProductReponsitory.findById(dto.getId()).get();
 
         p.setProductName(dto.getProductName());
+        p.setDescription(dto.getDescription());
         p.setCategoryId(CategoryService.findCateById(dto.getCategoryId().getId()));
         p.setPrice(dto.getPrice());
         p.setCount(dto.getCount());
@@ -116,16 +119,11 @@ public class ProductController {
 
     }
 
-    @PostMapping("/product/stat")
-    public ResponseEntity<?> stat() {
+    @PostMapping("/product/stat/{month}/{year}")
+    public ResponseEntity<?> stat(@PathVariable("month") int month,@PathVariable("year") int year) {
 
-        ProductDto dto = null;
-        if (dto == null) {
-            return new ResponseEntity<>("error find products", HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(orderService.stat(month, year), HttpStatus.OK);
 
-        }
     }
 
 }

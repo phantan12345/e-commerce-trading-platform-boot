@@ -19,11 +19,10 @@ import java.util.*;
 public class VNPayConfig {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:8080/swagger-ui/index.html#/";
+    public static String vnp_ReturnUrl = "http://localhost:8080/api/pay/return";
     public static String vnp_TmnCode = "RYRMPQGZ";
     public static String secretKey = "MIWQHXTVZCRDIOPZITZRKTMZAQKOMZWI";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-    public static String vnp_RefundUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
     public static String md5(String message) {
         String digest = null;

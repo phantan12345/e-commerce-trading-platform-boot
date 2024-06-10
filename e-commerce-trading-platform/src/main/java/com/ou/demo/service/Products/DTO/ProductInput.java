@@ -26,5 +26,6 @@ public class ProductInput {
     public BigDecimal price;
     public Category categoryId;
     public int count;
+    public String description;
 
 }
