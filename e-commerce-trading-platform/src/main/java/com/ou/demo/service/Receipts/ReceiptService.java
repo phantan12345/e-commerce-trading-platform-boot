@@ -73,6 +73,7 @@ public class ReceiptService implements IReceiptService {
                 d.setProductId(p);
                 d.setOrderId(o);
                 Orderdetail od = OrderdetailService.create(d);
+                updateCount(c.getId(), c.getCount());
                 Shipment shipment = new Shipment(carts.getAddress(), "Wait for confirmation", od);
                 shipmentReponsitory.save(shipment);
 
@@ -82,6 +83,13 @@ public class ReceiptService implements IReceiptService {
             return null;
         }
 
+    }
+
+    private Product updateCount(int id, int count) {
+        Product product = ProductService.findById(id).get();
+        product.setCount(product.getCount() - count);
+
+        return ProductService.save(product);
     }
 
 }

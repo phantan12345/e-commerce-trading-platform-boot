@@ -27,9 +27,22 @@ import org.springframework.web.context.request.WebRequest;
 @ResponseBody
 public class ErrorController {
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
+
     @ExceptionHandler(ShipmentException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<?> handleAssertionError(Exception  ex) {
-        return new ResponseEntity<>( new GoodNewsApiException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()) , HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> handleAssertionError(Exception ex) {
+        return new ResponseEntity<>(new GoodNewsApiException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

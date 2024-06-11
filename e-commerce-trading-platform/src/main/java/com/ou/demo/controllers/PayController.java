@@ -64,11 +64,11 @@ public class PayController {
     }
 
     @PostMapping("/VNPay")
-    public ResponseEntity<?> VNPay(@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) throws UnsupportedEncodingException {
+    public ResponseEntity<?> VNPay(HttpServletRequest req,@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) throws UnsupportedEncodingException {
 
         User userCuren = UserService.findById(currentUser.getId());
         carts.setUser(userCuren);
-        Object cart = this.VNPayService.createOrder(carts);
+        Object cart = this.VNPayService.createOrder(req,carts);
         if (cart == null) {
             return new ResponseEntity<>("ERROR PAYMENT METHOD ",
                     HttpStatus.BAD_REQUEST
@@ -96,10 +96,10 @@ public class PayController {
     }
 
     @GetMapping("/refund")
-    public ResponseEntity<?> refund(@RequestParam Map<String, String> params) throws Exception {
+    public ResponseEntity<?> refund(HttpServletRequest req,@RequestParam Map<String, String> params) throws Exception {
 
         return new ResponseEntity<>(
-                VNPayService.refund(params), HttpStatus.OK);
+                VNPayService.refund(req,params), HttpStatus.OK);
 
     }
 }
