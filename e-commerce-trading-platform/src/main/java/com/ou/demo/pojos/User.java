@@ -77,6 +77,10 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Product> productSet;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "UserId")
+    private Set<Evaluate> evaluateSet;
+
     public User() {
     }
 

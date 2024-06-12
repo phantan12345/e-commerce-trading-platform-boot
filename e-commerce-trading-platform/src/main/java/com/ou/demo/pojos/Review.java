@@ -34,8 +34,7 @@ public class Review implements Serializable {
     @Column(name = "date_content")
     @Temporal(TemporalType.DATE)
     private Date dateContent;
-    @Column(name = "evaluate")
-    private Integer evaluate;
+
     @Column(name = "is_delete")
     private boolean isDelete;
     

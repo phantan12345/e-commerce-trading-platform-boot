@@ -52,7 +52,6 @@ public class ReviewController {
         Review Reriew = ReviewService.addComment(c, user, id, 0);
 
         return new ResponseEntity<>(Reriew, HttpStatus.OK);
-
     }
 
     //reply comment

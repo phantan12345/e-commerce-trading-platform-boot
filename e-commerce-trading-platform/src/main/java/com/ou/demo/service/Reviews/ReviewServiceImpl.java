@@ -16,6 +16,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ou.demo.service.Products.IProductService;
+import com.ou.demo.service.Reviews.DTO.ReviewDto;
+import java.util.ArrayList;
+import org.modelmapper.ModelMapper;
 
 /**
  *
@@ -29,6 +32,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private ReviewRepository ReviewRepository;
+
+    @Autowired
+    private ModelMapper ModelMapper;
 
     @Override
     public Review addComment(Review r, User userId, int proId, int reply) {
@@ -51,15 +57,19 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review findCommentById(int id) {
         Review optionalReview = ReviewRepository.findById(id);
-        if (optionalReview!=null) {
+        if (optionalReview != null) {
             return optionalReview;
         }
         return null;
     }
 
     @Override
-    public List<Review> findAllCommentsByProductId(Product id) {
-        return ReviewRepository.findAll();
+    public List<ReviewDto> findAllCommentsByProductId(Product id) {
+        List<ReviewDto> listDto = new ArrayList<>();
+        List<Review> listReview = ReviewRepository.findByProductId(id);
+        listReview.forEach(mapper -> listDto.add(coverReview(mapper)));
+
+        return listDto;
 
     }
 
@@ -79,4 +89,10 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewRepository.findByreviewId(c);
     }
 
+    private ReviewDto coverReview(Review r) {
+
+        ReviewDto dto = ModelMapper.map(r, ReviewDto.class);
+        dto.setReply(ReviewRepository.findByreviewId(r));
+        return dto;
+    }
 }

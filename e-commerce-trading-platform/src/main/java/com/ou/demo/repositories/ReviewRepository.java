@@ -4,6 +4,7 @@
  */
 package com.ou.demo.repositories;
 
+import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.Review;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +23,12 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query("SELECT r FROM Review r WHERE r.id = ?1")
     Review findById(int id);
 
-    List<Review>  findByreviewId(Review id);
+    List<Review> findByreviewId(Review id);
 
+    @Query("SELECT r FROM Review r WHERE r.productId = ?1")
+    List<Review>  findByProductId(Product id);
+    
+    
+     @Query("SELECT r FROM Review r WHERE r.reviewId = ?1")
+    List<Review>  findByReviewId(Review id);
 }

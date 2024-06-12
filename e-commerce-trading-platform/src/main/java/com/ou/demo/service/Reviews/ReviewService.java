@@ -20,7 +20,7 @@ public interface ReviewService {
 
     Review findCommentById(int id);
 
-    List<Review> findAllCommentsByProductId(Product id);
+    List<ReviewDto> findAllCommentsByProductId(Product id);
 
     boolean deleteComment(Review id);
 
