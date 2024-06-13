@@ -69,8 +69,6 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public boolean getDelte() {
-        return this.isDelete;
-    }
+    
 
 }

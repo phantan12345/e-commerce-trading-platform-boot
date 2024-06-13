@@ -44,4 +44,7 @@ public class Evaluate {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private User UserId;
+
+    @Column(name = "is_delete")
+    private Boolean isDelete;
 }
