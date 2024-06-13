@@ -74,7 +74,7 @@ public class User implements Serializable {
     private Role roleId;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
     private Set<Product> productSet;
 
     @JsonIgnore
