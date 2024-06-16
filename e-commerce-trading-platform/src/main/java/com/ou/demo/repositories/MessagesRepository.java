@@ -47,7 +47,7 @@ public interface MessagesRepository extends JpaRepository<Messages, Integer> {
             + "        WHEN m.sent_to = ?1 THEN m.sent_by"
             + "        ELSE m.sent_to"
             + "    END,"
-            + "    u.username "
+            + "    u.username, u.name ,u.avatar "
             + "ORDER BY "
             + "    latest_message_id desc",
             nativeQuery = true)

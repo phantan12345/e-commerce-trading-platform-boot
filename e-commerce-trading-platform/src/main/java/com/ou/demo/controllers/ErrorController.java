@@ -46,9 +46,5 @@ public class ErrorController {
         return new ResponseEntity<>(new GoodNewsApiException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<?> exception(Exception ex) {
-        return new ResponseEntity<>(new GoodNewsApiException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+
 }

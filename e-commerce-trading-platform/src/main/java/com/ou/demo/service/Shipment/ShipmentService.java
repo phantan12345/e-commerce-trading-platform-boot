@@ -98,7 +98,7 @@ public class ShipmentService implements IShipmentService {
     @Override
     public List<ShipmentDto> getListShipmentByCurrenStore() {
         List<Object[]> dto = shipmentReponsitory.findShipmentByAdmin();
-
+        
         return dto.stream()
                 .map(shipmentDtoObject -> new ShipmentDto(
                 Integer.valueOf(shipmentDtoObject[0].toString()),
@@ -106,10 +106,10 @@ public class ShipmentService implements IShipmentService {
                 shipmentDtoObject[2].toString(),
                 shipmentDtoObject[2].toString(),
                 shipmentDtoObject[4].toString(),
+                Integer.valueOf(shipmentDtoObject[3].toString()),
                 Integer.valueOf(shipmentDtoObject[5].toString()),
-                Integer.valueOf(shipmentDtoObject[6].toString()),
-                shipmentDtoObject[7].toString(),
-                new BigDecimal(shipmentDtoObject[8].toString())))
+                shipmentDtoObject[6].toString(),
+                new BigDecimal(shipmentDtoObject[7].toString())))
                 .toList();
     }
 
