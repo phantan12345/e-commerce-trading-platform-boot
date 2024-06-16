@@ -101,7 +101,7 @@ public class ProductService implements IProductService {
     @Override
     public ProductDto findById(int id) {
 
-        return modelMapper.map(productReponsitory.findById(id).get(), ProductDto.class);
+        return this.convertToDto(productReponsitory.findById(id).get());
     }
 
     @Override
