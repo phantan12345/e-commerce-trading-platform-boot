@@ -86,6 +86,14 @@ public class ProductController {
 
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam Map<String, String> params) {
+
+        return new ResponseEntity<>(
+                productService.search(params), HttpStatus.OK);
+
+    }
+
     @GetMapping("/product/{id}")
     public ResponseEntity<?> getProductDetail(@PathVariable("id") int id) {
 
@@ -120,7 +128,7 @@ public class ProductController {
     }
 
     @PostMapping("/product/stat/{month}/{year}")
-    public ResponseEntity<?> stat(@PathVariable("month") int month,@PathVariable("year") int year) {
+    public ResponseEntity<?> stat(@PathVariable("month") int month, @PathVariable("year") int year) {
 
         return new ResponseEntity<>(orderService.stat(month, year), HttpStatus.OK);
 
