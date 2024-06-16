@@ -18,9 +18,8 @@ import lombok.Data;
 @Entity
 @Table(name = "product_image")
 @Data
-public class ProductImage implements Serializable {
+public class ProductImage  {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -39,6 +38,4 @@ public class ProductImage implements Serializable {
     public ProductImage() {
     }
 
-
-    
 }

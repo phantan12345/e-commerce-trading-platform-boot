@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import jakarta.persistence.*;
+import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -23,9 +24,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "product")
 @Data
-public class Product implements Serializable {
+public class Product {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -38,36 +38,29 @@ public class Product implements Serializable {
     private BigDecimal price;
     @Column(name = "is_delete")
     private boolean isDelete;
+    @Column(name = "count")
+    private Integer count;
     @Column(name = "description")
     private String description;
-    @Column(name = "count")
-    private int count;
+    
     @JsonIgnore
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;
-
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Set<ProductImage> productImageSet;
-
     @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private User userId;
-
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    private Set<ProductImage> productImageSet;
+    @OneToMany(mappedBy = "productId")
+    private Set<Evaluate> evaluatesSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Review> reviewSet;
-    
-    
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ProductId")
-    private Set<Evaluate> evaluateSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    private Set<Orderdetail> orderdetailSet;
 
     public Product() {
     }
-
-    
 
 }

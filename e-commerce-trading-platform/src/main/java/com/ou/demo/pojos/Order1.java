@@ -24,9 +24,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "order1")
 @Data
-public class Order1 implements Serializable {
+public class Order1 {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -40,17 +39,12 @@ public class Order1 implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total")
     private Float total;
-
-   
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     @ManyToOne
     private Payment paymentId;
     @JoinColumn(name = "UserID", referencedColumnName = "id")
     @ManyToOne
     private User userID;
-   
-
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
 
@@ -65,7 +59,7 @@ public class Order1 implements Serializable {
     }
 
     public Order1(int id) {
-        this.id=id;
+        this.id = id;
     }
 
 }

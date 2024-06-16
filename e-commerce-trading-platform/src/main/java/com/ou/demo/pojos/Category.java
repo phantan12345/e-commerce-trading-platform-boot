@@ -19,9 +19,8 @@ import lombok.Data;
 @Entity
 @Table(name = "category")
 @Data
-public class Category implements Serializable {
+public class Category {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -32,7 +31,6 @@ public class Category implements Serializable {
     private String name;
     @Column(name = "is_delete")
     private boolean isDelete;
-    
     @JsonIgnore
     @OneToMany(mappedBy = "categoryId")
     private Set<Product> productSet;
@@ -40,6 +38,4 @@ public class Category implements Serializable {
     public Category() {
     }
 
-   
-    
 }

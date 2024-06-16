@@ -19,6 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface EvaluateRespository extends JpaRepository<Evaluate, Integer> {
 
-    @Query("SELECT o FROM Evaluate o WHERE o.ProductId.id = ?1")
+    @Query("SELECT o FROM Evaluate o WHERE o.productId.id = ?1")
     List<Evaluate> findByProductId(int id);
 }

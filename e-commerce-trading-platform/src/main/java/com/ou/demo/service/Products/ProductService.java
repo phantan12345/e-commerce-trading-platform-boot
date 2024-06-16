@@ -16,6 +16,7 @@ import com.ou.demo.pojos.ProductImage;
 import com.ou.demo.pojos.User;
 import com.ou.demo.repositories.OrderReponsitory;
 import com.ou.demo.repositories.OrderdetailRepository;
+import com.ou.demo.repositories.ProductImageReponsitory;
 import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.service.ProductImages.ProductImageService;
 import com.ou.demo.util.GenericSpecifications;
@@ -70,6 +71,9 @@ public class ProductService implements IProductService {
 
     @Autowired
     private ModelMapper modelMapper;
+    
+    @Autowired
+    private ProductImageReponsitory ProductImageReponsitory;
 
     @Override
     public ProductDto create(Map<String, String> params, List<MultipartFile> file, User store) {
@@ -157,7 +161,9 @@ public class ProductService implements IProductService {
     }
 
     private ProductDto convertToDto(Product product) {
-        return modelMapper.map(product, ProductDto.class);
+        ProductDto dto = modelMapper.map(product, ProductDto.class);
+        dto.setProductImageSet(ProductImageReponsitory.findByProdcutId(product));
+        return dto;
     }
 
 }

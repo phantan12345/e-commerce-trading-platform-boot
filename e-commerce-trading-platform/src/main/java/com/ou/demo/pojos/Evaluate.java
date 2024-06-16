@@ -25,26 +25,20 @@ import lombok.Data;
 @Data
 public class Evaluate {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "evaluate")
-    private double evaluate;
-
-    @JsonIgnore
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    @ManyToOne
-    private Product ProductId;
-
-    @JsonIgnore
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne
-    private User UserId;
-
+    private Double evaluate;
     @Column(name = "is_delete")
     private Boolean isDelete;
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @ManyToOne
+    private Product productId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    private User userId;
 }

@@ -20,9 +20,8 @@ import lombok.Data;
 @Entity
 @Table(name = "orderdetail")
 @Data
-public class Orderdetail implements Serializable {
+public class Orderdetail {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -34,21 +33,14 @@ public class Orderdetail implements Serializable {
     private BigDecimal total;
     @Column(name = "is_delete")
     private boolean isDelete;
-
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderdetailId")
+    private Set<Shipment> shipmentSet;
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Order1 orderId;
-
-    @JsonIgnore
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
-    
-    
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderdetailId")
-    private Set<Shipment> shipmentSet;
 
     public Orderdetail() {
     }

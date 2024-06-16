@@ -34,11 +34,8 @@ public class Address {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Lob
     @Column(name = "name")
     private String name;
-
-    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private User userId;

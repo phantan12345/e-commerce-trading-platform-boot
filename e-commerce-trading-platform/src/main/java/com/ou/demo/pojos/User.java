@@ -23,15 +23,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "user")
 @Data
-public class User implements Serializable {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "name")
-    private String name;
     @Column(name = "username")
     private String username;
     @Column(name = "password")
@@ -40,46 +38,34 @@ public class User implements Serializable {
     private String avatar;
     @Column(name = "email")
     private String email;
-    @Column(name = "address", length = 99999)
-    private String[] address;
     @Column(name = "Phone")
     private String phone;
     @Column(name = "is_delete")
     private boolean isDelete;
     @Column(name = "refech_token")
     private String refechToken;
-
-    @JsonIgnore
+    @Lob
+    @Column(name = "address")
+    private byte[] address;
+    @Column(name = "name")
+    private String name;
+    @OneToMany(mappedBy = "userId")
+    private Set<Product> productSet;
+    @OneToMany(mappedBy = "userId")
+    private Set<Address> addressSet;
+    @OneToMany(mappedBy = "userId")
+    private Set<Evaluate> evaluatesSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Review> reviewSet;
-
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sentBy")
     private Set<Messages> messagesSet;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Address> addressSet;
-
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sentTo")
     private Set<Messages> messagesSet1;
-
-    @JsonIgnore
     @OneToMany(mappedBy = "userID")
     private Set<Order1> order1Set;
-
-    @JsonIgnore
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne
     private Role roleId;
-
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = FetchType.LAZY)
-    private Set<Product> productSet;
-
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "UserId")
-    private Set<Evaluate> evaluateSet;
 
     public User() {
     }

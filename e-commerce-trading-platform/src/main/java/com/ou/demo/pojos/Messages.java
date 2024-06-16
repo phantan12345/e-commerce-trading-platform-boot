@@ -19,9 +19,8 @@ import lombok.Data;
 @Table(name = "messages")
 @Data
 @Builder
-public class Messages implements Serializable {
+public class Messages {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -31,7 +30,6 @@ public class Messages implements Serializable {
     private String message;
     @Column(name = "status")
     private String status;
-
     @JoinColumn(name = "sent_by", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User sentBy;
@@ -50,6 +48,4 @@ public class Messages implements Serializable {
         this.sentTo = sentTo;
     }
 
-   
-    
 }
