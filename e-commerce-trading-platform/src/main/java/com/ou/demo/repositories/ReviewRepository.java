@@ -25,10 +25,9 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     List<Review> findByreviewId(Review id);
 
-    @Query("SELECT r FROM Review r WHERE r.productId = ?1")
-    List<Review>  findByProductId(Product id);
-    
-    
-     @Query("SELECT r FROM Review r WHERE r.reviewId = ?1")
-    List<Review>  findByReviewId(Review id);
+    @Query("SELECT r FROM Review r WHERE r.productId = ?1 AND r.reviewId=NULL")
+    List<Review> findByProductId(Product id);
+
+    @Query("SELECT r FROM Review r WHERE r.reviewId = ?1")
+    List<Review> findByReviewId(Review id);
 }

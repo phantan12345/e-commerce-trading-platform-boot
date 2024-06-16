@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShipmentReponsitory extends JpaRepository<Shipment, Integer> {
 
-    @Query(value = "SELECT s.*,p.product_name, od.quatity,img.url, od.total "
+    @Query(value = "SELECT s.*,p.product_name,p.id, od.quatity,img.url, od.total "
             + "     FROM shipment s"
             + "     JOIN orderdetail od ON s.orderdetail_id = od.id "
             + "     JOIN order1 o ON o.id = od.order_id "

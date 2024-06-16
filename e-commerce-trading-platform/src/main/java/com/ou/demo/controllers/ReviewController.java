@@ -70,15 +70,6 @@ public class ReviewController {
         return new ResponseEntity<>(ReviewService.findAllCommentsByProductId(ProductService.findById(id).get()), HttpStatus.OK);
     }
 
-    @GetMapping("/comment/{id}")
-    public ResponseEntity<?> replyToComentAll(@PathVariable("id") int id) {
-        List<Review> dto = this.ReviewService.getAllByCommentId(ReviewService.findCommentById(id));
 
-        if (dto != null) {
-            return new ResponseEntity<>(dto, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
 
 }

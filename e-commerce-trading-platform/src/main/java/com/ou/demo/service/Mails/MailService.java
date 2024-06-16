@@ -5,6 +5,7 @@
 package com.ou.demo.service.Mails;
 
 import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.Voucher;
 import com.ou.demo.service.Mails.DTO.Mail;
 
 /**
@@ -15,6 +16,6 @@ public interface MailService {
 
     public void sendEmail(User user, Mail mail);
 
-//    public void sendEmailStore(Store store, Mail mail);
+    public void sendEmai(Voucher voucher, Mail mail);
 
 }

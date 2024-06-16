@@ -4,6 +4,7 @@
  */
 package com.ou.demo.service.Receipts;
 
+import com.ou.demo.exceptions.ShipmentException;
 import com.ou.demo.service.Receipts.DTO.CartDto;
 import com.ou.demo.service.Receipts.DTO.CartInput;
 import com.ou.demo.pojos.Order1;
@@ -61,6 +62,8 @@ public class ReceiptService implements IReceiptService {
     public Order1 addReceipt(CartInput carts) {
         try {
             Order1 order = new Order1(carts.getTotal(), carts.getUser());
+
+            System.out.println(order.getId());
             order.setPaymentId(PaymentReponsitory.findById(carts.getPayment()).get());
             Order1 o = OrderService.create(order);
 
@@ -73,7 +76,11 @@ public class ReceiptService implements IReceiptService {
                 d.setProductId(p);
                 d.setOrderId(o);
                 Orderdetail od = OrderdetailService.create(d);
-                updateCount(c.getId(), c.getCount());
+
+                if (!updateCount(c.getId(), c.getCount())) {
+                    throw new ShipmentException("Product quantity is too large");
+
+                }
                 Shipment shipment = new Shipment(carts.getAddress(), "Wait for confirmation", od);
                 shipmentReponsitory.save(shipment);
 
@@ -85,11 +92,15 @@ public class ReceiptService implements IReceiptService {
 
     }
 
-    private Product updateCount(int id, int count) {
+    private boolean updateCount(int id, int count) {
         Product product = ProductService.findById(id).get();
+        if (product.getCount() - count < 0) {
+            return false;
+        }
         product.setCount(product.getCount() - count);
+        ProductService.save(product);
 
-        return ProductService.save(product);
+        return true;
     }
 
 }

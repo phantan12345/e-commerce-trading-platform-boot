@@ -14,6 +14,7 @@ import com.ou.demo.service.Users.DTO.UsersDto;
 import com.ou.demo.service.Users.IUserService;
 import com.ou.demo.service.VNPlay.VNPayService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class PayController {
     private VNPayService VNPayService;
 
     @PostMapping("/delivery")
-    public ResponseEntity<?> delivery(@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) {
+    public ResponseEntity<?> delivery(@CurrentUser UsersDto currentUser, @Valid @RequestBody CartInput carts) {
 
         User userCuren = UserService.findById(currentUser.getId());
         carts.setUser(userCuren);
@@ -64,11 +65,11 @@ public class PayController {
     }
 
     @PostMapping("/VNPay")
-    public ResponseEntity<?> VNPay(HttpServletRequest req,@CurrentUser UsersDto currentUser, @RequestBody CartInput carts) throws UnsupportedEncodingException {
+    public ResponseEntity<?> VNPay(HttpServletRequest req, @CurrentUser UsersDto currentUser, @RequestBody CartInput carts) throws UnsupportedEncodingException {
 
         User userCuren = UserService.findById(currentUser.getId());
         carts.setUser(userCuren);
-        Object cart = this.VNPayService.createOrder(req,carts);
+        Object cart = this.VNPayService.createOrder(req, carts);
         if (cart == null) {
             return new ResponseEntity<>("ERROR PAYMENT METHOD ",
                     HttpStatus.BAD_REQUEST
@@ -96,10 +97,10 @@ public class PayController {
     }
 
     @GetMapping("/refund")
-    public ResponseEntity<?> refund(HttpServletRequest req,@RequestParam Map<String, String> params) throws Exception {
+    public ResponseEntity<?> refund(HttpServletRequest req, @RequestParam Map<String, String> params) throws Exception {
 
         return new ResponseEntity<>(
-                VNPayService.refund(req,params), HttpStatus.OK);
+                VNPayService.refund(req, params), HttpStatus.OK);
 
     }
 }

@@ -52,7 +52,6 @@ public class Review implements Serializable {
     @ManyToOne
     private Review reviewId;
     
-    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;

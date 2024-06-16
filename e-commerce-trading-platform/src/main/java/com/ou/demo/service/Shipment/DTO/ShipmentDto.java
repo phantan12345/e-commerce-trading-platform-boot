@@ -34,6 +34,7 @@ public class ShipmentDto {
 
     private String provider;
     private String productName;
+    private int productId;
     private int quatity;
     private String url;
     private BigDecimal total;
@@ -41,12 +42,13 @@ public class ShipmentDto {
     public ShipmentDto() {
     }
 
-    public ShipmentDto(Integer id, String address, String active, String provider, String productName, int quatity, String url, BigDecimal total) {
+    public ShipmentDto(Integer id, String address, String active, String provider, String productName,int productId, int quatity, String url, BigDecimal total) {
         this.id = id;
         this.address = address;
         this.active = active;
         this.provider = provider;
         this.productName = productName;
+        this.productId=productId;
         this.quatity = quatity;
         this.url = url;
         this.total=total;

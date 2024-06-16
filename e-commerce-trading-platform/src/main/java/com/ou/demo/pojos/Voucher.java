@@ -37,10 +37,13 @@ public class Voucher implements Serializable {
     @Column(name = "is_delete")
     private boolean isDelete;
 
-
     public Voucher() {
     }
 
-    
-    
+    public Voucher(BigDecimal discount, String code) {
+        this.discount = discount;
+        this.code = code;
+        this.isDelete = false;
+    }
+
 }

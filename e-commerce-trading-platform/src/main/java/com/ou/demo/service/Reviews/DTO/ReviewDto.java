@@ -31,8 +31,6 @@ public class ReviewDto {
     public Integer id;
     public String coment;
     public Date dateContent;
-    public Integer evaluate;
-    public boolean isDelete;
-    public Product productId;
+    public User userId;
     public List<Review> reply;
 }

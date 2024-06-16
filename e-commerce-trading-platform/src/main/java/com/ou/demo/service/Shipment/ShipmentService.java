@@ -4,10 +4,18 @@
  */
 package com.ou.demo.service.Shipment;
 
+import com.ou.demo.configs.VNPayConfig;
 import com.ou.demo.exceptions.ShipmentException;
 import com.ou.demo.pojos.Order1;
+import com.ou.demo.pojos.Product;
 import com.ou.demo.pojos.Shipment;
+import com.ou.demo.pojos.User;
+import com.ou.demo.pojos.Voucher;
+import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.repositories.ShipmentReponsitory;
+import com.ou.demo.repositories.VoucherRepository;
+import com.ou.demo.service.Mails.DTO.Mail;
+import com.ou.demo.service.Mails.MailService;
 import com.ou.demo.service.Messsages.DTO.MessageSummaryDto;
 import com.ou.demo.service.Shipment.DTO.ShipmentDto;
 import java.io.Serial;
@@ -26,6 +34,15 @@ public class ShipmentService implements IShipmentService {
     @Autowired
     private ShipmentReponsitory shipmentReponsitory;
 
+    @Autowired
+    private VoucherRepository VoucherRepository;
+
+    @Autowired
+    private ProductReponsitory ProductReponsitory;
+
+    @Autowired
+    private MailService MailService;
+
     @Override
     public List<ShipmentDto> getListShipmentByCurrenUser(int id) {
         List<Object[]> dto = shipmentReponsitory.findShipmentByCurrntUser(id);
@@ -38,8 +55,9 @@ public class ShipmentService implements IShipmentService {
                 shipmentDtoObject[2].toString(),
                 shipmentDtoObject[4].toString(),
                 Integer.valueOf(shipmentDtoObject[5].toString()),
-                shipmentDtoObject[6].toString(),
-                new BigDecimal(shipmentDtoObject[7].toString())))
+                Integer.valueOf(shipmentDtoObject[6].toString()),
+                shipmentDtoObject[7].toString(),
+                new BigDecimal(shipmentDtoObject[8].toString())))
                 .toList();
     }
 
@@ -56,6 +74,16 @@ public class ShipmentService implements IShipmentService {
                 break;
 
             case "Canceled":
+                User user = (shipmentReponsitory.findById(dto.getId()).get()).getOrderdetailId().getOrderId().getUserID();
+
+                Mail mail = new Mail();
+                mail.setMailFrom("2051050435tan@ou.edu.vn");
+                mail.setMailTo(user.getEmail());
+                mail.setMailSubject("VOUCHER HOÀN TIỀN");
+                mail.setMailContent("VOUCHER HOÀN TIỀN");
+                Voucher voucher = addVouver(dto.getProductId());
+                MailService.sendEmai(voucher, mail);
+
                 shipment.setActive("Canceled");
                 break;
             case "Completed":
@@ -79,8 +107,15 @@ public class ShipmentService implements IShipmentService {
                 shipmentDtoObject[2].toString(),
                 shipmentDtoObject[4].toString(),
                 Integer.valueOf(shipmentDtoObject[5].toString()),
-                shipmentDtoObject[6].toString(),
-                new BigDecimal(shipmentDtoObject[7].toString())))
+                Integer.valueOf(shipmentDtoObject[6].toString()),
+                shipmentDtoObject[7].toString(),
+                new BigDecimal(shipmentDtoObject[8].toString())))
                 .toList();
+    }
+
+    private Voucher addVouver(int id) {
+        Product product = ProductReponsitory.findById(id).get();
+        Voucher voucher = new Voucher(product.getPrice(), VNPayConfig.getRandomNumber(6));
+        return VoucherRepository.save(voucher);
     }
 }
