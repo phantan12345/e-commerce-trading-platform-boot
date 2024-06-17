@@ -135,8 +135,8 @@ public class ProductService implements IProductService {
 
         }
         String sort = params.get("sort");
-        if (cate != null && !cate.isEmpty()) {
-            Specification<Product> spec = GenericSpecifications.sort("productName", sort);
+        if (sort != null && !sort.isEmpty()) {
+            Specification<Product> spec = GenericSpecifications.sort("price", sort);
             list.add(spec);
 
         }
