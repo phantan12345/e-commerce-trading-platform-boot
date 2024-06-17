@@ -52,7 +52,7 @@ public class AddressController {
     }
 
     @PostMapping("/address")
-    public ResponseEntity<?> addlAddressCurentuser(@CurrentUser UsersDto currentUser, AddressDto input) {
+    public ResponseEntity<?> addlAddressCurentuser(@CurrentUser UsersDto currentUser, @RequestBody AddressDto input) {
 
         User userCuren = UserService.findById(currentUser.getId());
 
@@ -61,15 +61,14 @@ public class AddressController {
     }
 
     @PutMapping("/address")
-    public ResponseEntity<?> updatelAddressCurentuser( AddressDto input) {
-
+    public ResponseEntity<?> updatelAddressCurentuser(@RequestBody AddressDto input) {
 
         return new ResponseEntity<>(
                 addressService.updateAddress(input), HttpStatus.OK);
     }
-    
+
     @DeleteMapping("/address/{id}")
-    public ResponseEntity<?> updatelAddressCurentuser( @PathVariable("id")int  id) {
+    public ResponseEntity<?> updatelAddressCurentuser(@PathVariable("id") int id) {
         return new ResponseEntity<>(
                 addressService.deleteAddress(id), HttpStatus.OK);
     }
