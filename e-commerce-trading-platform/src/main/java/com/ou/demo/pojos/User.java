@@ -44,9 +44,7 @@ public class User {
     private boolean isDelete;
     @Column(name = "refech_token")
     private String refechToken;
-    @Lob
-    @Column(name = "address")
-    private byte[] address;
+
     @Column(name = "name")
     private String name;
     @OneToMany(mappedBy = "userId")

@@ -5,14 +5,15 @@
 package com.ou.demo.service.Vouchers;
 
 import com.ou.demo.pojos.Voucher;
+import com.ou.demo.service.Vouchers.DTO.VoucherDto;
+import com.ou.demo.util.Service.ICrud;
 
 /**
  *
  * @author ADMIN
  */
-public interface VoucherService {
+public interface VoucherService extends ICrud<Voucher, VoucherDto>{
 
-    Voucher create(Voucher vou);
 
     Voucher findByid(int id);
     Voucher findByCode(String code);

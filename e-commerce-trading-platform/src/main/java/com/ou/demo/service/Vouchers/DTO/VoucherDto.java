@@ -5,6 +5,7 @@
 package com.ou.demo.service.Vouchers.DTO;
 
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,12 +16,11 @@ import lombok.NoArgsConstructor;
  * @author ADMIN
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class VoucherDto {
 
-    @NotNull
-    private int id;
+    public int id;
+    public BigDecimal discount;
+    public String code;
 
 }

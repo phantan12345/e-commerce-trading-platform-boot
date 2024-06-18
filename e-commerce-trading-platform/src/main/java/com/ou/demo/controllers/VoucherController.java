@@ -5,6 +5,7 @@
 package com.ou.demo.controllers;
 
 import com.ou.demo.pojos.Voucher;
+import com.ou.demo.service.Vouchers.DTO.VoucherDto;
 import com.ou.demo.service.Vouchers.VoucherService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author ADMIN
  */
-
 @AllArgsConstructor
 @RequestMapping("/api")
 @RestController
@@ -35,41 +35,24 @@ public class VoucherController {
     private VoucherService VoucherService;
 
     @PostMapping("/voucher")
-    public ResponseEntity<?> createStore(@RequestBody Voucher vou) {
+    public ResponseEntity<?> createStore(@RequestBody VoucherDto vou) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            Voucher v = VoucherService.create(vou);
-            return new ResponseEntity<>(v == null ? "error find voucher"
-                    : new ResponseEntity(v, HttpStatus.OK), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>("no accept", HttpStatus.UNAUTHORIZED);
-        }
+        Voucher v = VoucherService.Create(vou);
+        return new ResponseEntity(v, HttpStatus.OK);
 
     }
 
-    @GetMapping("/voucher/{id}")
-    public ResponseEntity<?> getStore( @PathVariable("id") int id) {
-            Voucher v = VoucherService.findByid(id);
-            return new ResponseEntity<>(v == null ? "error find voucher"
-                    : new ResponseEntity(v, HttpStatus.OK), HttpStatus.BAD_REQUEST);
-       
-    }
 
-    @GetMapping("/voucher/code")
-    public ResponseEntity<?> getByCode(@RequestParam String code) {
+
+    @GetMapping("/voucher/{code}")
+    public ResponseEntity<?> getByCode(@PathVariable("code") String code) {
+
+        Voucher v = VoucherService.findByCode(code);
+
+    
+            return new ResponseEntity<>(v, HttpStatus.OK);
         
-         
-            Voucher v = VoucherService.findByCode(code);
 
-            if (v == null) {
-                return new ResponseEntity<>("error find voucher",
-                        HttpStatus.BAD_REQUEST);
-            } else {
-                return new ResponseEntity<>(v, HttpStatus.OK);
-            }
-
-       
     }
 
 }

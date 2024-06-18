@@ -6,6 +6,8 @@ package com.ou.demo.service.Vouchers;
 
 import com.ou.demo.pojos.Voucher;
 import com.ou.demo.repositories.VoucherRepository;
+import com.ou.demo.service.Vouchers.DTO.VoucherDto;
+import com.ou.demo.util.Service.Crud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +16,12 @@ import org.springframework.stereotype.Service;
  * @author ADMIN
  */
 @Service
-public class VoucherServiceImpl implements VoucherService{
+public class VoucherServiceImpl extends Crud<Voucher, VoucherDto> implements VoucherService {
 
     @Autowired
     private VoucherRepository VoucherRepository;
     
-    @Override
-    public Voucher create(Voucher vou) {
-        return VoucherRepository.save(vou);
-    }
+
 
     @Override
     public Voucher findByid(int id) {

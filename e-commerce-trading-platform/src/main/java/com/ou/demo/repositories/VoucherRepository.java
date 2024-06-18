@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface VoucherRepository extends JpaRepository<Voucher, Integer>{
+    
+    @Query("SELECT v FROM Voucher v WHERE v.code=?1")
     Voucher findByCode(String code);
     
 }

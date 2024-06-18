@@ -94,8 +94,6 @@ public class UserController {
 
     }
 
- 
-
     @GetMapping("/users")
     public ResponseEntity<?> getUsers() {
         return new ResponseEntity<>(UserService.getAll(), HttpStatus.OK);
@@ -139,6 +137,17 @@ public class UserController {
 
         }
         return new ResponseEntity<>("no find store", HttpStatus.BAD_REQUEST);
+
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<?> updateUser(@RequestBody UsersDto input) {
+        User user = UserService.findById(input.getId());
+        user.setPhone(input.getPhone());
+        user.setEmail(input.getEmail());
+        user.setName(input.getName());
+
+        return new ResponseEntity<>(UserService.update(user), HttpStatus.BAD_REQUEST);
 
     }
 
