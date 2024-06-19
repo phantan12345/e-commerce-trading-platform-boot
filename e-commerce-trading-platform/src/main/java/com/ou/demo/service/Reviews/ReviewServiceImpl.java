@@ -50,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
         r.setUserId(userId);
         r.setProductId(p);
         r.setDateContent(new Date());
-
+        r.setDelete(false);
         return ReviewRepository.save(r);
     }
 

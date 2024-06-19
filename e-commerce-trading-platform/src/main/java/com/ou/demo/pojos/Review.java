@@ -34,24 +34,25 @@ public class Review implements Serializable {
     @Column(name = "date_content")
     @Temporal(TemporalType.DATE)
     private Date dateContent;
-
+    @Column(name = "evaluate")
+    private Double evaluate;
     @Column(name = "is_delete")
     private boolean isDelete;
-    
+
     @JsonIgnore
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Product productId;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "reviewId")
     private Set<Review> reviewSet;
-    
+
     @JsonIgnore
     @JoinColumn(name = "review_id", referencedColumnName = "id")
     @ManyToOne
     private Review reviewId;
-    
+
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
@@ -59,6 +60,4 @@ public class Review implements Serializable {
     public Review() {
     }
 
- 
-    
 }

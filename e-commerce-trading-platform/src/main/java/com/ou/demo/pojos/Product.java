@@ -53,8 +53,7 @@ public class Product {
     private User userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<ProductImage> productImageSet;
-    @OneToMany(mappedBy = "productId")
-    private Set<Evaluate> evaluatesSet;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
     private Set<Review> reviewSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")

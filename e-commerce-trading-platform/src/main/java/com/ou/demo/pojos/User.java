@@ -56,9 +56,7 @@ public class User {
     @OneToMany(mappedBy = "userId")
     private Set<Address> addressSet;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "userId")
-    private Set<Evaluate> evaluatesSet;
+
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
