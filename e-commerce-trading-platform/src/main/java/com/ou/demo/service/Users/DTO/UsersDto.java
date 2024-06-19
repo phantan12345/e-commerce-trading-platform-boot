@@ -4,6 +4,7 @@
  */
 package com.ou.demo.service.Users.DTO;
 
+import com.ou.demo.pojos.Address;
 import com.ou.demo.pojos.Role;
 import jakarta.persistence.Column;
 import java.util.List;
@@ -17,8 +18,6 @@ import lombok.*;
 @Setter
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class UsersDto {
 
     public Integer id;
@@ -31,5 +30,6 @@ public class UsersDto {
     public String acceptToken;
     public Role roleId;
     public String name;
+    public List<Address> Addresses;
 
 }

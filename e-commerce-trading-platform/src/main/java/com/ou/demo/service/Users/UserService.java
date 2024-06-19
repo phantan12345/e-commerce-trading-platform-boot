@@ -14,6 +14,7 @@ import com.ou.demo.service.Mails.DTO.Mail;
 import com.ou.demo.pojos.Role;
 import com.ou.demo.pojos.User;
 import com.ou.demo.pojos.Voucher;
+import com.ou.demo.repositories.AddressRepository;
 import com.ou.demo.repositories.UserRepository;
 import com.ou.demo.service.Mails.MailService;
 import com.ou.demo.service.Vouchers.VoucherService;
@@ -65,7 +66,7 @@ public class UserService extends Crud<User, UsersDto> implements IUserService {
     @Autowired
     private ModelMapper mapper;
     @Autowired
-    private ObjectMapper objectMapper;
+    private AddressRepository AddressRepository;
 
 //    @Autowired
 //    private IStoreService IStoreService;
@@ -176,6 +177,7 @@ public class UserService extends Crud<User, UsersDto> implements IUserService {
                 .phone(user.getPhone())
                 .roleId(user.getRoleId())
                 .name(user.getName())
+                .Addresses(AddressRepository.findAddressesCurentUser(user))
                 .build();
 
         return dto;

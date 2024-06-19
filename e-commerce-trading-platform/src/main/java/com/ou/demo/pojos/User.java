@@ -47,18 +47,32 @@ public class User {
 
     @Column(name = "name")
     private String name;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Product> productSet;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Address> addressSet;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private Set<Evaluate> evaluatesSet;
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Review> reviewSet;
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sentBy")
     private Set<Messages> messagesSet;
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sentTo")
     private Set<Messages> messagesSet1;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "userID")
     private Set<Order1> order1Set;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
