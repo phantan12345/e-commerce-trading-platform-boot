@@ -28,5 +28,6 @@ public class CartInput {
     public float total;
     public String address;
     public User user;
+    public int voucherId;
 
 }

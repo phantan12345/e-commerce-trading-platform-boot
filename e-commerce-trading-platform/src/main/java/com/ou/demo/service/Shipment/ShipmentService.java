@@ -98,7 +98,7 @@ public class ShipmentService implements IShipmentService {
     @Override
     public List<ShipmentDto> getListShipmentByCurrenStore() {
         List<Object[]> dto = shipmentReponsitory.findShipmentByAdmin();
-        
+
         return dto.stream()
                 .map(shipmentDtoObject -> new ShipmentDto(
                 Integer.valueOf(shipmentDtoObject[0].toString()),
@@ -115,7 +115,7 @@ public class ShipmentService implements IShipmentService {
 
     private Voucher addVouver(int id) {
         Product product = ProductReponsitory.findById(id).get();
-        Voucher voucher = new Voucher(product.getPrice(), VNPayConfig.getRandomNumber(6));
+        Voucher voucher = new Voucher(product.getPrice(), VNPayConfig.getRandomNumber(6), "MONEY");
         return VoucherRepository.save(voucher);
     }
 }

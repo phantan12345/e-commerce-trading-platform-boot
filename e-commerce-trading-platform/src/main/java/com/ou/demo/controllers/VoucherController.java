@@ -38,20 +38,24 @@ public class VoucherController {
     public ResponseEntity<?> createStore(@RequestBody VoucherDto vou) {
 
         Voucher v = VoucherService.Create(vou);
+        v.setCategory("PERCENT");
         return new ResponseEntity(v, HttpStatus.OK);
 
     }
-
-
 
     @GetMapping("/voucher/{code}")
     public ResponseEntity<?> getByCode(@PathVariable("code") String code) {
 
         Voucher v = VoucherService.findByCode(code);
 
-    
-            return new ResponseEntity<>(v, HttpStatus.OK);
-        
+        return new ResponseEntity<>(v, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/vouchers")
+    public ResponseEntity<?> getByCode() {
+
+        return new ResponseEntity<>(VoucherService.findAllAsync(), HttpStatus.OK);
 
     }
 

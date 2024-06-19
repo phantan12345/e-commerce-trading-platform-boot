@@ -8,6 +8,7 @@ import com.ou.demo.pojos.Voucher;
 import com.ou.demo.repositories.VoucherRepository;
 import com.ou.demo.service.Vouchers.DTO.VoucherDto;
 import com.ou.demo.util.Service.Crud;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +21,15 @@ public class VoucherServiceImpl extends Crud<Voucher, VoucherDto> implements Vou
 
     @Autowired
     private VoucherRepository VoucherRepository;
-    
-
-
-    @Override
-    public Voucher findByid(int id) {
-        return VoucherRepository.findById(id).get();
-    }
 
     @Override
     public Voucher findByCode(String code) {
         return VoucherRepository.findByCode(code);
     }
-    
+
+    @Override
+    public List<Voucher> findAllAsync() {
+        return VoucherRepository.findAllAsync();
+    }
+
 }

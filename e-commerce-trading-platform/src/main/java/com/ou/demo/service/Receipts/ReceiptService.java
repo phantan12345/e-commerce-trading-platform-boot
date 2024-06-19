@@ -17,6 +17,7 @@ import com.ou.demo.repositories.OrderReponsitory;
 import com.ou.demo.repositories.PaymentReponsitory;
 import com.ou.demo.repositories.ProductReponsitory;
 import com.ou.demo.repositories.ShipmentReponsitory;
+import com.ou.demo.repositories.VoucherRepository;
 import com.ou.demo.service.Vouchers.VoucherService;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigInteger;
@@ -50,7 +51,7 @@ public class ReceiptService implements IReceiptService {
     private ProductReponsitory ProductService;
 
     @Autowired
-    private VoucherService VoucherService;
+    private VoucherRepository VoucherRepository;
 
     @Autowired
     private ShipmentReponsitory shipmentReponsitory;
@@ -82,12 +83,14 @@ public class ReceiptService implements IReceiptService {
 
                 }
                 Shipment shipment = new Shipment(carts.getAddress(), "Wait for confirmation", od);
+                updateVoucher(carts.getVoucherId());
+
                 shipmentReponsitory.save(shipment);
 
             }
             return o;
         } catch (Exception ex) {
-            return null;
+            throw new ShipmentException("erro payment");
         }
 
     }
@@ -101,6 +104,12 @@ public class ReceiptService implements IReceiptService {
         ProductService.save(product);
 
         return true;
+    }
+
+    private Voucher updateVoucher(int id) {
+        Voucher voucher = VoucherRepository.findById(id).get();
+        voucher.setDelete(true);
+        return VoucherRepository.save(voucher);
     }
 
 }
