@@ -44,6 +44,7 @@ import com.ou.demo.service.Users.IUserService;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 /**
  *
@@ -140,14 +141,14 @@ public class UserController {
 
     }
 
-    @PostMapping("/user")
+    @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody UsersDto input) {
         User user = UserService.findById(input.getId());
         user.setPhone(input.getPhone());
         user.setEmail(input.getEmail());
         user.setName(input.getName());
 
-        return new ResponseEntity<>(UserService.update(user), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(UserService.update(user), HttpStatus.OK);
 
     }
 
