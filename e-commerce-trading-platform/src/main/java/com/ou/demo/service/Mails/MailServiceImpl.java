@@ -119,12 +119,12 @@ public class MailServiceImpl implements MailService {
 
             // Nội dung của email là HTML
             String htmlContent = "<p><b>Kính gửi Anh/Chị:</b></p>\n"
-                    + "<p>Tài khoản của quý khách đã được đăng ký thành công!!!! </p>\n"
+                    + "<p>chúng tôi gửi quý khách voucher giảm giá mua hàng!!!! </p>\n"
                     + "<table cellpadding=\"8\" cellspacing=\"0\"  width=\"100%\">\n"
                     + "   <tr>\n"
                     + "        <td style=\"border: 1px solid #EBEDF3;\n"
                     + "                       background-color: #f2f2f2 !important;\" width=170>\n"
-                    + "            store name\n"
+                    + "            code\n"
                     + "        </td>\n"
                     + "        <td style=\"border: 1px solid #EBEDF3;\">\n"
                     + voucher.getCode()
@@ -134,16 +134,10 @@ public class MailServiceImpl implements MailService {
                     + "     <tr>\n"
                     + "        <td style=\"border: 1px solid #EBEDF3;\n"
                     + "                       background-color: #f2f2f2 !important;\">\n"
-                    + "            Address\n"
+                    + "            Discount\n"
                     + "        </td>\n"
                     + "        <td style=\"border: 1px solid #EBEDF3;\">\n"
                     + voucher.getDiscount()
-                    + "        </td>\n"
-                    + "    </tr>\n"
-                    + "    <tr>\n"
-                    + "        <td style=\"border: 1px solid #EBEDF3;\n"
-                    + "                       background-color: #f2f2f2 !important;\">\n"
-                    + "            Để đăng nhập\n"
                     + "        </td>\n"
                     + "    </tr>\n"
                     + "</table>\n"
