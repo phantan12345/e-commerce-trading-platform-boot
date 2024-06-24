@@ -31,6 +31,7 @@ public class ReviewDto {
     public Integer id;
     public String coment;
     public Date dateContent;
+    public Double evaluate;
     public User userId;
     public List<Review> reply;
 }
