@@ -28,7 +28,6 @@ public class ProductDto {
     public String productName;
     public BigDecimal price;
     public int count;
-    public String voucher;
     private Set<ProductImage> productImageSet;
     public Category categoryId;
     public String description;
@@ -37,12 +36,11 @@ public class ProductDto {
     public ProductDto() {
     }
 
-    public ProductDto(Integer id, String productName, BigDecimal price, int count, String voucher, Set<ProductImage> productImageSet, Category categoryId, String description, int sold) {
+    public ProductDto(Integer id, String productName, BigDecimal price, int count, Set<ProductImage> productImageSet, Category categoryId, String description, int sold) {
         this.id = id;
         this.productName = productName;
         this.price = price;
         this.count = count;
-        this.voucher = voucher;
         this.productImageSet = productImageSet;
         this.categoryId = categoryId;
         this.description = description;

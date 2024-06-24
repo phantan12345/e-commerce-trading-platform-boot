@@ -42,6 +42,6 @@ public interface ProductReponsitory extends JpaRepository<Product, Integer>, Jpa
             + "where o.UserID= ?1 and p.is_delete=false ", nativeQuery = true)
     List<Product> findHistoryProduct(@Param("id") int id);
 
-    @Query("SELECT p FROM Product p WHERE p.isDelete=false ORDER BY p.id")
+    @Query("SELECT p FROM Product p WHERE p.isDelete=false AND p.count>0 ORDER BY p.id")
     List<Product> findAllProducts();
 }
