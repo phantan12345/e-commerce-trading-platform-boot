@@ -86,6 +86,7 @@ public class ProductService implements IProductService {
         p.setDelete(Boolean.FALSE);
         p.setUserId(store);
         p.setDescription(params.get("description"));
+        p.setSold(0);
         productReponsitory.save(p);
 
         for (MultipartFile f : file) {

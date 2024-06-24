@@ -45,6 +45,8 @@ public class Order1 {
     @JoinColumn(name = "UserID", referencedColumnName = "id")
     @ManyToOne
     private User userID;
+    
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Set<Orderdetail> orderdetailSet;
 

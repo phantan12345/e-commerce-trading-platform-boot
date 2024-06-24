@@ -24,10 +24,10 @@ import lombok.NoArgsConstructor;
 public class CartInput {
 
     public List<CartDto> carts;
+    public int voucherId;
     public int payment;
     public float total;
     public String address;
     public User user;
-    public int voucherId;
 
 }

@@ -74,6 +74,7 @@ public class ReceiptService implements IReceiptService {
                 d.setTotal(c.getPrice());
                 d.setDelete(false);
                 Product p = ProductService.findById(c.getId()).get();
+                p.setSold(p.getSold() + 1);
                 d.setProductId(p);
                 d.setOrderId(o);
                 Orderdetail od = OrderdetailService.create(d);
@@ -83,14 +84,17 @@ public class ReceiptService implements IReceiptService {
 
                 }
                 Shipment shipment = new Shipment(carts.getAddress(), "Wait for confirmation", od);
-                updateVoucher(carts.getVoucherId());
+                if (carts.getVoucherId() != 0) {
+                    updateVoucher(carts.getVoucherId());
+
+                }
 
                 shipmentReponsitory.save(shipment);
 
             }
             return o;
         } catch (Exception ex) {
-            throw new ShipmentException("erro payment");
+            throw new ShipmentException(ex.getMessage());
         }
 
     }

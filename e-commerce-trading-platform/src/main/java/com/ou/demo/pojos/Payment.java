@@ -32,6 +32,8 @@ public class Payment {
     private String payment;
     @Column(name = "is_delete")
     private boolean isDelete;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "paymentId")
     private Set<Order1> order1Set;
 

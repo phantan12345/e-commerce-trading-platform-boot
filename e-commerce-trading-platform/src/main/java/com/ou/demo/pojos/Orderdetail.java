@@ -33,6 +33,9 @@ public class Orderdetail {
     private BigDecimal total;
     @Column(name = "is_delete")
     private boolean isDelete;
+    
+    
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderdetailId")
     private Set<Shipment> shipmentSet;
     @JoinColumn(name = "order_id", referencedColumnName = "id")
