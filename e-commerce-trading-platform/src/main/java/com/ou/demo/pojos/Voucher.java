@@ -35,14 +35,14 @@ public class Voucher implements Serializable {
     @Column(name = "code")
     private String code;
     @Column(name = "category")
-    private String category;
+    private Boolean category;
     @Column(name = "is_delete")
     private boolean isDelete;
 
     public Voucher() {
     }
 
-    public Voucher(BigDecimal discount, String code, String category) {
+    public Voucher(BigDecimal discount, String code, Boolean category) {
         this.discount = discount;
         this.code = code;
         this.isDelete = false;

@@ -22,6 +22,6 @@ public class VoucherDto {
     public int id;
     public BigDecimal discount;
     public String code;
-    public String category;
+    public Boolean category;
 
 }

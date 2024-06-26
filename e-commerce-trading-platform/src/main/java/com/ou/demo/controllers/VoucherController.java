@@ -36,9 +36,9 @@ public class VoucherController {
 
     @PostMapping("/voucher")
     public ResponseEntity<?> createStore(@RequestBody VoucherDto vou) {
+        vou.setCategory(true);
 
         Voucher v = VoucherService.Create(vou);
-        v.setCategory("PERCENT");
         return new ResponseEntity(v, HttpStatus.OK);
 
     }

@@ -115,7 +115,7 @@ public class ShipmentService implements IShipmentService {
 
     private Voucher addVouver(int id) {
         Product product = ProductReponsitory.findById(id).get();
-        Voucher voucher = new Voucher(product.getPrice(), VNPayConfig.getRandomNumber(6), "MONEY");
+        Voucher voucher = new Voucher(product.getPrice(), VNPayConfig.getRandomNumber(6), false);
         return VoucherRepository.save(voucher);
     }
 }
